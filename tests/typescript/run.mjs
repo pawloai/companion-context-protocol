@@ -52,9 +52,27 @@ const checks = [
     )
   },
   {
+    name: "permission grant validator accepts expired fixture",
+    valid: validators.permissionGrant(
+      readJson("tests/conformance/fixtures/valid/permission-grant-expired.json")
+    )
+  },
+  {
+    name: "permission grant validator accepts revoked fixture",
+    valid: validators.permissionGrant(
+      readJson("tests/conformance/fixtures/valid/permission-grant-revoked.json")
+    )
+  },
+  {
     name: "response validator accepts purchase history fixture",
     valid: validators.commerceContextResponse(
       readJson("tests/conformance/fixtures/valid/commerce-context-ok-purchase-history-response.json")
+    )
+  },
+  {
+    name: "response validator accepts omission coverage fixture",
+    valid: validators.commerceContextResponse(
+      readJson("tests/conformance/fixtures/valid/commerce-context-omission-coverage-response.json")
     )
   }
 ];

@@ -4,6 +4,12 @@
   "private": true,
   "type": "module",
   "description": "Draft TypeScript types and validators for the Companion Context Protocol.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/companion-context-protocol/companion-context-protocol.git"
+  },
+  "author": "Companion Context Protocol contributors",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

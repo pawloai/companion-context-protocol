@@ -4,6 +4,12 @@
   "private": true,
   "type": "module",
   "description": "Draft Companion Context Protocol specification and conformance fixtures.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/companion-context-protocol/companion-context-protocol.git"
+  },
+  "author": "Companion Context Protocol contributors",
   "workspaces": [
     "packages/typescript"
   ],

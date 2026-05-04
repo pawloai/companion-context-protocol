@@ -82,6 +82,40 @@ export type Sex = "female" | "male" | "unknown";
 export type LifeStage = "puppy" | "kitten" | "adult" | "senior" | "unknown";
 export type SizeClass = "toy" | "small" | "medium" | "large" | "giant" | "unknown";
 
+export interface PetProfile {
+  pet_id: string;
+  display_name: FieldEnvelope<string>;
+  species: FieldEnvelope<Species>;
+  breed?: FieldEnvelope<string>;
+  breed_mix?: FieldEnvelope<boolean>;
+  sex?: FieldEnvelope<Sex>;
+  age_years?: FieldEnvelope<number>;
+  life_stage: FieldEnvelope<LifeStage>;
+  weight?: FieldEnvelope<Weight>;
+  size_class: FieldEnvelope<SizeClass>;
+  metadata: ObjectMetadata;
+}
+
+export interface DietProfile {
+  diet_profile_id: string;
+  pet_id: string;
+  food_brands?: FieldEnvelope<string[]>;
+  proteins?: FieldEnvelope<string[]>;
+  feeding_schedule?: FieldEnvelope<string>;
+  allergies: FieldEnvelope<string[]>;
+  sensitivities: FieldEnvelope<string[]>;
+  treats_allowed?: FieldEnvelope<boolean>;
+  product_exclusions: FieldEnvelope<string[]>;
+  owner_notes_summary?: FieldEnvelope<string>;
+  metadata: ObjectMetadata;
+}
+
+export interface PurchaseHistorySummary {
+  last_purchase_at?: FieldEnvelope<string>;
+  preferred_categories?: FieldEnvelope<string[]>;
+  metadata: ObjectMetadata;
+}
+
 export interface CommercePetProfile {
   pet_id: string;
   display_name?: FieldEnvelope<string>;

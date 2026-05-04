@@ -51,7 +51,11 @@ companion-context-protocol/
     python/
   tests/
     conformance/
+    mcp/
+    openapi/
     python/
+    typescript/
+    vendor-neutrality/
   docs/
     design/
     implementers/
@@ -88,7 +92,7 @@ npm install
 npm test
 ```
 
-The test suite validates the current positive examples, rejects negative fixtures for duplicate scopes, invalid grant lifecycle state, inconsistent response status, provenance gaps, and non-commerce-safe commerce context fields, checks example request/response consistency, verifies OpenAPI external examples, checks MCP tool sketches, builds/tests the draft TypeScript package, and compiles/tests the draft Python package.
+The test suite validates the current positive examples and core `$defs` fixtures, rejects negative fixtures for duplicate scopes, invalid grant lifecycle state, inconsistent response status, provenance gaps, and non-commerce-safe commerce context fields, checks example request/response consistency, verifies OpenAPI external examples, checks MCP tool sketches, scans tracked files for vendor-neutrality regressions, builds/tests the draft TypeScript package, and compiles/tests the draft Python package.
 
 ## Design Principles
 

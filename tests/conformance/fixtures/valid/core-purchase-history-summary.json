@@ -1,0 +1,43 @@
+{
+  "last_purchase_at": {
+    "value": "2026-04-15T13:00:00Z",
+    "visibility": [
+      "owner_visible"
+    ],
+    "provenance": {
+      "source_type": "imported",
+      "source_system": "synthetic-commerce-import",
+      "recorded_at": "2026-05-04T15:50:00Z",
+      "source_record_ref": "example://purchases/pet_synthetic_001/latest"
+    }
+  },
+  "preferred_categories": {
+    "value": [
+      "sensitive_stomach_food"
+    ],
+    "visibility": [
+      "agent_summary_only"
+    ],
+    "provenance": {
+      "source_type": "generated",
+      "source_system": "example-ccp-server",
+      "recorded_at": "2026-05-04T15:55:00Z",
+      "derived_from": [
+        "example://purchases/pet_synthetic_001/summary"
+      ]
+    }
+  },
+  "metadata": {
+    "visibility": [
+      "owner_visible"
+    ],
+    "provenance": {
+      "source_type": "generated",
+      "source_system": "example-ccp-server",
+      "recorded_at": "2026-05-04T16:00:00Z",
+      "derived_from": [
+        "example://purchases/pet_synthetic_001/summary"
+      ]
+    }
+  }
+}

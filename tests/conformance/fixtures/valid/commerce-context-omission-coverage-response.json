@@ -1,0 +1,88 @@
+{
+  "request_id": "req_omission_coverage",
+  "status": "partial",
+  "authorization_decision": {
+    "decision": "partial",
+    "evaluated_at": "2026-05-04T16:45:00Z",
+    "requester_actor_id": "actor_example_recommendation_agent",
+    "pet_id": "pet_synthetic_001",
+    "purpose": "product_recommendation",
+    "grant_id": "grant_synthetic_partial_001",
+    "applied_scopes": [
+      "pet.commerce_context.read",
+      "pet.preferences.read"
+    ],
+    "denied_scopes": [
+      "pet.permission_grants.read",
+      "pet.purchase_history.summary.read"
+    ],
+    "reasons": [
+      "Some commerce-safe preference context was returned; other requested fields were omitted with machine-readable reasons."
+    ]
+  },
+  "commerce_context": {
+    "pet_id": "pet_synthetic_001",
+    "purpose": "product_recommendation",
+    "preferences": {
+      "value": [
+        "limited_ingredient_treats"
+      ],
+      "visibility": [
+        "caregiver_visible",
+        "commerce_safe"
+      ],
+      "provenance": {
+        "source_type": "caregiver_entered",
+        "source_actor_id": "actor_caregiver_001",
+        "source_system": "example-ccp-server",
+        "recorded_at": "2026-05-04T16:20:00Z"
+      }
+    },
+    "metadata": {
+      "visibility": [
+        "caregiver_visible",
+        "commerce_safe"
+      ],
+      "provenance": {
+        "source_type": "generated",
+        "source_system": "example-ccp-server",
+        "recorded_at": "2026-05-04T16:45:00Z",
+        "derived_from": [
+          "example://pets/pet_synthetic_001/preferences"
+        ]
+      }
+    }
+  },
+  "omissions": [
+    {
+      "field": "permission_grants",
+      "reason": "not_requested",
+      "required_scope": "pet.permission_grants.read"
+    },
+    {
+      "field": "commerce_context.diet_profile",
+      "reason": "grant_expired",
+      "required_scope": "pet.diet.read"
+    },
+    {
+      "field": "commerce_context.pet_profile.weight",
+      "reason": "grant_revoked",
+      "required_scope": "pet.profile.read"
+    },
+    {
+      "field": "commerce_context.pet_profile.age_years",
+      "reason": "source_stale",
+      "visibility_class": "commerce_safe"
+    },
+    {
+      "field": "commerce_context.purchase_history_summary.last_purchase_at",
+      "reason": "not_available",
+      "required_scope": "pet.purchase_history.summary.read"
+    },
+    {
+      "field": "commerce_context.purchase_history_summary",
+      "reason": "summary_only",
+      "visibility_class": "agent_summary_only"
+    }
+  ]
+}

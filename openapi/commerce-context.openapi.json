@@ -5,7 +5,15 @@
     "title": "Companion Context Protocol Commerce Context HTTP Adapter",
     "version": "0.1.0-draft",
     "summary": "Illustrative OpenAPI surface for the CCP Commerce Context Profile.",
-    "description": "This OpenAPI document is an adapter sketch. JSON Schema remains the canonical CCP contract. HTTP implementations are CCP-compatible only when they preserve the same authorization, minimization, provenance, visibility, and omission semantics defined by SPEC.md."
+    "description": "This OpenAPI document is an adapter sketch. JSON Schema remains the canonical CCP contract. HTTP implementations are CCP-compatible only when they preserve the same authorization, minimization, provenance, visibility, and omission semantics defined by SPEC.md.",
+    "license": {
+      "name": "Apache-2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "contact": {
+      "name": "Companion Context Protocol maintainers",
+      "url": "https://github.com/companion-context-protocol/companion-context-protocol/issues"
+    }
   },
   "servers": [
     {

@@ -14,6 +14,12 @@ This package is intentionally small. It provides hand-written TypeScript types f
 - `AuthorizationDecision`
 - `Omission`
 - `ContextProvenance`
+- `PetProfile`
+- `DietProfile`
+- `PurchaseHistorySummary`
+- `CommercePetProfile`
+- `CommerceDietProfile`
+- `CommercePurchaseHistorySummary`
 - `VisibilityClass`
 - `Scope`
 - `Purpose`

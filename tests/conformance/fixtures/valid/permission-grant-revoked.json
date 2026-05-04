@@ -1,0 +1,16 @@
+{
+  "grant_id": "grant_synthetic_revoked_001",
+  "subject_pet_id": "pet_synthetic_001",
+  "grantor_actor_id": "actor_owner_001",
+  "grantee_actor_id": "actor_example_filtering_agent",
+  "scopes": [
+    "pet.commerce_context.read",
+    "pet.permission_grants.read"
+  ],
+  "purposes": [
+    "product_filtering"
+  ],
+  "status": "revoked",
+  "created_at": "2026-04-04T14:00:00Z",
+  "revoked_at": "2026-05-04T14:00:00Z"
+}

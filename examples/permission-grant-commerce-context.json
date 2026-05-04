@@ -7,6 +7,7 @@
     "pet.profile.read",
     "pet.diet.read",
     "pet.commerce_context.read",
+    "pet.permission_grants.read",
     "pet.product_exclusions.read",
     "pet.preferences.read"
   ],

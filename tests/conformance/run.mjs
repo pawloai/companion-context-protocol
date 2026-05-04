@@ -22,6 +22,24 @@ ajv.addSchema(coreSchema, "ccp-core.schema.json");
 
 const cases = [
   {
+    name: "core PetProfile fixture",
+    schema: "ccp-core.schema.json#/$defs/PetProfile",
+    data: "tests/conformance/fixtures/valid/core-pet-profile.json",
+    valid: true
+  },
+  {
+    name: "core DietProfile fixture",
+    schema: "ccp-core.schema.json#/$defs/DietProfile",
+    data: "tests/conformance/fixtures/valid/core-diet-profile.json",
+    valid: true
+  },
+  {
+    name: "core PurchaseHistorySummary fixture",
+    schema: "ccp-core.schema.json#/$defs/PurchaseHistorySummary",
+    data: "tests/conformance/fixtures/valid/core-purchase-history-summary.json",
+    valid: true
+  },
+  {
     name: "permission grant example",
     schema: "schemas/permission-grant.schema.json",
     data: "examples/permission-grant-commerce-context.json",
@@ -61,6 +79,24 @@ const cases = [
     name: "commerce context ok purchase history fixture",
     schema: "schemas/commerce-context-response.schema.json",
     data: "tests/conformance/fixtures/valid/commerce-context-ok-purchase-history-response.json",
+    valid: true
+  },
+  {
+    name: "commerce context omission coverage fixture",
+    schema: "schemas/commerce-context-response.schema.json",
+    data: "tests/conformance/fixtures/valid/commerce-context-omission-coverage-response.json",
+    valid: true
+  },
+  {
+    name: "expired permission grant fixture",
+    schema: "schemas/permission-grant.schema.json",
+    data: "tests/conformance/fixtures/valid/permission-grant-expired.json",
+    valid: true
+  },
+  {
+    name: "revoked permission grant fixture",
+    schema: "schemas/permission-grant.schema.json",
+    data: "tests/conformance/fixtures/valid/permission-grant-revoked.json",
     valid: true
   },
   {
@@ -122,9 +158,19 @@ const cases = [
 let failed = false;
 const validators = new Map();
 
+const compileValidator = (schemaPathOrRef) => {
+  if (schemaPathOrRef.startsWith("ccp-core.schema.json#")) {
+    return ajv.compile({
+      $ref: schemaPathOrRef
+    });
+  }
+
+  return ajv.compile(readJson(schemaPathOrRef));
+};
+
 for (const testCase of cases) {
   if (!validators.has(testCase.schema)) {
-    validators.set(testCase.schema, ajv.compile(readJson(testCase.schema)));
+    validators.set(testCase.schema, compileValidator(testCase.schema));
   }
 
   const validate = validators.get(testCase.schema);

@@ -5,7 +5,12 @@ import process from "node:process";
 import { fileURLToPath } from "node:url";
 
 const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
-const forbiddenTerms = [
+const localForbiddenTermsPath = path.join(
+  repoRoot,
+  "tests/vendor-neutrality/forbidden-terms.json"
+);
+
+const defaultForbiddenTerms = [
   {
     term: ["paw", "lo"].join(""),
     reason: "vendor org / domain"
@@ -18,6 +23,47 @@ const forbiddenTerms = [
     term: ["yeunge", "-", "paw", "lo"].join(""),
     reason: "personal fork host"
   }
+];
+
+const normalizeForbiddenTerm = (entry, index) => {
+  if (typeof entry === "string" && entry.length > 0) {
+    return {
+      term: entry,
+      reason: "local forbidden term"
+    };
+  }
+
+  if (
+    entry &&
+    typeof entry === "object" &&
+    typeof entry.term === "string" &&
+    entry.term.length > 0
+  ) {
+    return {
+      term: entry.term,
+      reason: typeof entry.reason === "string" ? entry.reason : "local forbidden term"
+    };
+  }
+
+  throw new Error(`Invalid local forbidden term entry at index ${index}`);
+};
+
+const loadLocalForbiddenTerms = () => {
+  if (!fs.existsSync(localForbiddenTermsPath)) {
+    return [];
+  }
+
+  const localTerms = JSON.parse(fs.readFileSync(localForbiddenTermsPath, "utf8"));
+  if (!Array.isArray(localTerms)) {
+    throw new Error("Local forbidden terms file must contain a JSON array");
+  }
+
+  return localTerms.map(normalizeForbiddenTerm);
+};
+
+const forbiddenTerms = [
+  ...defaultForbiddenTerms,
+  ...loadLocalForbiddenTerms()
 ];
 
 const trackedFiles = execFileSync("git", ["ls-files", "-z"], {

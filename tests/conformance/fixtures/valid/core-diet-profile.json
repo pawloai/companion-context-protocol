@@ -1,0 +1,63 @@
+{
+  "diet_profile_id": "diet_synthetic_001",
+  "pet_id": "pet_synthetic_001",
+  "allergies": {
+    "value": [
+      "chicken"
+    ],
+    "visibility": [
+      "vet_shareable"
+    ],
+    "provenance": {
+      "source_type": "vet_verified",
+      "source_actor_id": "actor_vet_001",
+      "source_system": "example-ccp-server",
+      "recorded_at": "2026-05-04T15:25:00Z",
+      "verified_at": "2026-05-04T15:30:00Z"
+    }
+  },
+  "sensitivities": {
+    "value": [
+      "rich_foods"
+    ],
+    "visibility": [
+      "owner_visible"
+    ],
+    "provenance": {
+      "source_type": "owner_entered",
+      "source_actor_id": "actor_owner_001",
+      "source_system": "example-ccp-server",
+      "recorded_at": "2026-05-04T15:35:00Z"
+    }
+  },
+  "product_exclusions": {
+    "value": [
+      "rawhide"
+    ],
+    "visibility": [
+      "agent_summary_only"
+    ],
+    "provenance": {
+      "source_type": "generated",
+      "source_system": "example-ccp-server",
+      "recorded_at": "2026-05-04T15:40:00Z",
+      "derived_from": [
+        "example://pets/pet_synthetic_001/diet/allergies",
+        "example://pets/pet_synthetic_001/diet/sensitivities"
+      ]
+    }
+  },
+  "metadata": {
+    "visibility": [
+      "owner_visible"
+    ],
+    "provenance": {
+      "source_type": "generated",
+      "source_system": "example-ccp-server",
+      "recorded_at": "2026-05-04T15:45:00Z",
+      "derived_from": [
+        "example://pets/pet_synthetic_001/diet"
+      ]
+    }
+  }
+}

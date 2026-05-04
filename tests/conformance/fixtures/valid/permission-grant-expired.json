@@ -1,0 +1,16 @@
+{
+  "grant_id": "grant_synthetic_expired_001",
+  "subject_pet_id": "pet_synthetic_001",
+  "grantor_actor_id": "actor_owner_001",
+  "grantee_actor_id": "actor_example_recommendation_agent",
+  "scopes": [
+    "pet.commerce_context.read",
+    "pet.permission_grants.read"
+  ],
+  "purposes": [
+    "product_recommendation"
+  ],
+  "expires_at": "2026-05-04T14:00:00Z",
+  "status": "expired",
+  "created_at": "2026-04-04T14:00:00Z"
+}
