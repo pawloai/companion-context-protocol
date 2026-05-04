@@ -1,0 +1,27 @@
+{
+  "name": "@companion-context-protocol/typescript",
+  "version": "0.1.0-draft",
+  "private": true,
+  "type": "module",
+  "description": "Draft TypeScript types and validators for the Companion Context Protocol.",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node scripts/copy-schemas.mjs"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "typescript": "^5.8.3"
+  }
+}

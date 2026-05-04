@@ -1,0 +1,26 @@
+{
+  "name": "companion-context-protocol",
+  "version": "0.1.0-draft",
+  "private": true,
+  "type": "module",
+  "description": "Draft Companion Context Protocol specification and conformance fixtures.",
+  "workspaces": [
+    "packages/typescript"
+  ],
+  "scripts": {
+    "test": "npm run test:vendor-neutrality && npm run test:conformance && npm run test:openapi && npm run test:mcp && npm run test:typescript && npm run test:python",
+    "test:vendor-neutrality": "node tests/vendor-neutrality/run.mjs",
+    "test:conformance": "node tests/conformance/run.mjs",
+    "test:openapi": "node tests/openapi/run.mjs",
+    "test:mcp": "node tests/mcp/run.mjs",
+    "test:typescript": "node tests/typescript/run.mjs",
+    "test:python": "node tests/python/run.mjs"
+  },
+  "devDependencies": {
+    "@apidevtools/swagger-parser": "^12.1.0",
+    "@types/node": "^22.15.3",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "typescript": "^5.8.3"
+  }
+}

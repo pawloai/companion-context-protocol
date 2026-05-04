@@ -1,0 +1,74 @@
+{
+  "request_id": "req_invalid_conflicting_visibility",
+  "status": "partial",
+  "authorization_decision": {
+    "decision": "partial",
+    "evaluated_at": "2026-05-04T16:30:00Z",
+    "requester_actor_id": "actor_example_recommendation_agent",
+    "pet_id": "pet_luna_001",
+    "purpose": "product_recommendation",
+    "applied_scopes": [
+      "pet.profile.read",
+      "pet.commerce_context.read"
+    ],
+    "denied_scopes": [],
+    "reasons": [
+      "Some commerce-safe profile context was returned."
+    ]
+  },
+  "commerce_context": {
+    "pet_id": "pet_luna_001",
+    "purpose": "product_recommendation",
+    "pet_profile": {
+      "pet_id": "pet_luna_001",
+      "species": {
+        "value": "dog",
+        "visibility": [
+          "owner_visible",
+          "commerce_safe",
+          "staff_only"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-20T16:21:00Z"
+        }
+      },
+      "metadata": {
+        "visibility": [
+          "owner_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-04T16:30:00Z",
+          "derived_from": [
+            "example://pets/pet_luna_001/profile"
+          ]
+        }
+      }
+    },
+    "metadata": {
+      "visibility": [
+        "owner_visible",
+        "commerce_safe"
+      ],
+      "provenance": {
+        "source_type": "generated",
+        "source_system": "example-ccp-server",
+        "recorded_at": "2026-05-04T16:30:00Z",
+        "derived_from": [
+          "example://pets/pet_luna_001/profile"
+        ]
+      }
+    }
+  },
+  "omissions": [
+    {
+      "field": "commerce_context.diet_profile",
+      "reason": "not_requested"
+    }
+  ]
+}

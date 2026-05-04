@@ -1,0 +1,57 @@
+name: Spec change proposal
+description: Propose a change to CCP schemas, scopes, purposes, visibility, or profile behavior.
+title: "[Spec]: "
+labels:
+  - spec
+  - needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for proposed changes to normative protocol behavior. For security issues, follow SECURITY.md instead of opening a public issue.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What implementer, partner, privacy, safety, or compatibility problem does this address?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Describe the schema, spec, example, adapter, or conformance change.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Commerce Context Profile
+        - Core schema
+        - Scope registry
+        - Purpose registry
+        - Visibility classes
+        - Provenance
+        - Permission grants
+        - OpenAPI adapter
+        - MCP adapter
+        - Conformance tests
+        - Documentation
+    validations:
+      required: true
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Compatibility impact
+      description: Would this break existing draft examples, schemas, adapters, or package helpers?
+    validations:
+      required: true
+  - type: textarea
+    id: tests
+    attributes:
+      label: Conformance coverage
+      description: What tests or fixtures should be added or changed?
+    validations:
+      required: false

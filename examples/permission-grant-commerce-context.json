@@ -1,0 +1,20 @@
+{
+  "grant_id": "grant_owner_to_example_001",
+  "subject_pet_id": "pet_luna_001",
+  "grantor_actor_id": "actor_owner_001",
+  "grantee_actor_id": "actor_example_recommendation_agent",
+  "scopes": [
+    "pet.profile.read",
+    "pet.diet.read",
+    "pet.commerce_context.read",
+    "pet.product_exclusions.read",
+    "pet.preferences.read"
+  ],
+  "purposes": [
+    "product_recommendation",
+    "product_filtering"
+  ],
+  "expires_at": "2026-06-04T16:30:00Z",
+  "status": "active",
+  "created_at": "2026-05-04T16:00:00Z"
+}

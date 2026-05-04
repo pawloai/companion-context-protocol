@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://companioncontext.org/schemas/commerce-context-response.schema.json",
+  "title": "CCP Commerce Context Response",
+  "$ref": "ccp-core.schema.json#/$defs/CommerceContextResponse"
+}
+

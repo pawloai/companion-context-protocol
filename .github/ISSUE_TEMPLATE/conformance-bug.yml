@@ -1,0 +1,46 @@
+name: Conformance or example bug
+description: Report a mismatch between the spec, schemas, examples, adapters, or package helpers.
+title: "[Conformance]: "
+labels:
+  - conformance
+  - needs-triage
+body:
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed behavior
+      description: What validates, fails, or appears inconsistent?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should the spec, schema, fixture, adapter, or package helper do instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction
+      description: Include commands, fixture paths, schema paths, or snippets.
+      placeholder: |
+        npm install
+        npm test
+    validations:
+      required: false
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      options:
+        - JSON Schema
+        - Examples
+        - Conformance runner
+        - OpenAPI adapter
+        - MCP adapter
+        - TypeScript package
+        - Python package
+        - Documentation
+    validations:
+      required: true

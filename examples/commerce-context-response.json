@@ -1,0 +1,402 @@
+{
+  "request_id": "req_20260504_001",
+  "status": "partial",
+  "authorization_decision": {
+    "decision": "partial",
+    "evaluated_at": "2026-05-04T16:30:00Z",
+    "requester_actor_id": "actor_example_recommendation_agent",
+    "pet_id": "pet_luna_001",
+    "purpose": "product_recommendation",
+    "grant_id": "grant_owner_to_example_001",
+    "applied_scopes": [
+      "pet.profile.read",
+      "pet.diet.read",
+      "pet.commerce_context.read",
+      "pet.product_exclusions.read",
+      "pet.preferences.read"
+    ],
+    "denied_scopes": [
+      "pet.purchase_history.summary.read"
+    ],
+    "reasons": [
+      "The active grant allows commerce-safe profile, diet, exclusion, preference, and provenance context.",
+      "Purchase history summary was not returned because the active grant does not include that scope."
+    ]
+  },
+  "commerce_context": {
+    "pet_id": "pet_luna_001",
+    "purpose": "product_recommendation",
+    "pet_profile": {
+      "pet_id": "pet_luna_001",
+      "display_name": {
+        "value": "Luna",
+        "visibility": [
+          "owner_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-20T16:21:00Z",
+          "confidence": 0.8,
+          "stale_after": "2026-10-20T16:21:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/profile/display_name"
+        }
+      },
+      "species": {
+        "value": "dog",
+        "visibility": [
+          "owner_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-20T16:21:00Z",
+          "confidence": 0.8,
+          "stale_after": "2026-10-20T16:21:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/profile/species"
+        }
+      },
+      "breed": {
+        "value": "Labrador Retriever",
+        "visibility": [
+          "owner_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-20T16:21:00Z",
+          "confidence": 0.8,
+          "stale_after": "2026-10-20T16:21:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/profile/breed"
+        }
+      },
+      "breed_mix": {
+        "value": false,
+        "visibility": [
+          "owner_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-20T16:21:00Z",
+          "confidence": 0.8,
+          "stale_after": "2026-10-20T16:21:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/profile/breed_mix"
+        }
+      },
+      "sex": {
+        "value": "female",
+        "visibility": [
+          "owner_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-20T16:21:00Z",
+          "confidence": 0.8,
+          "stale_after": "2026-10-20T16:21:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/profile/sex"
+        }
+      },
+      "age_years": {
+        "value": 4,
+        "visibility": [
+          "owner_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-20T16:21:00Z",
+          "confidence": 0.8,
+          "stale_after": "2026-10-20T16:21:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/profile/age_years"
+        }
+      },
+      "life_stage": {
+        "value": "adult",
+        "visibility": [
+          "owner_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-04T16:30:00Z",
+          "confidence": 0.82,
+          "derived_from": [
+            "example://pets/pet_luna_001/profile/age_years"
+          ]
+        }
+      },
+      "weight": {
+        "value": {
+          "value": 62,
+          "unit": "lb"
+        },
+        "visibility": [
+          "owner_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-20T16:21:00Z",
+          "confidence": 0.8,
+          "stale_after": "2026-10-20T16:21:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/profile/weight"
+        }
+      },
+      "size_class": {
+        "value": "large",
+        "visibility": [
+          "owner_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-04T16:30:00Z",
+          "confidence": 0.82,
+          "derived_from": [
+            "example://pets/pet_luna_001/profile/weight"
+          ]
+        }
+      },
+      "metadata": {
+        "visibility": [
+          "owner_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-04T16:30:00Z",
+          "confidence": 0.82,
+          "derived_from": [
+            "example://pets/pet_luna_001/profile"
+          ]
+        }
+      }
+    },
+    "diet_profile": {
+      "diet_profile_id": "diet_luna_001",
+      "pet_id": "pet_luna_001",
+      "food_brands": {
+        "value": [
+          "Acme Large Breed Adult"
+        ],
+        "visibility": [
+          "owner_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-22T14:08:00Z",
+          "confidence": 0.75,
+          "stale_after": "2026-07-22T14:08:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/diet/food_brands"
+        }
+      },
+      "proteins": {
+        "value": [
+          "salmon"
+        ],
+        "visibility": [
+          "owner_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-22T14:08:00Z",
+          "confidence": 0.75,
+          "stale_after": "2026-07-22T14:08:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/diet/proteins"
+        }
+      },
+      "allergies": {
+        "value": [
+          "chicken"
+        ],
+        "visibility": [
+          "owner_visible",
+          "vet_shareable",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-22T14:08:00Z",
+          "confidence": 0.75,
+          "stale_after": "2026-07-22T14:08:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/diet/allergies"
+        }
+      },
+      "sensitivities": {
+        "value": [
+          "wheat"
+        ],
+        "visibility": [
+          "owner_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-22T14:08:00Z",
+          "confidence": 0.75,
+          "stale_after": "2026-07-22T14:08:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/diet/sensitivities"
+        }
+      },
+      "treats_allowed": {
+        "value": true,
+        "visibility": [
+          "owner_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-22T14:08:00Z",
+          "confidence": 0.75,
+          "stale_after": "2026-07-22T14:08:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/diet/treats_allowed"
+        }
+      },
+      "product_exclusions": {
+        "value": [
+          "chicken_protein",
+          "wheat_based_treats"
+        ],
+        "visibility": [
+          "owner_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-04T16:30:00Z",
+          "confidence": 0.82,
+          "derived_from": [
+            "example://pets/pet_luna_001/diet/allergies",
+            "example://pets/pet_luna_001/diet/sensitivities"
+          ]
+        }
+      },
+      "owner_notes_summary": {
+        "value": "Owner prefers limited-ingredient treats.",
+        "visibility": [
+          "owner_visible",
+          "agent_summary_only",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-04T16:30:00Z",
+          "confidence": 0.74,
+          "derived_from": [
+            "example://pets/pet_luna_001/diet/owner_notes"
+          ]
+        }
+      },
+      "metadata": {
+        "visibility": [
+          "owner_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-04T16:30:00Z",
+          "confidence": 0.82,
+          "derived_from": [
+            "example://pets/pet_luna_001/diet"
+          ]
+        }
+      }
+    },
+    "preferences": {
+      "value": [
+        "durable_chews",
+        "soft_training_treats"
+      ],
+      "visibility": [
+        "owner_visible",
+        "commerce_safe"
+      ],
+      "provenance": {
+        "source_type": "generated",
+        "source_system": "example-ccp-server",
+        "recorded_at": "2026-05-04T16:30:00Z",
+        "confidence": 0.82,
+        "derived_from": [
+          "example://pets/pet_luna_001/preferences"
+        ]
+      }
+    },
+    "metadata": {
+      "visibility": [
+        "owner_visible",
+        "commerce_safe"
+      ],
+      "provenance": {
+        "source_type": "generated",
+        "source_system": "example-ccp-server",
+        "recorded_at": "2026-05-04T16:30:00Z",
+        "confidence": 0.82,
+        "derived_from": [
+          "example://pets/pet_luna_001/profile",
+          "example://pets/pet_luna_001/diet",
+          "example://pets/pet_luna_001/preferences"
+        ]
+      }
+    }
+  },
+  "omissions": [
+    {
+      "field": "commerce_context.purchase_history_summary",
+      "reason": "scope_missing",
+      "required_scope": "pet.purchase_history.summary.read",
+      "detail": "The active grant does not include purchase history summary access."
+    },
+    {
+      "field": "commerce_context.diet_profile.feeding_schedule",
+      "reason": "visibility_restricted",
+      "visibility_class": "owner_visible",
+      "detail": "Owner-visible feeding cadence was not returned because owner visibility does not imply commerce access."
+    },
+    {
+      "field": "commerce_context.wellness_timeline",
+      "reason": "purpose_not_allowed",
+      "visibility_class": "restricted_sensitive",
+      "detail": "Raw wellness timelines are outside the Commerce Context Profile."
+    },
+    {
+      "field": "commerce_context.staff_notes",
+      "reason": "visibility_restricted",
+      "visibility_class": "staff_only",
+      "detail": "Staff-only notes are not commerce-safe."
+    }
+  ]
+}

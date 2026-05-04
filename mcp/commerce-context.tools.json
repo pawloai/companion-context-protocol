@@ -1,0 +1,66 @@
+{
+  "adapter": "mcp",
+  "status": "draft",
+  "ccp_version": "0.1.0-draft",
+  "profile": "commerce-context",
+  "description": "Illustrative MCP tool sketches for the CCP Commerce Context Profile. JSON Schema remains the canonical CCP contract.",
+  "canonical_contract": "../schemas/ccp-core.schema.json",
+  "tools": [
+    {
+      "name": "ccp_commerce_context_request",
+      "title": "Request CCP Commerce Context",
+      "description": "Request commerce-safe context for one pet. The server evaluates requester identity, pet identity, scopes, purpose, active grant, visibility classes, and freshness. Protocol-level denials return a CCP response envelope with status `denied`.",
+      "inputSchema": {
+        "$ref": "../schemas/ccp-core.schema.json#/$defs/CommerceContextRequest"
+      },
+      "outputSchema": {
+        "$ref": "../schemas/ccp-core.schema.json#/$defs/CommerceContextResponse"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "x-ccp-canonical-request-schema": "../schemas/commerce-context-request.schema.json",
+      "x-ccp-canonical-response-schema": "../schemas/commerce-context-response.schema.json",
+      "examples": {
+        "input": "../examples/commerce-context-request.json",
+        "partial_output": "../examples/commerce-context-response.json",
+        "denied_output": "../examples/commerce-context-denied-response.json"
+      }
+    },
+    {
+      "name": "ccp_permission_grant_get",
+      "title": "Get CCP Permission Grant",
+      "description": "Fetch a permission grant visible to the requester. This is an optional MCP adapter surface requiring `pet.permission_grants.read`; grant management semantics remain implementation-specific in this draft.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "grant_id"
+        ],
+        "properties": {
+          "grant_id": {
+            "type": "string",
+            "description": "Permission grant identifier."
+          }
+        }
+      },
+      "outputSchema": {
+        "$ref": "../schemas/ccp-core.schema.json#/$defs/PermissionGrant"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "x-ccp-required-scope": "pet.permission_grants.read",
+      "x-ccp-canonical-response-schema": "../schemas/permission-grant.schema.json",
+      "examples": {
+        "output": "../examples/permission-grant-commerce-context.json"
+      }
+    }
+  ]
+}

@@ -1,0 +1,235 @@
+{
+  "openapi": "3.1.0",
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "info": {
+    "title": "Companion Context Protocol Commerce Context HTTP Adapter",
+    "version": "0.1.0-draft",
+    "summary": "Illustrative OpenAPI surface for the CCP Commerce Context Profile.",
+    "description": "This OpenAPI document is an adapter sketch. JSON Schema remains the canonical CCP contract. HTTP implementations are CCP-compatible only when they preserve the same authorization, minimization, provenance, visibility, and omission semantics defined by SPEC.md."
+  },
+  "servers": [
+    {
+      "url": "https://example.com/ccp/v0",
+      "description": "Illustrative server URL. Implementations should publish their own base URL."
+    }
+  ],
+  "tags": [
+    {
+      "name": "Commerce Context",
+      "description": "Commerce-safe companion-animal context requests."
+    },
+    {
+      "name": "Permission Grants",
+      "description": "Optional grant lookup surfaces. Grant management semantics remain implementation-specific in this draft."
+    }
+  ],
+  "paths": {
+    "/commerce-context": {
+      "post": {
+        "tags": [
+          "Commerce Context"
+        ],
+        "operationId": "requestCommerceContext",
+        "summary": "Request commerce-safe context for one pet",
+        "description": "Evaluates requester identity, pet identity, requested scopes, declared purpose, active grant, visibility classes, and freshness. Protocol-level denials return a CCP response envelope with `status: denied`; malformed requests and transport authentication failures use ordinary HTTP errors.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/CCPVersion"
+          },
+          {
+            "$ref": "#/components/parameters/CCPProfile"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "../schemas/ccp-core.schema.json#/$defs/CommerceContextRequest"
+              },
+              "examples": {
+                "commerce_context_request": {
+                  "summary": "Commerce context request",
+                  "externalValue": "../examples/commerce-context-request.json"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "CCP authorization result. The body may be `ok`, `partial`, or `denied` according to the canonical response schema.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../schemas/ccp-core.schema.json#/$defs/CommerceContextResponse"
+                },
+                "examples": {
+                  "partial_response": {
+                    "summary": "Partial commerce context response",
+                    "externalValue": "../examples/commerce-context-response.json"
+                  },
+                  "denied_response": {
+                    "summary": "Denied commerce context response",
+                    "externalValue": "../examples/commerce-context-denied-response.json"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "415": {
+            "$ref": "#/components/responses/UnsupportedMediaType"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-ccp-profile": "commerce-context",
+        "x-ccp-version": "0.1.0-draft",
+        "x-ccp-canonical-request-schema": "../schemas/commerce-context-request.schema.json",
+        "x-ccp-canonical-response-schema": "../schemas/commerce-context-response.schema.json"
+      }
+    },
+    "/permission-grants/{grant_id}": {
+      "get": {
+        "tags": [
+          "Permission Grants"
+        ],
+        "operationId": "getPermissionGrant",
+        "summary": "Fetch a permission grant by id",
+        "description": "Optional HTTP adapter surface for retrieving a grant visible to the authenticated requester. Implementations must not expose grants unless requester authorization allows it. This operation requires `pet.permission_grants.read`.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/CCPVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "name": "grant_id",
+            "in": "path",
+            "required": true,
+            "description": "Permission grant identifier.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Permission grant visible to the requester.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../schemas/ccp-core.schema.json#/$defs/PermissionGrant"
+                },
+                "examples": {
+                  "commerce_permission_grant": {
+                    "summary": "Commerce permission grant",
+                    "externalValue": "../examples/permission-grant-commerce-context.json"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        },
+        "x-ccp-version": "0.1.0-draft",
+        "x-ccp-required-scope": "pet.permission_grants.read",
+        "x-ccp-canonical-response-schema": "../schemas/permission-grant.schema.json"
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Illustrative transport authentication. CCP does not define an authentication mechanism."
+      }
+    },
+    "parameters": {
+      "CCPVersion": {
+        "name": "CCP-Version",
+        "in": "header",
+        "required": false,
+        "description": "Requested CCP draft version. Implementations should document supported versions.",
+        "schema": {
+          "type": "string",
+          "example": "0.1.0-draft"
+        }
+      },
+      "CCPProfile": {
+        "name": "CCP-Profile",
+        "in": "header",
+        "required": false,
+        "description": "Requested CCP profile.",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "commerce-context"
+          ]
+        }
+      },
+      "RequestId": {
+        "name": "X-Request-Id",
+        "in": "header",
+        "required": false,
+        "description": "Transport-level request correlation identifier.",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Malformed HTTP request or request body that cannot be parsed or validated."
+      },
+      "Unauthorized": {
+        "description": "Missing or invalid transport authentication."
+      },
+      "Forbidden": {
+        "description": "Transport-authenticated requester is not allowed to use this HTTP surface."
+      },
+      "NotFound": {
+        "description": "Resource not found or not visible to the requester."
+      },
+      "UnsupportedMediaType": {
+        "description": "Request media type is not supported. Use `application/json`."
+      },
+      "RateLimited": {
+        "description": "Request was rate limited by the HTTP implementation."
+      }
+    }
+  }
+}

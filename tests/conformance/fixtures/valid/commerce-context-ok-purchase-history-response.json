@@ -1,0 +1,73 @@
+{
+  "request_id": "req_purchase_history_ok",
+  "status": "ok",
+  "authorization_decision": {
+    "decision": "allowed",
+    "evaluated_at": "2026-05-04T16:40:00Z",
+    "requester_actor_id": "actor_example_recommendation_agent",
+    "pet_id": "pet_luna_001",
+    "purpose": "product_recommendation",
+    "grant_id": "grant_owner_to_example_purchase_history_001",
+    "applied_scopes": [
+      "pet.commerce_context.read",
+      "pet.purchase_history.summary.read"
+    ],
+    "denied_scopes": [],
+    "reasons": [
+      "The active grant allows commerce-safe purchase history summary context."
+    ]
+  },
+  "commerce_context": {
+    "pet_id": "pet_luna_001",
+    "purpose": "product_recommendation",
+    "purchase_history_summary": {
+      "preferred_categories": {
+        "value": [
+          "durable_chews",
+          "limited_ingredient_treats"
+        ],
+        "visibility": [
+          "owner_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-04T16:40:00Z",
+          "derived_from": [
+            "example://pets/pet_luna_001/purchases/summary"
+          ]
+        }
+      },
+      "metadata": {
+        "visibility": [
+          "owner_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-04T16:40:00Z",
+          "derived_from": [
+            "example://pets/pet_luna_001/purchases/summary"
+          ]
+        }
+      }
+    },
+    "metadata": {
+      "visibility": [
+        "owner_visible",
+        "commerce_safe"
+      ],
+      "provenance": {
+        "source_type": "generated",
+        "source_system": "example-ccp-server",
+        "recorded_at": "2026-05-04T16:40:00Z",
+        "derived_from": [
+          "example://pets/pet_luna_001/purchases/summary"
+        ]
+      }
+    }
+  },
+  "omissions": []
+}

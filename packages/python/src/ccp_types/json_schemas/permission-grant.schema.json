@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://companioncontext.org/schemas/permission-grant.schema.json",
+  "title": "CCP Permission Grant",
+  "$ref": "ccp-core.schema.json#/$defs/PermissionGrant"
+}
+

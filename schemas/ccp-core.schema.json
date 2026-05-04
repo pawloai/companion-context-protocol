@@ -1,0 +1,1317 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://companioncontext.org/schemas/ccp-core.schema.json",
+  "title": "Companion Context Protocol Core",
+  "type": "object",
+  "$defs": {
+    "VisibilityClass": {
+      "type": "string",
+      "enum": [
+        "owner_visible",
+        "caregiver_visible",
+        "staff_only",
+        "vet_shareable",
+        "commerce_safe",
+        "agent_summary_only",
+        "restricted_sensitive"
+      ]
+    },
+    "Scope": {
+      "type": "string",
+      "enum": [
+        "pet.profile.read",
+        "pet.diet.read",
+        "pet.commerce_context.read",
+        "pet.permission_grants.read",
+        "pet.product_exclusions.read",
+        "pet.preferences.read",
+        "pet.purchase_history.summary.read"
+      ]
+    },
+    "Purpose": {
+      "type": "string",
+      "enum": [
+        "product_recommendation",
+        "product_filtering"
+      ]
+    },
+    "OmissionReasonCode": {
+      "type": "string",
+      "enum": [
+        "not_requested",
+        "scope_missing",
+        "purpose_not_allowed",
+        "visibility_restricted",
+        "grant_expired",
+        "grant_revoked",
+        "source_stale",
+        "not_available",
+        "summary_only"
+      ]
+    },
+    "VisibilitySet": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/VisibilityClass"
+      },
+      "allOf": [
+        {
+          "not": {
+            "allOf": [
+              {
+                "contains": {
+                  "const": "commerce_safe"
+                }
+              },
+              {
+                "contains": {
+                  "enum": [
+                    "staff_only",
+                    "restricted_sensitive"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "CommerceVisibilitySet": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/VisibilitySet"
+        },
+        {
+          "contains": {
+            "const": "commerce_safe"
+          }
+        },
+        {
+          "not": {
+            "contains": {
+              "enum": [
+                "staff_only",
+                "restricted_sensitive"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "CommerceObjectMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "visibility",
+        "provenance"
+      ],
+      "properties": {
+        "visibility": {
+          "$ref": "#/$defs/CommerceVisibilitySet"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ContextProvenance"
+        }
+      }
+    },
+    "CommerceStringField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/StringField"
+        },
+        {
+          "properties": {
+            "visibility": {
+              "$ref": "#/$defs/CommerceVisibilitySet"
+            }
+          }
+        }
+      ]
+    },
+    "CommerceStringArrayField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/StringArrayField"
+        },
+        {
+          "properties": {
+            "visibility": {
+              "$ref": "#/$defs/CommerceVisibilitySet"
+            }
+          }
+        }
+      ]
+    },
+    "CommerceBooleanField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/BooleanField"
+        },
+        {
+          "properties": {
+            "visibility": {
+              "$ref": "#/$defs/CommerceVisibilitySet"
+            }
+          }
+        }
+      ]
+    },
+    "CommerceNumberField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/NumberField"
+        },
+        {
+          "properties": {
+            "visibility": {
+              "$ref": "#/$defs/CommerceVisibilitySet"
+            }
+          }
+        }
+      ]
+    },
+    "CommerceWeightField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/WeightField"
+        },
+        {
+          "properties": {
+            "visibility": {
+              "$ref": "#/$defs/CommerceVisibilitySet"
+            }
+          }
+        }
+      ]
+    },
+    "CommerceSpeciesField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/SpeciesField"
+        },
+        {
+          "properties": {
+            "visibility": {
+              "$ref": "#/$defs/CommerceVisibilitySet"
+            }
+          }
+        }
+      ]
+    },
+    "CommerceSexField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/SexField"
+        },
+        {
+          "properties": {
+            "visibility": {
+              "$ref": "#/$defs/CommerceVisibilitySet"
+            }
+          }
+        }
+      ]
+    },
+    "CommerceLifeStageField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LifeStageField"
+        },
+        {
+          "properties": {
+            "visibility": {
+              "$ref": "#/$defs/CommerceVisibilitySet"
+            }
+          }
+        }
+      ]
+    },
+    "CommerceSizeClassField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/SizeClassField"
+        },
+        {
+          "properties": {
+            "visibility": {
+              "$ref": "#/$defs/CommerceVisibilitySet"
+            }
+          }
+        }
+      ]
+    },
+    "CommercePurchaseHistorySummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "last_purchase_at": {
+          "$ref": "#/$defs/CommerceStringField"
+        },
+        "preferred_categories": {
+          "$ref": "#/$defs/CommerceStringArrayField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/CommerceObjectMetadata"
+        }
+      },
+      "required": [
+        "metadata"
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "last_purchase_at"
+          ]
+        },
+        {
+          "required": [
+            "preferred_categories"
+          ]
+        }
+      ]
+    },
+    "CommercePetProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pet_id",
+        "metadata"
+      ],
+      "properties": {
+        "pet_id": {
+          "type": "string"
+        },
+        "display_name": {
+          "$ref": "#/$defs/CommerceStringField"
+        },
+        "species": {
+          "$ref": "#/$defs/CommerceSpeciesField"
+        },
+        "breed": {
+          "$ref": "#/$defs/CommerceStringField"
+        },
+        "breed_mix": {
+          "$ref": "#/$defs/CommerceBooleanField"
+        },
+        "sex": {
+          "$ref": "#/$defs/CommerceSexField"
+        },
+        "age_years": {
+          "$ref": "#/$defs/CommerceNumberField"
+        },
+        "life_stage": {
+          "$ref": "#/$defs/CommerceLifeStageField"
+        },
+        "weight": {
+          "$ref": "#/$defs/CommerceWeightField"
+        },
+        "size_class": {
+          "$ref": "#/$defs/CommerceSizeClassField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/CommerceObjectMetadata"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "display_name"
+          ]
+        },
+        {
+          "required": [
+            "species"
+          ]
+        },
+        {
+          "required": [
+            "breed"
+          ]
+        },
+        {
+          "required": [
+            "breed_mix"
+          ]
+        },
+        {
+          "required": [
+            "sex"
+          ]
+        },
+        {
+          "required": [
+            "age_years"
+          ]
+        },
+        {
+          "required": [
+            "life_stage"
+          ]
+        },
+        {
+          "required": [
+            "weight"
+          ]
+        },
+        {
+          "required": [
+            "size_class"
+          ]
+        }
+      ]
+    },
+    "CommerceDietProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "diet_profile_id",
+        "pet_id",
+        "metadata"
+      ],
+      "properties": {
+        "diet_profile_id": {
+          "type": "string"
+        },
+        "pet_id": {
+          "type": "string"
+        },
+        "food_brands": {
+          "$ref": "#/$defs/CommerceStringArrayField"
+        },
+        "proteins": {
+          "$ref": "#/$defs/CommerceStringArrayField"
+        },
+        "feeding_schedule": {
+          "$ref": "#/$defs/CommerceStringField"
+        },
+        "allergies": {
+          "$ref": "#/$defs/CommerceStringArrayField"
+        },
+        "sensitivities": {
+          "$ref": "#/$defs/CommerceStringArrayField"
+        },
+        "treats_allowed": {
+          "$ref": "#/$defs/CommerceBooleanField"
+        },
+        "product_exclusions": {
+          "$ref": "#/$defs/CommerceStringArrayField"
+        },
+        "owner_notes_summary": {
+          "$ref": "#/$defs/CommerceStringField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/CommerceObjectMetadata"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "food_brands"
+          ]
+        },
+        {
+          "required": [
+            "proteins"
+          ]
+        },
+        {
+          "required": [
+            "feeding_schedule"
+          ]
+        },
+        {
+          "required": [
+            "allergies"
+          ]
+        },
+        {
+          "required": [
+            "sensitivities"
+          ]
+        },
+        {
+          "required": [
+            "treats_allowed"
+          ]
+        },
+        {
+          "required": [
+            "product_exclusions"
+          ]
+        },
+        {
+          "required": [
+            "owner_notes_summary"
+          ]
+        }
+      ]
+    },
+    "ContextProvenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_type",
+        "recorded_at"
+      ],
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": [
+            "owner_entered",
+            "caregiver_entered",
+            "staff_observed",
+            "vet_verified",
+            "imported",
+            "inferred",
+            "generated"
+          ]
+        },
+        "source_actor_id": {
+          "type": "string"
+        },
+        "source_system": {
+          "type": "string"
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "verified_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "stale_after": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source_record_ref": {
+          "type": "string"
+        },
+        "derived_from": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "source_type": {
+                "const": "generated"
+              }
+            },
+            "required": [
+              "source_type"
+            ]
+          },
+          "then": {
+            "required": [
+              "source_system",
+              "derived_from"
+            ]
+          }
+        }
+      ]
+    },
+    "StringField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "visibility",
+        "provenance"
+      ],
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "visibility": {
+          "$ref": "#/$defs/VisibilitySet"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ContextProvenance"
+        }
+      }
+    },
+    "StringArrayField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "visibility",
+        "provenance"
+      ],
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "visibility": {
+          "$ref": "#/$defs/VisibilitySet"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ContextProvenance"
+        }
+      }
+    },
+    "BooleanField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "visibility",
+        "provenance"
+      ],
+      "properties": {
+        "value": {
+          "type": "boolean"
+        },
+        "visibility": {
+          "$ref": "#/$defs/VisibilitySet"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ContextProvenance"
+        }
+      }
+    },
+    "NumberField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "visibility",
+        "provenance"
+      ],
+      "properties": {
+        "value": {
+          "type": "number"
+        },
+        "visibility": {
+          "$ref": "#/$defs/VisibilitySet"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ContextProvenance"
+        }
+      }
+    },
+    "Weight": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "unit"
+      ],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 0
+        },
+        "unit": {
+          "type": "string",
+          "enum": [
+            "lb",
+            "kg"
+          ]
+        }
+      }
+    },
+    "WeightField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "visibility",
+        "provenance"
+      ],
+      "properties": {
+        "value": {
+          "$ref": "#/$defs/Weight"
+        },
+        "visibility": {
+          "$ref": "#/$defs/VisibilitySet"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ContextProvenance"
+        }
+      }
+    },
+    "SpeciesField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "visibility",
+        "provenance"
+      ],
+      "properties": {
+        "value": {
+          "type": "string",
+          "enum": [
+            "dog",
+            "cat",
+            "other"
+          ]
+        },
+        "visibility": {
+          "$ref": "#/$defs/VisibilitySet"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ContextProvenance"
+        }
+      }
+    },
+    "SexField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "visibility",
+        "provenance"
+      ],
+      "properties": {
+        "value": {
+          "type": "string",
+          "enum": [
+            "female",
+            "male",
+            "unknown"
+          ]
+        },
+        "visibility": {
+          "$ref": "#/$defs/VisibilitySet"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ContextProvenance"
+        }
+      }
+    },
+    "LifeStageField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "visibility",
+        "provenance"
+      ],
+      "properties": {
+        "value": {
+          "type": "string",
+          "enum": [
+            "puppy",
+            "kitten",
+            "adult",
+            "senior",
+            "unknown"
+          ]
+        },
+        "visibility": {
+          "$ref": "#/$defs/VisibilitySet"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ContextProvenance"
+        }
+      }
+    },
+    "SizeClassField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "visibility",
+        "provenance"
+      ],
+      "properties": {
+        "value": {
+          "type": "string",
+          "enum": [
+            "toy",
+            "small",
+            "medium",
+            "large",
+            "giant",
+            "unknown"
+          ]
+        },
+        "visibility": {
+          "$ref": "#/$defs/VisibilitySet"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ContextProvenance"
+        }
+      }
+    },
+    "ObjectMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "visibility",
+        "provenance"
+      ],
+      "properties": {
+        "visibility": {
+          "$ref": "#/$defs/VisibilitySet"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ContextProvenance"
+        }
+      }
+    },
+    "PetProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pet_id",
+        "display_name",
+        "species",
+        "life_stage",
+        "size_class",
+        "metadata"
+      ],
+      "properties": {
+        "pet_id": {
+          "type": "string"
+        },
+        "display_name": {
+          "$ref": "#/$defs/StringField"
+        },
+        "species": {
+          "$ref": "#/$defs/SpeciesField"
+        },
+        "breed": {
+          "$ref": "#/$defs/StringField"
+        },
+        "breed_mix": {
+          "$ref": "#/$defs/BooleanField"
+        },
+        "sex": {
+          "$ref": "#/$defs/SexField"
+        },
+        "age_years": {
+          "$ref": "#/$defs/NumberField"
+        },
+        "life_stage": {
+          "$ref": "#/$defs/LifeStageField"
+        },
+        "weight": {
+          "$ref": "#/$defs/WeightField"
+        },
+        "size_class": {
+          "$ref": "#/$defs/SizeClassField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/ObjectMetadata"
+        }
+      }
+    },
+    "DietProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "diet_profile_id",
+        "pet_id",
+        "allergies",
+        "sensitivities",
+        "product_exclusions",
+        "metadata"
+      ],
+      "properties": {
+        "diet_profile_id": {
+          "type": "string"
+        },
+        "pet_id": {
+          "type": "string"
+        },
+        "food_brands": {
+          "$ref": "#/$defs/StringArrayField"
+        },
+        "proteins": {
+          "$ref": "#/$defs/StringArrayField"
+        },
+        "feeding_schedule": {
+          "$ref": "#/$defs/StringField"
+        },
+        "allergies": {
+          "$ref": "#/$defs/StringArrayField"
+        },
+        "sensitivities": {
+          "$ref": "#/$defs/StringArrayField"
+        },
+        "treats_allowed": {
+          "$ref": "#/$defs/BooleanField"
+        },
+        "product_exclusions": {
+          "$ref": "#/$defs/StringArrayField"
+        },
+        "owner_notes_summary": {
+          "$ref": "#/$defs/StringField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/ObjectMetadata"
+        }
+      }
+    },
+    "PurchaseHistorySummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "last_purchase_at": {
+          "$ref": "#/$defs/StringField"
+        },
+        "preferred_categories": {
+          "$ref": "#/$defs/StringArrayField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/ObjectMetadata"
+        }
+      },
+      "required": [
+        "metadata"
+      ]
+    },
+    "CommerceContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pet_id",
+        "purpose",
+        "metadata"
+      ],
+      "properties": {
+        "pet_id": {
+          "type": "string"
+        },
+        "purpose": {
+          "$ref": "#/$defs/Purpose"
+        },
+        "pet_profile": {
+          "$ref": "#/$defs/CommercePetProfile"
+        },
+        "diet_profile": {
+          "$ref": "#/$defs/CommerceDietProfile"
+        },
+        "preferences": {
+          "$ref": "#/$defs/CommerceStringArrayField"
+        },
+        "purchase_history_summary": {
+          "$ref": "#/$defs/CommercePurchaseHistorySummary"
+        },
+        "metadata": {
+          "$ref": "#/$defs/CommerceObjectMetadata"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "pet_profile"
+          ]
+        },
+        {
+          "required": [
+            "diet_profile"
+          ]
+        },
+        {
+          "required": [
+            "preferences"
+          ]
+        },
+        {
+          "required": [
+            "purchase_history_summary"
+          ]
+        }
+      ]
+    },
+    "PermissionGrant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grant_id",
+        "subject_pet_id",
+        "grantor_actor_id",
+        "grantee_actor_id",
+        "scopes",
+        "purposes",
+        "status",
+        "created_at"
+      ],
+      "properties": {
+        "grant_id": {
+          "type": "string"
+        },
+        "subject_pet_id": {
+          "type": "string"
+        },
+        "grantor_actor_id": {
+          "type": "string"
+        },
+        "grantee_actor_id": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/Scope"
+          }
+        },
+        "purposes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/Purpose"
+          }
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "expired",
+            "revoked"
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "revoked_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "active"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "not": {
+              "required": [
+                "revoked_at"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "revoked"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "revoked_at"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "expired"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "expires_at"
+            ]
+          }
+        }
+      ]
+    },
+    "AuthorizationDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision",
+        "evaluated_at",
+        "requester_actor_id",
+        "pet_id",
+        "purpose",
+        "applied_scopes",
+        "denied_scopes",
+        "reasons"
+      ],
+      "properties": {
+        "decision": {
+          "type": "string",
+          "enum": [
+            "allowed",
+            "partial",
+            "denied"
+          ]
+        },
+        "evaluated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "requester_actor_id": {
+          "type": "string"
+        },
+        "pet_id": {
+          "type": "string"
+        },
+        "purpose": {
+          "$ref": "#/$defs/Purpose"
+        },
+        "grant_id": {
+          "type": "string"
+        },
+        "applied_scopes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/Scope"
+          }
+        },
+        "denied_scopes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/Scope"
+          }
+        },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Omission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "field",
+        "reason"
+      ],
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "reason": {
+          "$ref": "#/$defs/OmissionReasonCode"
+        },
+        "visibility_class": {
+          "$ref": "#/$defs/VisibilityClass"
+        },
+        "required_scope": {
+          "$ref": "#/$defs/Scope"
+        },
+        "detail": {
+          "type": "string"
+        }
+      }
+    },
+    "CommerceContextRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "requester_actor_id",
+        "pet_id",
+        "purpose",
+        "scopes"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string"
+        },
+        "requester_actor_id": {
+          "type": "string"
+        },
+        "pet_id": {
+          "type": "string"
+        },
+        "purpose": {
+          "$ref": "#/$defs/Purpose"
+        },
+        "scopes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/Scope"
+          }
+        },
+        "grant_id": {
+          "type": "string"
+        }
+      }
+    },
+    "CommerceContextResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "status",
+        "authorization_decision",
+        "commerce_context",
+        "omissions"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "ok",
+            "partial",
+            "denied"
+          ]
+        },
+        "authorization_decision": {
+          "$ref": "#/$defs/AuthorizationDecision"
+        },
+        "commerce_context": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CommerceContext"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "omissions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Omission"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "ok"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "authorization_decision": {
+                "properties": {
+                  "decision": {
+                    "const": "allowed"
+                  },
+                  "denied_scopes": {
+                    "maxItems": 0
+                  }
+                }
+              },
+              "commerce_context": {
+                "$ref": "#/$defs/CommerceContext"
+              },
+              "omissions": {
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "partial"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "authorization_decision": {
+                "properties": {
+                  "decision": {
+                    "const": "partial"
+                  }
+                }
+              },
+              "commerce_context": {
+                "$ref": "#/$defs/CommerceContext"
+              },
+              "omissions": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "denied"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "authorization_decision": {
+                "properties": {
+                  "decision": {
+                    "const": "denied"
+                  },
+                  "applied_scopes": {
+                    "maxItems": 0
+                  }
+                }
+              },
+              "commerce_context": {
+                "type": "null"
+              },
+              "omissions": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

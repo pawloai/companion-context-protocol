@@ -1,0 +1,29 @@
+{
+  "request_id": "req_20260504_002",
+  "status": "denied",
+  "authorization_decision": {
+    "decision": "denied",
+    "evaluated_at": "2026-05-04T16:35:00Z",
+    "requester_actor_id": "actor_unknown_agent",
+    "pet_id": "pet_luna_001",
+    "purpose": "product_recommendation",
+    "grant_id": "grant_owner_to_unknown_agent_001",
+    "applied_scopes": [],
+    "denied_scopes": [
+      "pet.commerce_context.read"
+    ],
+    "reasons": [
+      "The active grant does not allow the requested purpose."
+    ]
+  },
+  "commerce_context": null,
+  "omissions": [
+    {
+      "field": "commerce_context",
+      "reason": "purpose_not_allowed",
+      "required_scope": "pet.commerce_context.read",
+      "detail": "The active grant does not allow the requested purpose."
+    }
+  ]
+}
+

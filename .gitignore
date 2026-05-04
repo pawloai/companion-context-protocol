@@ -1,0 +1,73 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Test and build output
+coverage/
+dist/
+build/
+.nyc_output/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+*.egg-info/
+
+# Local configuration
+.env
+.env.*
+!.env.example
+.npmrc
+.pypirc
+pip.conf
+pip.ini
+
+# Local credentials and key material
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+id_rsa*
+id_ed25519*
+.aws/
+.azure/
+.gcloud/
+
+# Local traces, exports, and data dumps
+*.har
+*.log
+*.sqlite
+*.sqlite3
+*.db
+*.csv
+*.tsv
+*.xlsx
+*.parquet
+*.ndjson
+
+# Local agent instructions
+AGENTS.md
+CLAUDE.md
+
+# Local-only vendor scan inputs
+tests/vendor-neutrality/forbidden-terms.json
