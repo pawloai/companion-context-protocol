@@ -83,7 +83,7 @@ Expected result:
 
 ## Launch Assets
 
-- [ ] One-paragraph positioning statement.
+- [x] One-paragraph positioning statement.
 - [x] Short announcement post.
 - [x] Design-partner call for feedback.
 - [x] Maintainer contact path.
