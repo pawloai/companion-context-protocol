@@ -34,3 +34,7 @@ Maintainers should:
 ## Current Maintainer Path
 
 Until a dedicated maintainer email is published, use GitHub issues for non-sensitive project feedback and GitHub private vulnerability reporting for sensitive security or privacy reports when enabled.
+
+## Public Source URL
+
+The public source repository URL is not assigned yet. Do not publish package or adapter metadata with a repository URL until that URL resolves for unauthenticated users.

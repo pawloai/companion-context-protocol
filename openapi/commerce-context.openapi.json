@@ -11,8 +11,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "contact": {
-      "name": "Companion Context Protocol maintainers",
-      "url": "https://github.com/companion-context-protocol/companion-context-protocol/issues"
+      "name": "Companion Context Protocol maintainers; see MAINTAINERS.md until a public source URL is assigned"
     }
   },
   "servers": [
@@ -104,6 +103,15 @@
           },
           "429": {
             "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          },
+          "502": {
+            "$ref": "#/components/responses/BadGateway"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "x-ccp-profile": "commerce-context",
@@ -170,6 +178,15 @@
           },
           "429": {
             "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          },
+          "502": {
+            "$ref": "#/components/responses/BadGateway"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
           }
         },
         "x-ccp-version": "0.1.0-draft",
@@ -219,6 +236,33 @@
         }
       }
     },
+    "schemas": {
+      "ProblemDetails": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "type": {
+            "type": "string",
+            "format": "uri-reference"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 599
+          },
+          "detail": {
+            "type": "string"
+          },
+          "instance": {
+            "type": "string",
+            "format": "uri-reference"
+          }
+        }
+      }
+    },
     "responses": {
       "BadRequest": {
         "description": "Malformed HTTP request or request body that cannot be parsed or validated."
@@ -237,6 +281,36 @@
       },
       "RateLimited": {
         "description": "Request was rate limited by the HTTP implementation."
+      },
+      "InternalServerError": {
+        "description": "Unexpected implementation error. The response is transport-level and does not replace CCP authorization decisions.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
+      },
+      "BadGateway": {
+        "description": "An upstream dependency returned an invalid response before a CCP decision could be produced.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
+      },
+      "ServiceUnavailable": {
+        "description": "The implementation or an upstream dependency is temporarily unavailable before a CCP decision could be produced.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
       }
     }
   }
