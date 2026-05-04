@@ -75,6 +75,7 @@ companion-context-protocol/
 - [Commerce Context OpenAPI adapter](openapi/commerce-context.openapi.json)
 - [Commerce Context MCP tool sketches](mcp/commerce-context.tools.json)
 - [Commerce Context server implementer guide](docs/implementers/commerce-context-server.md)
+- [Known compatibility risks](docs/implementers/compatibility-risks.md)
 - [Public launch checklist](docs/launch/public-launch-checklist.md)
 - [Announcement copy](docs/launch/announcement.md)
 - [Design-partner outreach notes](docs/launch/design-partner-outreach.md)
@@ -82,6 +83,28 @@ companion-context-protocol/
 - [Draft TypeScript package](packages/typescript)
 - [Draft Python package](packages/python)
 - [Open-source adoption roadmap](docs/design/2026-05-04-ccp-open-source-adoption-roadmap.md)
+
+## Getting Started
+
+Start with the draft specification, then validate the current contract before building against it:
+
+1. Read [SPEC.md](SPEC.md) for the normative protocol concepts, including grants, scopes, purposes, visibility classes, provenance, authorization decisions, and omissions.
+2. Review the canonical schemas in [schemas/](schemas/). JSON Schema is the source of truth for this draft.
+3. Compare the example flow in [examples/](examples/): permission grant, commerce context request, partial response, and denied response.
+4. Run the validation suite from a clean checkout:
+
+   ```sh
+   npm install
+   npm test
+   ```
+
+If you are implementing a Commerce Context server, use [docs/implementers/commerce-context-server.md](docs/implementers/commerce-context-server.md) as the implementation guide. Validate incoming `CommerceContextRequest` objects, authenticate the requester outside the CCP payload, evaluate grants, scopes, purposes, visibility, freshness, and provenance, then validate outgoing `CommerceContextResponse` objects before returning them.
+
+If you are integrating over HTTP, start with [openapi/commerce-context.openapi.json](openapi/commerce-context.openapi.json). If you are integrating with agents or assistant clients, start with [mcp/commerce-context.tools.json](mcp/commerce-context.tools.json). These are adapter sketches; compatibility is based on preserving the canonical CCP semantics, not on copying a specific transport shape.
+
+If you are using helper packages, see [packages/typescript](packages/typescript) for TypeScript types and AJV validator helpers, and [packages/python](packages/python) for Python schema-loading helpers. The canonical schemas still win if package helpers and schemas disagree.
+
+Before depending on this draft, read [docs/implementers/compatibility-risks.md](docs/implementers/compatibility-risks.md). CCP is pre-1.0, and draft versions may change incompatibly as the profile and conformance tests are refined.
 
 ## Validate The Draft
 

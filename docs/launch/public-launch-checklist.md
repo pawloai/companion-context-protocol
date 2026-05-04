@@ -46,7 +46,7 @@ The repository can be made public to gather feedback now, but broad positioning 
 - [x] Permission grant lifecycle constraints are enforced by schema.
 - [ ] Design partners have reviewed the Commerce Context Profile.
 - [ ] Feedback has been triaged into v0.1.0-draft updates or later milestones.
-- [ ] Known compatibility risks are documented.
+- [x] Known compatibility risks are documented.
 
 ## Example And Data Safety
 
