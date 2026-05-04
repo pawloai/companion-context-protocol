@@ -2,7 +2,7 @@
 
 Draft TypeScript helpers for CCP implementers live here.
 
-Status: Stub, pre-1.0
+Status: Draft helper package, pre-1.0
 
 This package is intentionally small. It provides hand-written TypeScript types for the Commerce Context Profile plus AJV validator helpers that load packaged copies of the canonical JSON Schemas.
 

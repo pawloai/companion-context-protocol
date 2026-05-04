@@ -6,7 +6,7 @@ Working name: Companion Context Protocol
 
 Acronym: CCP
 
-Status note: This roadmap has partially been implemented. The repository now includes the draft spec, canonical schemas, vendor-neutral Commerce Context examples, conformance runner, positive and negative fixtures, public-facing README/security/conduct/governance docs, an OpenAPI Commerce Context adapter, draft MCP Commerce Context tool sketches, a Commerce Context server implementer guide, a draft TypeScript package with exported types and AJV validators, and a draft Python package with schema-loading helpers. Generated Python model work and design-partner feedback remain future work.
+Status note: This roadmap has partially been implemented. The repository now includes the draft spec, canonical schemas, vendor-neutral Commerce Context examples, conformance runner, positive and negative fixtures, public-facing README/security/conduct/governance docs, an OpenAPI Commerce Context adapter, draft MCP Commerce Context tool sketches, a Commerce Context server implementer guide, a draft TypeScript helper package with exported types and AJV validators, a draft Python helper package with schema-loading helpers, launch materials, and the first `v0.1.0-draft` tag. Generated model work and design-partner feedback remain future work.
 
 ## Goal
 
@@ -255,14 +255,16 @@ Completed surfaces:
 - OpenAPI Commerce Context adapter.
 - MCP Commerce Context tool sketches.
 - Commerce Context server implementer guide.
+- Draft TypeScript helper package with exported types and AJV validators.
+- Draft Python helper package with schema-loading helpers.
 - Public-facing README, governance, security, and code of conduct.
+- Public launch checklist, announcement copy, design-partner outreach notes, issue templates, and pull request template.
+- First tagged draft release for feedback preview.
 
 Remaining implementation surfaces:
 
-- Optional generated TypeScript and Python models for package consumers.
-- Python validator helpers or generated Pydantic models if design partners need runtime validation in Python.
+- Optional generated TypeScript and Python models for package consumers, if design partners need model-first runtime integration.
 - Design-partner feedback loop.
-- First tagged draft release.
 
 Local-only repo guidance:
 
@@ -306,7 +308,7 @@ Current status:
 - Done: public issue and pull request templates.
 - Done: draft `v0.1.0-draft` changelog entry.
 - Done: maintainer contact path, launch announcement copy, and initial issue labels.
+- Done: first tagged `v0.1.0-draft` feedback preview.
 - Next: identify 3-5 design partners for review.
 - Next: complete remaining public launch checklist items after partner review.
-- Next: create first tagged draft release when launch gate is met.
 - Next: generated Python model plan or Pydantic model generation spike, if partner feedback shows demand for runtime models.

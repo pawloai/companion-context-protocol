@@ -35,5 +35,4 @@ Initial design-partner review draft.
 
 - Review the Commerce Context Profile with 2-3 design partners.
 - Triage accepted, deferred, and rejected feedback.
-- Complete the public launch checklist.
-- Create the first tagged draft release.
+- Complete remaining public launch checklist items after partner review.

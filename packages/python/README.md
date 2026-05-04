@@ -2,7 +2,7 @@
 
 Draft Python helpers for CCP implementers live here.
 
-Status: Stub, pre-1.0
+Status: Draft helper package, pre-1.0
 
 This package is intentionally small. It does not define hand-written runtime models yet. It provides package metadata and schema-loading helpers for the canonical JSON Schemas in this repository. Packaged schema snapshots are included for installed users and checked against the canonical repository schemas in `npm run test:python`.
 

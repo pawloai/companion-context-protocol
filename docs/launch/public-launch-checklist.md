@@ -27,8 +27,8 @@ The repository can be made public to gather feedback now, but broad positioning 
 - [x] Code of conduct exists.
 - [x] Governance model exists.
 - [x] Apache-2.0 license exists.
-- [x] TypeScript package stub exists.
-- [x] Python package stub exists.
+- [x] Draft TypeScript helper package exists.
+- [x] Draft Python schema helper package exists.
 - [x] Public issue templates exist.
 - [x] Public pull request template exists.
 - [x] Public changelog or release notes file exists.
