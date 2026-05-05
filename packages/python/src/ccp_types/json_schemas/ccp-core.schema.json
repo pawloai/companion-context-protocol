@@ -1341,7 +1341,7 @@
           "type": "string"
         },
         "purpose": {
-          "$ref": "#/$defs/Purpose"
+          "const": "boarding_preparation"
         },
         "facility_id": {
           "type": "string"
@@ -1946,7 +1946,18 @@
           ]
         },
         "authorization_decision": {
-          "$ref": "#/$defs/AuthorizationDecision"
+          "allOf": [
+            {
+              "$ref": "#/$defs/AuthorizationDecision"
+            },
+            {
+              "properties": {
+                "purpose": {
+                  "const": "boarding_preparation"
+                }
+              }
+            }
+          ]
         },
         "care_facility_context": {
           "anyOf": [

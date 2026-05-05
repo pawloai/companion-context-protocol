@@ -241,7 +241,7 @@ export interface EmergencyContact {
 
 export interface CareFacilityContext {
   pet_id: string;
-  purpose: Purpose;
+  purpose: "boarding_preparation";
   facility_id: string;
   service_id?: string;
   service_type: "boarding";

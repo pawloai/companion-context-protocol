@@ -51,6 +51,8 @@ Current invalid fixtures:
 - `fixtures/invalid/care-facility-boarding-response-with-wellness-timeline.json`
 - `fixtures/invalid/care-facility-boarding-response-with-diagnosis-history.json`
 - `fixtures/invalid/care-facility-pickup-authorization-payment-authority-leak.json`
+- `fixtures/invalid/care-facility-response-with-commerce-decision-purpose.json`
+- `fixtures/invalid/care-facility-response-with-commerce-context-purpose.json`
 
 Current valid fixtures:
 

@@ -219,6 +219,18 @@ const cases = [
     schema: "schemas/care-facility-context-response.schema.json",
     data: "tests/conformance/fixtures/invalid/care-facility-pickup-authorization-payment-authority-leak.json",
     valid: false
+  },
+  {
+    name: "reject care facility response with commerce decision purpose",
+    schema: "schemas/care-facility-context-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-response-with-commerce-decision-purpose.json",
+    valid: false
+  },
+  {
+    name: "reject care facility response with commerce context purpose",
+    schema: "schemas/care-facility-context-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-response-with-commerce-context-purpose.json",
+    valid: false
   }
 ];
 
