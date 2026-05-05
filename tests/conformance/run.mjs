@@ -329,6 +329,12 @@ const cases = [
     valid: false
   },
   {
+    name: "reject care facility pickup verification staff-only visibility",
+    schema: "schemas/care-facility-pickup-verification-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-pickup-verification-staff-only-visibility.json",
+    valid: false
+  },
+  {
     name: "care network lookup request example",
     schema: "schemas/care-network-lookup-request.schema.json",
     data: "examples/care-network-lookup-request.json",
