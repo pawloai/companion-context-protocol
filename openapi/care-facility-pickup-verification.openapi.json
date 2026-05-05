@@ -120,7 +120,6 @@
         },
         "x-ccp-profile": "care-facility-pickup-verification",
         "x-ccp-version": "0.1.0-draft",
-        "x-ccp-required-scope": "pet.pickup_authorization.read",
         "x-ccp-canonical-request-schema": "../schemas/care-facility-pickup-verification-request.schema.json",
         "x-ccp-canonical-response-schema": "../schemas/care-facility-pickup-verification-response.schema.json"
       }
@@ -200,12 +199,6 @@
       },
       "Unauthorized": {
         "description": "Missing or invalid transport authentication."
-      },
-      "Forbidden": {
-        "description": "Transport-authenticated requester is not allowed to use this HTTP surface."
-      },
-      "NotFound": {
-        "description": "Resource not found or not visible to the requester."
       },
       "UnsupportedMediaType": {
         "description": "Request media type is not supported. Use `application/json`."

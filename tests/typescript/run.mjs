@@ -192,9 +192,9 @@ const invalidFixtures = [
     data: "tests/conformance/fixtures/invalid/care-network-lookup-broad-scope-request.json"
   },
   {
-    name: "care network lookup response validator rejects household leak",
+    name: "care network lookup response validator rejects household keyword in reasons",
     validator: validators.careNetworkLookupResponse,
-    data: "tests/conformance/fixtures/invalid/care-network-lookup-household-leak.json"
+    data: "tests/conformance/fixtures/invalid/care-network-lookup-household-keyword-in-reasons.json"
   },
   {
     name: "care network lookup response validator rejects sensitive provenance ref",

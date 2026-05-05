@@ -359,9 +359,9 @@ const cases = [
     valid: false
   },
   {
-    name: "reject care network lookup household leak",
+    name: "reject care network lookup household keyword in reasons",
     schema: "schemas/care-network-lookup-response.schema.json",
-    data: "tests/conformance/fixtures/invalid/care-network-lookup-household-leak.json",
+    data: "tests/conformance/fixtures/invalid/care-network-lookup-household-keyword-in-reasons.json",
     valid: false
   },
   {

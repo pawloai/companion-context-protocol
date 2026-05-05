@@ -20,10 +20,10 @@ The conformance runner enforces today's invariants. The following surfaces are t
 
 These enums are expected to grow as new profiles land. Implementers should treat unknown values as forward-compatible signals rather than errors when reading, and should never hard-code the full set in production code:
 
-- `VisibilityClass` — currently 8 classes. New profiles (vet export, medication administration, etc.) may add classes, and precedence rules may extend.
-- `Scope` — currently includes commerce-safe scopes plus a first care-facility boarding-preparation slice. Future profiles will add wellness, vet export, facility writeback, medication administration, and payment-authority scopes.
-- `Purpose` — currently `product_recommendation`, `product_filtering`, and `boarding_preparation`. Other profiles will add their own purposes.
-- `OmissionReasonCode` — currently 11 reasons. Future profiles may add reason codes for profile-specific omissions.
+- `VisibilityClass` — currently 11 classes (`owner_visible`, `caregiver_visible`, `staff_only`, `vet_shareable`, `facility_shareable`, `commerce_safe`, `care_network_visible`, `contact_shareable`, `action_authorization_visible`, `agent_summary_only`, `restricted_sensitive`). New profiles (vet export, medication administration, etc.) may add classes, and precedence rules may extend.
+- `Scope` — currently includes commerce-safe scopes, the first care-facility boarding-preparation slice, the care-facility pickup-verification slice (single-scope `pet.pickup_authorization.read`), and the care-network lookup slice (`pet.care_network.actor_refs.read`, `pet.care_network.relationships.read`, `pet.care_network.contact_channels.read`, `pet.care_network.action_authorizations.read`, `pet.care_network.revocation_status.read`). Future profiles will add wellness, vet export, facility writeback, medication administration, and payment-authority scopes.
+- `Purpose` — currently `product_recommendation`, `product_filtering`, `boarding_preparation`, `pickup_verification`, and `care_network_lookup`. Other profiles will add their own purposes.
+- `OmissionReasonCode` — currently 13 reasons (the original 11 plus `facility_mismatch` and `service_window_inactive`). Future profiles may add reason codes for profile-specific omissions.
 
 ### Field envelope
 
@@ -60,13 +60,21 @@ Every field in a returned `commerce_context` must include `commerce_safe` and mu
 
 ### Facility-shareable rule
 
-Every field in a returned `care_facility_context` must include `facility_shareable` and must not include `staff_only` or `restricted_sensitive`. The first Care Facility Context slice is limited to boarding preparation and must preserve facility, service-window, purpose, scope, provenance, and omission boundaries.
+Every field in a returned `care_facility_context` or `pickup_verification_context` must include `facility_shareable` and must not include `staff_only` or `restricted_sensitive`. The boarding-preparation slice and the pickup-verification slice each preserve their own facility, service-window, purpose, scope, provenance, and omission boundaries.
+
+### Care-network visibility rule
+
+Every field in a returned `care_network_context` must include at least one of `care_network_visible`, `contact_shareable`, or `action_authorization_visible`, and must not include `staff_only` or `restricted_sensitive`. Care-network and commerce-context endpoints must be independently access-controlled — care-network visibility classes do not imply commerce safety, and commerce visibility does not imply care-network access.
 
 ## Profile Boundary
 
 The Commerce Context Profile's exclusions (staff notes, full wellness timelines, diagnosis or treatment history, billing data, household data, sensitive facility operations data, raw `agent_summary_only` observations) are intentional. Broadening them requires a new profile with its own scopes, purpose rules, visibility behavior, and conformance fixtures. Implementers should not expect these exclusions to soften within Commerce Context.
 
-The first Care Facility Context slice's exclusions (medication administration, facility observation writeback, full wellness timelines, diagnosis or treatment history, billing data, payment authority, identity document copies, unrelated household data, and staff-only records) are intentional. Broadening them requires additional scopes, purpose rules, visibility behavior, and conformance fixtures.
+The boarding-preparation Care Facility Context slice's exclusions (medication administration, facility observation writeback, full wellness timelines, diagnosis or treatment history, billing data, payment authority, identity document copies, unrelated household data, and staff-only records) are intentional. Broadening them requires additional scopes, purpose rules, visibility behavior, and conformance fixtures.
+
+The Care Facility Pickup Verification slice's exclusions (feeding instructions, medication administration, billing, payment authority, household context, identity-document copies and numbers, broader care history, wellness timeline, diagnosis history, treatment history, vaccination records unless separately requested, unrelated emergency contacts, unrelated Care Network contacts, staff-only notes, internal facility notes from other providers, raw behavioral incident records, and free-text denial details that reveal restricted source content) are intentional. The slice answers only whether release to the requested actor is allowed for the requested pickup context.
+
+The Care Network Lookup slice's exclusions (household data, staff-only records, sensitive provenance references, unrelated contacts outside the requested subject actor, billing, payment authority, medical or treatment context, and free-text denial details that reveal restricted source content) are intentional. The slice answers only whether the requested subject actor's relationship, contact channels, action authorizations, or revocation status are visible for the declared purpose.
 
 ## Adapter Compatibility
 
@@ -82,7 +90,7 @@ Adapter sketches are illustrative. They preserve canonical CCP semantics but the
 
 ### MCP
 
-- Tool names `ccp_commerce_context_request`, `ccp_care_facility_context_request`, and `ccp_permission_grant_get` are recommended snake_case names. The conformance runner enforces the relevant request tool plus grant lookup tool in each adapter sketch today.
+- Tool names `ccp_commerce_context_request`, `ccp_care_facility_context_request`, `ccp_care_facility_pickup_verification_request`, `ccp_care_network_lookup_request`, and `ccp_permission_grant_get` are recommended snake_case names. The conformance runner enforces the relevant request tool plus grant lookup tool in each adapter sketch today, except for the pickup-verification and care-network-lookup adapter sketches which intentionally omit the grant lookup tool.
 - Tool input/output schemas reference canonical `$defs` via `../schemas/ccp-core.schema.json#/$defs/...`. The path prefix is enforced today.
 - `annotations.readOnlyHint`, `idempotentHint`, and similar are illustrative MCP metadata, not normative.
 

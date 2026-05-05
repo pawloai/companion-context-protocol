@@ -305,7 +305,8 @@ Initial precedence rules:
 7. `facility_shareable` may be returned for care-facility purposes only when the requested scope, purpose, grant, facility, and service window also allow it.
 8. `facility_shareable` must not be combined with `staff_only` or `restricted_sensitive` on the same returned field.
 9. `care_network_visible`, `contact_shareable`, and `action_authorization_visible` may be returned for Care Network lookup only when the requested actor, scope, purpose, grant, and freshness checks allow that field.
-10. `contact_shareable` does not imply action authority, and `action_authorization_visible` does not imply access to contact channels.
+10. `care_network_visible`, `contact_shareable`, and `action_authorization_visible` must not be combined with `staff_only` or `restricted_sensitive` on the same returned field.
+11. `contact_shareable` does not imply action authority, and `action_authorization_visible` does not imply access to contact channels.
 
 ## Scope Registry
 

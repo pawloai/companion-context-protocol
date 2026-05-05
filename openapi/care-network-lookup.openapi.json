@@ -116,7 +116,6 @@
         },
         "x-ccp-profile": "care-network-lookup",
         "x-ccp-version": "0.1.0-draft",
-        "x-ccp-required-scope": "pet.care_network.actor_refs.read",
         "x-ccp-canonical-request-schema": "../schemas/care-network-lookup-request.schema.json",
         "x-ccp-canonical-response-schema": "../schemas/care-network-lookup-response.schema.json"
       }
@@ -128,6 +127,33 @@
         "type": "http",
         "scheme": "bearer",
         "description": "Illustrative transport authentication. CCP does not define an authentication mechanism."
+      }
+    },
+    "schemas": {
+      "ProblemDetails": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "type": {
+            "type": "string",
+            "format": "uri-reference"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 599
+          },
+          "detail": {
+            "type": "string"
+          },
+          "instance": {
+            "type": "string",
+            "format": "uri-reference"
+          }
+        }
       }
     },
     "parameters": {
@@ -177,13 +203,34 @@
         "description": "Request was rate limited by the HTTP implementation."
       },
       "InternalServerError": {
-        "description": "Unexpected implementation error. The response is transport-level and does not replace CCP authorization decisions."
+        "description": "Unexpected implementation error. The response is transport-level and does not replace CCP authorization decisions.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
       },
       "BadGateway": {
-        "description": "Upstream dependency failed."
+        "description": "An upstream dependency returned an invalid response before a CCP decision could be produced.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
       },
       "ServiceUnavailable": {
-        "description": "Service is temporarily unavailable."
+        "description": "The implementation or an upstream dependency is temporarily unavailable before a CCP decision could be produced.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
       }
     }
   }

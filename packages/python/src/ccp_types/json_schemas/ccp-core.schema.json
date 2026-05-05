@@ -1322,7 +1322,26 @@
           "$ref": "#/$defs/FacilityStringField"
         },
         "contact_channel": {
-          "$ref": "#/$defs/FacilityStringField"
+          "allOf": [
+            {
+              "$ref": "#/$defs/FacilityStringField"
+            },
+            {
+              "properties": {
+                "value": {
+                  "enum": [
+                    "app_message",
+                    "in_app",
+                    "sms",
+                    "phone",
+                    "email",
+                    "secure_message",
+                    "facility_counter"
+                  ]
+                }
+              }
+            }
+          ]
         },
         "care_network_source": {
           "$ref": "#/$defs/FacilityStringField"
@@ -1381,7 +1400,6 @@
       "additionalProperties": false,
       "required": [
         "authorization_status",
-        "release_allowed",
         "metadata"
       ],
       "properties": {
@@ -2290,6 +2308,9 @@
                   {
                     "properties": {
                       "pickup_authorization": {
+                        "required": [
+                          "release_allowed"
+                        ],
                         "properties": {
                           "authorization_status": {
                             "properties": {
