@@ -72,7 +72,7 @@
     },
     "SensitiveKeywordPattern": {
       "not": {
-        "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- ][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- ][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- ][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- ][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
+        "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- _][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- _][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- _][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- _][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
       }
     },
     "VisibilitySet": {

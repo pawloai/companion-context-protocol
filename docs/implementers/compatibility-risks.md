@@ -121,7 +121,7 @@ The packages in `packages/typescript/` and `packages/python/` are draft helpers,
 These are not "compatibility risks" in the schema sense, but they affect what an implementation can safely upgrade through:
 
 - The "no real data" rule applies to every example, fixture, issue, PR, screenshot, and design note. Future drafts will not relax it.
-- `authorization_decision.reasons` and omission `detail` strings must not contain restricted source content. This is load-bearing.
+- `authorization_decision.reasons` and omission `detail` strings must not contain restricted source content. This is load-bearing. The pickup-verification and care-network-lookup response schemas enforce this with a `SensitiveKeywordPattern` overlay; the commerce-context and care-facility-boarding-preparation response schemas leave the constraint to the implementer because their omission detail strings legitimately reference excluded categories by name (for example, "Diagnosis history is not needed for boarding preparation"). Implementers of either older slice MUST still avoid embedding restricted source content in those strings even though the schema does not currently reject it.
 - Security-relevant clarifications may be made without preserving compatibility with earlier draft examples (`SECURITY.md`).
 
 ## How To Insulate An Implementation

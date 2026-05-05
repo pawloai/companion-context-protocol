@@ -509,7 +509,7 @@ A CCP Care Facility Pickup Verification implementation should:
 - Attach provenance and visibility metadata to returned facts or summaries.
 - Include an authorization decision in each response.
 - In `ok` responses, require `authorization_status: authorized` and `release_allowed: true`.
-- In `partial` responses, omit `release_allowed` or report it as `false`, and avoid claiming `authorization_status: authorized`.
+- In `partial` responses, omit `release_allowed` or report it as `false`, and do not claim `authorization_status: authorized`.
 - In `denied` responses, return `pickup_verification_context: null` with at least one omission.
 - Provide machine-readable omission reasons.
 - Avoid exposing feeding instructions, medication administration, billing data, payment authority, household context, identity-document copies or numbers, broader care history, wellness timelines, diagnosis or treatment history, vaccination records (unless separately requested for another purpose), unrelated emergency contacts, unrelated Care Network contacts, staff-only notes, internal facility notes from other providers, raw behavioral incident records, or free-text denial details that reveal restricted source content.
