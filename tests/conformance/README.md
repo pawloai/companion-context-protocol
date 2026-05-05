@@ -16,6 +16,8 @@ The current test suite verifies:
 - Response `status`, `authorization_decision.decision`, `commerce_context`, and omissions are internally consistent.
 - Grant lifecycle fields are internally consistent.
 - Example request/response pairs preserve request id, requester, pet, purpose, and grant identity.
+- The Care Facility request/response pair preserves facility, service, service type, and service-window identity.
+- The Care Facility permission grant example matches the public request's pet, requester, facility, service, service window, purpose, and requested scopes.
 - A valid purchase-history summary response is accepted.
 - The OpenAPI adapter sketches parse as valid API descriptions.
 - The OpenAPI adapter external examples resolve to existing files.

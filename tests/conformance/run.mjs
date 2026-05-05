@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
+import { isDeepStrictEqual } from "node:util";
 import { fileURLToPath } from "node:url";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
@@ -306,10 +307,19 @@ for (const pair of roundTripPairs) {
       [`${contextKey}.pet_id`, context?.pet_id, request.pet_id],
       [`${contextKey}.purpose`, context?.purpose, request.purpose]
     );
+
+    if (contextKey === "care_facility_context") {
+      roundTripChecks.push(
+        [`${contextKey}.facility_id`, context?.facility_id, request.facility_id],
+        [`${contextKey}.service_id`, context?.service_id, request.service_id],
+        [`${contextKey}.service_type`, context?.service_type, request.service_type],
+        [`${contextKey}.service_window`, context?.service_window, request.service_window]
+      );
+    }
   }
 
   for (const [name, actual, expected] of roundTripChecks) {
-    if (actual === expected) {
+    if (actual === expected || isDeepStrictEqual(actual, expected)) {
       continue;
     }
 
@@ -324,3 +334,46 @@ if (failed) {
 }
 
 console.log("ok - request/response round trip consistency");
+
+const careFacilityRequest = readJson("examples/care-facility-boarding-preparation-request.json");
+const careFacilityGrant = readJson("examples/permission-grant-care-facility-boarding-preparation.json");
+const grantRequestChecks = [
+  ["subject_pet_id", careFacilityGrant.subject_pet_id, careFacilityRequest.pet_id],
+  ["grantee_actor_id", careFacilityGrant.grantee_actor_id, careFacilityRequest.requester_actor_id],
+  ["facility_id", careFacilityGrant.facility_id, careFacilityRequest.facility_id],
+  ["service_id", careFacilityGrant.service_id, careFacilityRequest.service_id],
+  ["service_type", careFacilityGrant.service_type, careFacilityRequest.service_type],
+  ["service_window", careFacilityGrant.service_window, careFacilityRequest.service_window]
+];
+
+for (const [name, actual, expected] of grantRequestChecks) {
+  if (actual === expected || isDeepStrictEqual(actual, expected)) {
+    continue;
+  }
+
+  failed = true;
+  console.error(`not ok - care facility grant/request mismatch: ${name}`);
+  console.error(`  expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+}
+
+if (!careFacilityGrant.purposes.includes(careFacilityRequest.purpose)) {
+  failed = true;
+  console.error("not ok - care facility grant/request mismatch: purpose");
+  console.error(`  expected grant purposes to include ${careFacilityRequest.purpose}`);
+}
+
+for (const scope of careFacilityRequest.scopes) {
+  if (careFacilityGrant.scopes.includes(scope)) {
+    continue;
+  }
+
+  failed = true;
+  console.error("not ok - care facility grant/request mismatch: scope");
+  console.error(`  expected grant scopes to include ${scope}`);
+}
+
+if (failed) {
+  process.exit(1);
+}
+
+console.log("ok - care facility grant/request consistency");

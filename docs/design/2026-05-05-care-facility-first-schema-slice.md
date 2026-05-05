@@ -290,6 +290,12 @@ Valid denied response examples:
 - `examples/care-facility-facility-mismatch-denied-response.json`
 - `examples/care-facility-expired-service-window-denied-response.json`
 
+Implementation-readiness checks:
+
+- The public grant, request, and partial response preserve pet, requester, facility, service, service type, service window, purpose, and grant identity.
+- The public request scopes are included in the public grant.
+- The OpenAPI and MCP adapters reference the canonical Care Facility request and response schemas and resolve their public examples.
+
 ## Negative Fixtures
 
 Initial negative fixtures:
@@ -313,4 +319,4 @@ Facility mismatch and expired service-window cases are valid denied response exa
 
 ## Recommended Next Step
 
-Run an implementation-readiness pass against the care-facility guide, examples, schemas, OpenAPI adapter, and MCP tool sketch to find any remaining mismatches before asking design partners to review the first boarding-preparation slice.
+Prepare a design-partner review packet for the first boarding-preparation slice that points reviewers to the schema, examples, adapter sketches, implementer guide, and the specific open decisions that still need feedback.
