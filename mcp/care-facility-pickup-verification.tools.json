@@ -22,7 +22,6 @@
         "idempotentHint": false,
         "openWorldHint": true
       },
-      "x-ccp-required-scope": "pet.pickup_authorization.read",
       "x-ccp-canonical-request-schema": "../schemas/care-facility-pickup-verification-request.schema.json",
       "x-ccp-canonical-response-schema": "../schemas/care-facility-pickup-verification-response.schema.json",
       "examples": {

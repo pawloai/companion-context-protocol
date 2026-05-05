@@ -151,7 +151,7 @@ for (const adapterFile of adapterFiles) {
   if (adapterFile.grantLookup !== false) {
     requiredTools.push("ccp_permission_grant_get");
   } else if (toolNames.has("ccp_permission_grant_get")) {
-    addError(`${adapterFile.path} must not expose grant lookup for minimized pickup verification`);
+    addError(`${adapterFile.path} must not expose grant lookup for a minimized profile`);
   }
 
   for (const requiredTool of requiredTools) {

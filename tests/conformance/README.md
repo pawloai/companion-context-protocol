@@ -57,7 +57,7 @@ Current invalid fixtures:
 - `fixtures/invalid/care-facility-response-with-commerce-context-purpose.json`
 - `fixtures/invalid/care-network-lookup-broad-scope-request.json`
 - `fixtures/invalid/care-network-lookup-denied-response-with-context.json`
-- `fixtures/invalid/care-network-lookup-household-leak.json`
+- `fixtures/invalid/care-network-lookup-household-keyword-in-reasons.json`
 - `fixtures/invalid/care-network-lookup-sensitive-provenance-ref.json`
 - `fixtures/invalid/care-network-lookup-staff-only-visibility.json`
 - `fixtures/invalid/care-network-lookup-unrelated-contact-list.json`

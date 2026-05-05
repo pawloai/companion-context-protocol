@@ -23,7 +23,7 @@ These enums are expected to grow as new profiles land. Implementers should treat
 - `VisibilityClass` — currently 11 classes (`owner_visible`, `caregiver_visible`, `staff_only`, `vet_shareable`, `facility_shareable`, `commerce_safe`, `care_network_visible`, `contact_shareable`, `action_authorization_visible`, `agent_summary_only`, `restricted_sensitive`). New profiles (vet export, medication administration, etc.) may add classes, and precedence rules may extend.
 - `Scope` — currently includes commerce-safe scopes, the first care-facility boarding-preparation slice, the care-facility pickup-verification slice (single-scope `pet.pickup_authorization.read`), and the care-network lookup slice (`pet.care_network.actor_refs.read`, `pet.care_network.relationships.read`, `pet.care_network.contact_channels.read`, `pet.care_network.action_authorizations.read`, `pet.care_network.revocation_status.read`). Future profiles will add wellness, vet export, facility writeback, medication administration, and payment-authority scopes.
 - `Purpose` — currently `product_recommendation`, `product_filtering`, `boarding_preparation`, `pickup_verification`, and `care_network_lookup`. Other profiles will add their own purposes.
-- `OmissionReasonCode` — currently 13 reasons (the original 11 plus `facility_mismatch` and `service_window_inactive`). Future profiles may add reason codes for profile-specific omissions.
+- `OmissionReasonCode` — currently 11 reasons. Future profiles may add reason codes for profile-specific omissions.
 
 ### Field envelope
 

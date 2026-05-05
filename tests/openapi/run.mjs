@@ -92,7 +92,7 @@ for (const adapterFile of adapterFiles) {
       errors.push(`${adapterFile.file} GET /permission-grants/{grant_id} must declare pet.permission_grants.read`);
     }
   } else if (openApi.paths?.["/permission-grants/{grant_id}"]) {
-    errors.push(`${adapterFile.file} must not expose grant lookup for minimized pickup verification`);
+    errors.push(`${adapterFile.file} must not expose grant lookup for a minimized profile`);
   }
 }
 

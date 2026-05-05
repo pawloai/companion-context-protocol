@@ -16,11 +16,11 @@ export type VisibilityClass =
   | "vet_shareable"
   | "facility_shareable"
   | "commerce_safe"
+  | "agent_summary_only"
+  | "restricted_sensitive"
   | "care_network_visible"
   | "contact_shareable"
-  | "action_authorization_visible"
-  | "agent_summary_only"
-  | "restricted_sensitive";
+  | "action_authorization_visible";
 
 export type Scope =
   | "pet.profile.read"
@@ -35,13 +35,13 @@ export type Scope =
   | "pet.feeding_instructions.read"
   | "pet.vaccinations.status.read"
   | "pet.pickup_authorization.read"
+  | "pet.emergency_contacts.read"
+  | "pet.medications.administration.read"
   | "pet.care_network.actor_refs.read"
   | "pet.care_network.relationships.read"
   | "pet.care_network.contact_channels.read"
   | "pet.care_network.action_authorizations.read"
-  | "pet.care_network.revocation_status.read"
-  | "pet.emergency_contacts.read"
-  | "pet.medications.administration.read";
+  | "pet.care_network.revocation_status.read";
 
 export type Purpose =
   | "product_recommendation"
@@ -288,7 +288,7 @@ export interface PickupAuthorizationVerification {
   revocation_status?: FieldEnvelope<string>;
   identity_check_required?: FieldEnvelope<boolean>;
   identity_check_method?: FieldEnvelope<string>;
-  release_allowed: FieldEnvelope<boolean>;
+  release_allowed?: FieldEnvelope<boolean>;
   metadata: ObjectMetadata;
 }
 

@@ -22,7 +22,6 @@
         "idempotentHint": false,
         "openWorldHint": true
       },
-      "x-ccp-required-scope": "pet.care_network.actor_refs.read",
       "x-ccp-canonical-request-schema": "../schemas/care-network-lookup-request.schema.json",
       "x-ccp-canonical-response-schema": "../schemas/care-network-lookup-response.schema.json",
       "examples": {

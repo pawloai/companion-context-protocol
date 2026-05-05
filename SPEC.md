@@ -102,7 +102,7 @@ The initial profile should exclude by default:
 
 The draft also includes Care Facility Context schema slices for `boarding_preparation` and `pickup_verification`, plus a first Care Network lookup slice for `care_network_lookup`. The boarding-preparation slice lets an authorized care facility request boarding-preparation context for one pet, facility, and service window. The pickup-verification slice lets an authorized care facility verify whether one pickup actor may pick up one pet for one facility and service window. The Care Network lookup slice lets an authorized requester retrieve a minimized actor, relationship, contact-channel, action-authorization, or revocation subset for one pet and one subject actor.
 
-The first care-facility slice can include:
+The boarding-preparation care-facility slice can include:
 
 - Facility booking context.
 - Care instructions.
@@ -111,7 +111,7 @@ The first care-facility slice can include:
 - Pickup authorization.
 - Emergency contacts.
 
-The first care-facility slice excludes by default:
+The boarding-preparation care-facility slice excludes by default:
 
 - Medication administration.
 - Facility observation writeback.
@@ -496,6 +496,21 @@ A CCP Care Facility Context Profile implementation should:
 - Omit restricted data by default.
 - Provide machine-readable omission reasons.
 - Avoid exposing medication administration, raw wellness timelines, diagnosis history, billing data, payment authority, identity document copies, or staff-only records unless explicitly allowed by a future profile or scope.
+
+A CCP Care Facility Pickup Verification implementation should:
+
+- Validate request and response objects against the canonical schema.
+- Enforce purpose-bound access (`pickup_verification`).
+- Enforce facility, service-window, and pickup-actor boundaries.
+- Enforce visibility precedence; require `facility_shareable` and reject `staff_only` or `restricted_sensitive` on returned context fields.
+- Return only the granted `pet.pickup_authorization.read` scope.
+- Attach provenance and visibility metadata to returned facts or summaries.
+- Include an authorization decision in each response.
+- In `ok` responses, require `authorization_status: authorized` and `release_allowed: true`.
+- In `partial` responses, omit `release_allowed` or report it as `false`, and avoid claiming `authorization_status: authorized`.
+- In `denied` responses, return `pickup_verification_context: null` with at least one omission.
+- Provide machine-readable omission reasons.
+- Avoid exposing feeding instructions, medication administration, billing data, payment authority, household context, identity-document copies or numbers, broader care history, wellness timelines, diagnosis or treatment history, vaccination records (unless separately requested for another purpose), unrelated emergency contacts, unrelated Care Network contacts, staff-only notes, internal facility notes from other providers, raw behavioral incident records, or free-text denial details that reveal restricted source content.
 
 A CCP Care Network Lookup implementation should:
 

@@ -70,6 +70,11 @@
         "summary_only"
       ]
     },
+    "SensitiveKeywordPattern": {
+      "not": {
+        "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- ][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- ][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- ][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- ][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
+      }
+    },
     "VisibilitySet": {
       "type": "array",
       "minItems": 1,
@@ -114,7 +119,11 @@
             "contains": {
               "enum": [
                 "staff_only",
-                "restricted_sensitive"
+                "restricted_sensitive",
+                "facility_shareable",
+                "care_network_visible",
+                "contact_shareable",
+                "action_authorization_visible"
               ]
             }
           }
@@ -127,18 +136,22 @@
           "$ref": "#/$defs/VisibilitySet"
         },
         {
-          "contains": {
-            "const": "facility_shareable"
-          }
-        },
-        {
           "not": {
             "contains": {
               "enum": [
                 "staff_only",
-                "restricted_sensitive"
+                "restricted_sensitive",
+                "commerce_safe",
+                "care_network_visible",
+                "contact_shareable",
+                "action_authorization_visible"
               ]
             }
+          }
+        },
+        {
+          "contains": {
+            "const": "facility_shareable"
           }
         }
       ]
@@ -2237,9 +2250,7 @@
                 },
                 "reasons": {
                   "items": {
-                    "not": {
-                      "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- ][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- ][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- ][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- ][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
-                    }
+                    "$ref": "#/$defs/SensitiveKeywordPattern"
                   }
                 }
               }
@@ -2266,9 +2277,7 @@
               {
                 "properties": {
                   "detail": {
-                    "not": {
-                      "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- ][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- ][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- ][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- ][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
-                    }
+                    "$ref": "#/$defs/SensitiveKeywordPattern"
                   }
                 }
               }
@@ -2359,7 +2368,37 @@
                 }
               },
               "pickup_verification_context": {
-                "$ref": "#/$defs/PickupVerificationContext"
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/PickupVerificationContext"
+                  },
+                  {
+                    "properties": {
+                      "pickup_authorization": {
+                        "properties": {
+                          "authorization_status": {
+                            "properties": {
+                              "value": {
+                                "not": {
+                                  "const": "authorized"
+                                }
+                              }
+                            }
+                          },
+                          "release_allowed": {
+                            "properties": {
+                              "value": {
+                                "not": {
+                                  "const": true
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
               },
               "omissions": {
                 "minItems": 1
@@ -2569,7 +2608,9 @@
             "contains": {
               "enum": [
                 "staff_only",
-                "restricted_sensitive"
+                "restricted_sensitive",
+                "commerce_safe",
+                "facility_shareable"
               ]
             }
           }
@@ -2600,9 +2641,7 @@
         {
           "properties": {
             "value": {
-              "not": {
-                "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- ][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- ][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- ][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- ][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
-              }
+              "$ref": "#/$defs/SensitiveKeywordPattern"
             },
             "visibility": {
               "$ref": "#/$defs/CareNetworkVisibilitySet"
@@ -2623,9 +2662,7 @@
           "properties": {
             "value": {
               "items": {
-                "not": {
-                  "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- ][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- ][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- ][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- ][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
-                }
+                "$ref": "#/$defs/SensitiveKeywordPattern"
               }
             },
             "visibility": {
@@ -3179,9 +3216,7 @@
                 },
                 "reasons": {
                   "items": {
-                    "not": {
-                      "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- ][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- ][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- ][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- ][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
-                    }
+                    "$ref": "#/$defs/SensitiveKeywordPattern"
                   }
                 }
               }
@@ -3217,9 +3252,7 @@
                     ]
                   },
                   "detail": {
-                    "not": {
-                      "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- ][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- ][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- ][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- ][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
-                    }
+                    "$ref": "#/$defs/SensitiveKeywordPattern"
                   }
                 }
               }
@@ -3331,20 +3364,14 @@
         {
           "properties": {
             "source_system": {
-              "not": {
-                "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- ][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- ][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- ][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- ][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
-              }
+              "$ref": "#/$defs/SensitiveKeywordPattern"
             },
             "source_record_ref": {
-              "not": {
-                "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- ][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- ][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- ][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- ][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
-              }
+              "$ref": "#/$defs/SensitiveKeywordPattern"
             },
             "derived_from": {
               "items": {
-                "not": {
-                  "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- ][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- ][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- ][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- ][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
-                }
+                "$ref": "#/$defs/SensitiveKeywordPattern"
               }
             }
           }
