@@ -67,10 +67,24 @@
           "source_type": "generated",
           "source_system": "example-ccp-server",
           "recorded_at": "2026-05-15T20:30:00Z",
-          "confidence": 0.94,
           "derived_from": [
             "example://grants/grant_owner_to_boarding_facility_pickup_001",
             "example://services/svc_boarding_20260512_001/pickup"
+          ]
+        }
+      },
+      "release_allowed": {
+        "value": true,
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-15T20:30:00Z",
+          "derived_from": [
+            "example://grants/grant_owner_to_boarding_facility_pickup_001"
           ]
         }
       },
