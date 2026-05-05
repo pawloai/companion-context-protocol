@@ -211,6 +211,16 @@ for (const fixture of invalidFixtures) {
   });
 }
 
+const onDiskSchemas = fs
+  .readdirSync(path.join(repoRoot, "schemas"))
+  .filter((name) => name.endsWith(".schema.json"))
+  .sort();
+const registeredSchemas = [...schemaFilenames].sort();
+checks.push({
+  name: "scripts/schema-names.mjs lists every schema present in schemas/",
+  valid: JSON.stringify(onDiskSchemas) === JSON.stringify(registeredSchemas)
+});
+
 for (const schemaName of schemaFilenames) {
   checks.push({
     name: `TypeScript build copied canonical schema ${schemaName}`,
