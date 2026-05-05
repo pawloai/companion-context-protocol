@@ -283,6 +283,7 @@ Public artifacts:
 - `examples/permission-grant-care-facility-boarding-preparation.json`
 - `examples/care-facility-boarding-preparation-request.json`
 - `examples/care-facility-boarding-preparation-response.json`
+- `docs/implementers/care-facility-context-server.md`
 
 Valid denied response examples:
 
@@ -312,4 +313,4 @@ Facility mismatch and expired service-window cases are valid denied response exa
 
 ## Recommended Next Step
 
-Draft a care-facility implementer guide that explains server-side evaluation for facility identity, service-window boundaries, `facility_shareable` visibility, valid denied responses, and purpose-inappropriate omissions.
+Run an implementation-readiness pass against the care-facility guide, examples, schemas, OpenAPI adapter, and MCP tool sketch to find any remaining mismatches before asking design partners to review the first boarding-preparation slice.

@@ -406,6 +406,8 @@ The illustrative HTTP adapter for this flow is `openapi/care-facility-context.op
 
 The illustrative MCP adapter for this flow is `mcp/care-facility-context.tools.json`.
 
+Implementation guidance for this flow is `docs/implementers/care-facility-context-server.md`.
+
 ## Conformance Requirements
 
 A CCP Commerce Context Profile implementation should:

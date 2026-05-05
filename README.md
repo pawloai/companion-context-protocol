@@ -87,6 +87,7 @@ companion-context-protocol/
 - [Care Facility Context OpenAPI adapter](openapi/care-facility-context.openapi.json)
 - [Care Facility Context MCP tool sketches](mcp/care-facility-context.tools.json)
 - [Commerce Context server implementer guide](docs/implementers/commerce-context-server.md)
+- [Care Facility Context server implementer guide](docs/implementers/care-facility-context-server.md)
 - [Known compatibility risks](docs/implementers/compatibility-risks.md)
 - [Public launch checklist](docs/launch/public-launch-checklist.md)
 - [Announcement copy](docs/launch/announcement.md)
@@ -113,6 +114,8 @@ Start with the draft specification, then validate the current contract before bu
    ```
 
 If you are implementing a Commerce Context server, use [docs/implementers/commerce-context-server.md](docs/implementers/commerce-context-server.md) as the implementation guide. Validate incoming `CommerceContextRequest` objects, authenticate the requester outside the CCP payload, evaluate grants, scopes, purposes, visibility, freshness, and provenance, then validate outgoing `CommerceContextResponse` objects before returning them.
+
+If you are implementing the first Care Facility Context slice, use [docs/implementers/care-facility-context-server.md](docs/implementers/care-facility-context-server.md) as the implementation guide. Validate incoming `CareFacilityContextRequest` objects, authenticate the requester outside the CCP payload, evaluate grants, facility identity, service-window boundaries, scopes, purpose, `facility_shareable` visibility, freshness, and provenance, then validate outgoing `CareFacilityContextResponse` objects before returning them.
 
 If you are integrating over HTTP, start with [openapi/](openapi/) for Commerce Context and Care Facility Context adapter sketches. If you are integrating with agents or assistant clients, start with [mcp/](mcp/) for the matching tool sketches. Compatibility is based on preserving the canonical CCP semantics, not on copying a specific transport shape.
 
