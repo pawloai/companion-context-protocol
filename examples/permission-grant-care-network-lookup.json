@@ -1,8 +1,8 @@
 {
-  "grant_id": "grant-care-network-lookup-001",
-  "subject_pet_id": "pet-001",
-  "grantor_actor_id": "actor-owner-001",
-  "grantee_actor_id": "actor-sitter-001",
+  "grant_id": "grant_care_network_lookup_001",
+  "subject_pet_id": "pet_luna_001",
+  "grantor_actor_id": "actor_owner_001",
+  "grantee_actor_id": "actor_sitter_001",
   "scopes": [
     "pet.care_network.actor_refs.read",
     "pet.care_network.relationships.read",
@@ -12,7 +12,7 @@
   "purposes": [
     "care_network_lookup"
   ],
-  "service_id": "care-session-001",
+  "service_id": "care_session_001",
   "service_type": "in_home_visit",
   "service_window": {
     "starts_at": "2026-05-10T15:00:00Z",

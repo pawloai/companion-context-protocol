@@ -1,7 +1,7 @@
 {
-  "request_id": "req-care-network-lookup-001",
-  "requester_actor_id": "actor-sitter-001",
-  "pet_id": "pet-001",
+  "request_id": "req_care_network_lookup_001",
+  "requester_actor_id": "actor_sitter_001",
+  "pet_id": "pet_luna_001",
   "purpose": "care_network_lookup",
   "scopes": [
     "pet.care_network.actor_refs.read",
@@ -9,10 +9,10 @@
     "pet.care_network.contact_channels.read",
     "pet.care_network.action_authorizations.read"
   ],
-  "grant_id": "grant-care-network-lookup-001",
-  "subject_actor_id": "actor-owner-001",
+  "grant_id": "grant_care_network_lookup_001",
+  "subject_actor_id": "actor_owner_001",
   "requested_action": "receive_care_updates",
-  "service_id": "care-session-001",
+  "service_id": "care_session_001",
   "service_window": {
     "starts_at": "2026-05-10T15:00:00Z",
     "ends_at": "2026-05-10T18:00:00Z"

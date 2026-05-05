@@ -4,10 +4,10 @@
   "authorization_decision": {
     "decision": "allowed",
     "evaluated_at": "2026-05-10T15:05:00Z",
-    "requester_actor_id": "actor-sitter-001",
-    "pet_id": "pet-001",
+    "requester_actor_id": "actor_sitter_001",
+    "pet_id": "pet_luna_001",
     "purpose": "care_network_lookup",
-    "grant_id": "grant-care-network-lookup-001",
+    "grant_id": "grant_care_network_lookup_001",
     "applied_scopes": [
       "pet.care_network.actor_refs.read",
       "pet.care_network.relationships.read"
@@ -18,10 +18,10 @@
     ]
   },
   "care_network_context": {
-    "pet_id": "pet-001",
+    "pet_id": "pet_luna_001",
     "purpose": "care_network_lookup",
     "subject_actor": {
-      "actor_id": "actor-owner-001",
+      "actor_id": "actor_owner_001",
       "actor_type": {
         "value": "owner",
         "visibility": [
@@ -29,9 +29,9 @@
         ],
         "provenance": {
           "source_type": "owner_entered",
-          "source_actor_id": "actor-owner-001",
+          "source_actor_id": "actor_owner_001",
           "recorded_at": "2026-04-20T10:00:00Z",
-          "source_record_ref": "example://pets/pet-001/billing/contact-owner"
+          "source_record_ref": "example://pets/pet_luna_001/billing/contact-owner"
         }
       },
       "metadata": {
@@ -40,14 +40,14 @@
         ],
         "provenance": {
           "source_type": "owner_entered",
-          "source_actor_id": "actor-owner-001",
+          "source_actor_id": "actor_owner_001",
           "recorded_at": "2026-04-20T10:00:00Z"
         }
       }
     },
     "relationship": {
-      "actor_id": "actor-owner-001",
-      "pet_id": "pet-001",
+      "actor_id": "actor_owner_001",
+      "pet_id": "pet_luna_001",
       "relationship_type": {
         "value": "owner",
         "visibility": [
@@ -55,7 +55,7 @@
         ],
         "provenance": {
           "source_type": "owner_entered",
-          "source_actor_id": "actor-owner-001",
+          "source_actor_id": "actor_owner_001",
           "recorded_at": "2026-04-20T10:00:00Z"
         }
       },
@@ -66,7 +66,7 @@
         ],
         "provenance": {
           "source_type": "owner_entered",
-          "source_actor_id": "actor-owner-001",
+          "source_actor_id": "actor_owner_001",
           "recorded_at": "2026-04-20T10:00:00Z"
         }
       },
@@ -76,7 +76,7 @@
         ],
         "provenance": {
           "source_type": "owner_entered",
-          "source_actor_id": "actor-owner-001",
+          "source_actor_id": "actor_owner_001",
           "recorded_at": "2026-04-20T10:00:00Z"
         }
       }
@@ -87,7 +87,7 @@
       ],
       "provenance": {
         "source_type": "owner_entered",
-        "source_actor_id": "actor-owner-001",
+        "source_actor_id": "actor_owner_001",
         "recorded_at": "2026-04-20T10:00:00Z"
       }
     }
