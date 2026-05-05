@@ -156,6 +156,8 @@ The context bundle should contain returned context only. Omissions should remain
 
 ## Candidate Nested Objects
 
+The fields below are candidate schema fields, not all required response fields. The first schema pass should require object metadata and field envelopes for returned facts, while allowing omitted optional fields to be represented by top-level omissions when they were requested, relevant, unavailable, or restricted.
+
 ### `FacilityBookingContext`
 
 Fields:
@@ -249,7 +251,11 @@ Emergency contacts should be limited to the boarding service window and should n
 
 ## Visibility Approach
 
-Use the existing visibility classes in the first schema pass where possible:
+The draft examples use `facility_shareable` as the candidate allow-oriented visibility class for returned care-facility fields.
+
+The next schema pass should either add `facility_shareable` with explicit precedence rules or replace it before these examples move into canonical `examples/`.
+
+Existing visibility classes still matter:
 
 - `owner_visible`
 - `caregiver_visible`
@@ -258,9 +264,7 @@ Use the existing visibility classes in the first schema pass where possible:
 - `agent_summary_only`
 - `restricted_sensitive`
 
-Add `facility_shareable` only if the first schema cannot clearly express facility access with scope, purpose, grant, and service-window constraints.
-
-For the first slice, a conservative option is to require every returned field in `care_facility_context` to include a future profile-specific allow class. If that path is chosen, `facility_shareable` should be added with explicit precedence rules and should not override `restricted_sensitive` or `staff_only`.
+For the first slice, the conservative option is to require every returned field in `care_facility_context` to include the profile-specific allow class. `facility_shareable` should not override `restricted_sensitive` or `staff_only`.
 
 ## Positive Example To Draft Next
 
@@ -297,7 +301,7 @@ Initial negative fixtures:
 
 ## Open Decisions Before Schema Work
 
-- Should `facility_shareable` be introduced in the first schema pass?
+- Should `facility_shareable` be the final name for the first care-facility allow class?
 - Should `grant_id` be required for the first slice?
 - Should `service_id` be required, or can pre-booking boarding preparation exist?
 - Should `emergency_contacts` be in the first slice, or deferred with emergency handoff?
