@@ -1,0 +1,594 @@
+{
+  "request_id": "req_boarding_20260505_001",
+  "status": "partial",
+  "authorization_decision": {
+    "decision": "partial",
+    "evaluated_at": "2026-05-05T16:30:00Z",
+    "requester_actor_id": "actor_boarding_facility_app_001",
+    "pet_id": "pet_luna_001",
+    "purpose": "boarding_preparation",
+    "grant_id": "grant_owner_to_boarding_facility_001",
+    "applied_scopes": [
+      "pet.facility_booking_context.read",
+      "pet.care_instructions.read",
+      "pet.feeding_instructions.read",
+      "pet.vaccinations.status.read",
+      "pet.pickup_authorization.read",
+      "pet.emergency_contacts.read"
+    ],
+    "denied_scopes": [
+      "pet.medications.administration.read"
+    ],
+    "reasons": [
+      "The active grant allows boarding preparation context for the requested facility and service window.",
+      "Medication administration was not returned because medication access is outside the first Care Facility schema slice."
+    ]
+  },
+  "care_facility_context": {
+    "pet_id": "pet_luna_001",
+    "purpose": "boarding_preparation",
+    "facility_id": "facility_boarding_001",
+    "service_id": "svc_boarding_20260512_001",
+    "service_type": "boarding",
+    "service_window": {
+      "starts_at": "2026-05-12T16:00:00Z",
+      "ends_at": "2026-05-16T18:00:00Z"
+    },
+    "booking_context": {
+      "eligibility_status": {
+        "value": "ready_with_omissions",
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-05T16:30:00Z",
+          "confidence": 0.86,
+          "derived_from": [
+            "example://services/svc_boarding_20260512_001",
+            "example://pets/pet_luna_001/care"
+          ]
+        }
+      },
+      "missing_required_context": {
+        "value": [],
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-05T16:30:00Z",
+          "confidence": 0.9,
+          "derived_from": [
+            "example://services/svc_boarding_20260512_001/requirements"
+          ]
+        }
+      },
+      "service_restrictions": {
+        "value": [
+          "no_shared_treats"
+        ],
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-05T16:30:00Z",
+          "confidence": 0.82,
+          "derived_from": [
+            "example://pets/pet_luna_001/feeding"
+          ]
+        }
+      },
+      "required_owner_approvals": {
+        "value": [
+          "confirm_pickup_contacts_at_dropoff"
+        ],
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-05T16:30:00Z",
+          "confidence": 0.78,
+          "derived_from": [
+            "example://services/svc_boarding_20260512_001/pickup"
+          ]
+        }
+      },
+      "metadata": {
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-05T16:30:00Z",
+          "confidence": 0.86,
+          "derived_from": [
+            "example://services/svc_boarding_20260512_001",
+            "example://pets/pet_luna_001/care"
+          ]
+        }
+      }
+    },
+    "care_instructions": {
+      "handling_summary": {
+        "value": "Use calm greetings and allow a short decompression period after drop-off.",
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-24T15:00:00Z",
+          "confidence": 0.78,
+          "stale_after": "2026-07-24T15:00:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/care/handling_summary"
+        }
+      },
+      "comfort_routines": {
+        "value": [
+          "short_walk_before_bed",
+          "blanket_from_home"
+        ],
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-24T15:00:00Z",
+          "confidence": 0.78,
+          "stale_after": "2026-07-24T15:00:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/care/comfort_routines"
+        }
+      },
+      "playgroup_constraints": {
+        "value": [
+          "large_calm_dogs_only"
+        ],
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "staff_observed",
+          "source_actor_id": "actor_staff_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-28T19:20:00Z",
+          "confidence": 0.84,
+          "stale_after": "2026-07-28T19:20:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/care/playgroup_summary"
+        }
+      },
+      "activity_restrictions": {
+        "value": [],
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-24T15:00:00Z",
+          "confidence": 0.7,
+          "stale_after": "2026-07-24T15:00:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/care/activity_restrictions"
+        }
+      },
+      "metadata": {
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-05T16:30:00Z",
+          "confidence": 0.82,
+          "derived_from": [
+            "example://pets/pet_luna_001/care"
+          ]
+        }
+      }
+    },
+    "feeding_instructions": {
+      "food_description": {
+        "value": "Owner-supplied salmon kibble",
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-22T14:08:00Z",
+          "confidence": 0.75,
+          "stale_after": "2026-07-22T14:08:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/feeding/food_description"
+        }
+      },
+      "portion": {
+        "value": "one_measured_cup",
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-22T14:08:00Z",
+          "confidence": 0.75,
+          "stale_after": "2026-07-22T14:08:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/feeding/portion"
+        }
+      },
+      "schedule": {
+        "value": [
+          "07:00",
+          "18:00"
+        ],
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-22T14:08:00Z",
+          "confidence": 0.75,
+          "stale_after": "2026-07-22T14:08:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/feeding/schedule"
+        }
+      },
+      "treat_rules": {
+        "value": [
+          "no_chicken",
+          "facility_treats_require_owner_approval"
+        ],
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-22T14:08:00Z",
+          "confidence": 0.75,
+          "stale_after": "2026-07-22T14:08:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/feeding/treat_rules"
+        }
+      },
+      "allergy_notes": {
+        "value": [
+          "chicken"
+        ],
+        "visibility": [
+          "owner_visible",
+          "vet_shareable",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-22T14:08:00Z",
+          "confidence": 0.75,
+          "stale_after": "2026-07-22T14:08:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/feeding/allergy_notes"
+        }
+      },
+      "owner_supplied_food": {
+        "value": true,
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-04-22T14:08:00Z",
+          "confidence": 0.75,
+          "stale_after": "2026-07-22T14:08:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/feeding/owner_supplied_food"
+        }
+      },
+      "metadata": {
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-05T16:30:00Z",
+          "confidence": 0.8,
+          "derived_from": [
+            "example://pets/pet_luna_001/feeding"
+          ]
+        }
+      }
+    },
+    "vaccination_status": [
+      {
+        "vaccine_name": {
+          "value": "rabies",
+          "visibility": [
+            "owner_visible",
+            "vet_shareable",
+            "facility_shareable"
+          ],
+          "provenance": {
+            "source_type": "vet_verified",
+            "source_actor_id": "actor_vet_001",
+            "source_system": "example-ccp-server",
+            "recorded_at": "2026-04-10T17:00:00Z",
+            "verified_at": "2026-04-10T17:00:00Z",
+            "confidence": 0.96,
+            "source_record_ref": "example://pets/pet_luna_001/vaccinations/rabies"
+          }
+        },
+        "proof_status": {
+          "value": "verified",
+          "visibility": [
+            "owner_visible",
+            "vet_shareable",
+            "facility_shareable"
+          ],
+          "provenance": {
+            "source_type": "vet_verified",
+            "source_actor_id": "actor_vet_001",
+            "source_system": "example-ccp-server",
+            "recorded_at": "2026-04-10T17:00:00Z",
+            "verified_at": "2026-04-10T17:00:00Z",
+            "confidence": 0.96,
+            "source_record_ref": "example://pets/pet_luna_001/vaccinations/rabies"
+          }
+        },
+        "metadata": {
+          "visibility": [
+            "owner_visible",
+            "vet_shareable",
+            "facility_shareable"
+          ],
+          "provenance": {
+            "source_type": "generated",
+            "source_system": "example-ccp-server",
+            "recorded_at": "2026-05-05T16:30:00Z",
+            "confidence": 0.96,
+            "derived_from": [
+              "example://pets/pet_luna_001/vaccinations/rabies"
+            ]
+          }
+        }
+      }
+    ],
+    "pickup_authorization": [
+      {
+        "authorized_actor_id": "actor_owner_001",
+        "display_name": {
+          "value": "Primary owner",
+          "visibility": [
+            "owner_visible",
+            "facility_shareable"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor_owner_001",
+            "source_system": "example-ccp-server",
+            "recorded_at": "2026-05-01T14:30:00Z",
+            "confidence": 0.9,
+            "source_record_ref": "example://pets/pet_luna_001/pickup/actor_owner_001"
+          }
+        },
+        "relationship": {
+          "value": "owner",
+          "visibility": [
+            "owner_visible",
+            "facility_shareable"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor_owner_001",
+            "source_system": "example-ccp-server",
+            "recorded_at": "2026-05-01T14:30:00Z",
+            "confidence": 0.9,
+            "source_record_ref": "example://pets/pet_luna_001/pickup/actor_owner_001"
+          }
+        },
+        "contact_channel": {
+          "value": "app_message",
+          "visibility": [
+            "owner_visible",
+            "facility_shareable"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor_owner_001",
+            "source_system": "example-ccp-server",
+            "recorded_at": "2026-05-01T14:30:00Z",
+            "confidence": 0.9,
+            "source_record_ref": "example://pets/pet_luna_001/pickup/actor_owner_001/contact"
+          }
+        },
+        "identity_check_required": {
+          "value": true,
+          "visibility": [
+            "owner_visible",
+            "facility_shareable"
+          ],
+          "provenance": {
+            "source_type": "generated",
+            "source_system": "example-ccp-server",
+            "recorded_at": "2026-05-05T16:30:00Z",
+            "confidence": 0.88,
+            "derived_from": [
+              "example://services/svc_boarding_20260512_001/pickup"
+            ]
+          }
+        },
+        "metadata": {
+          "visibility": [
+            "owner_visible",
+            "facility_shareable"
+          ],
+          "provenance": {
+            "source_type": "generated",
+            "source_system": "example-ccp-server",
+            "recorded_at": "2026-05-05T16:30:00Z",
+            "confidence": 0.88,
+            "derived_from": [
+              "example://pets/pet_luna_001/pickup/actor_owner_001"
+            ]
+          }
+        }
+      }
+    ],
+    "emergency_contacts": [
+      {
+        "contact_actor_id": "actor_emergency_contact_001",
+        "display_name": {
+          "value": "Emergency contact",
+          "visibility": [
+            "owner_visible",
+            "facility_shareable"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor_owner_001",
+            "source_system": "example-ccp-server",
+            "recorded_at": "2026-05-01T14:30:00Z",
+            "confidence": 0.82,
+            "source_record_ref": "example://pets/pet_luna_001/emergency_contacts/actor_emergency_contact_001"
+          }
+        },
+        "role": {
+          "value": "backup_contact",
+          "visibility": [
+            "owner_visible",
+            "facility_shareable"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor_owner_001",
+            "source_system": "example-ccp-server",
+            "recorded_at": "2026-05-01T14:30:00Z",
+            "confidence": 0.82,
+            "source_record_ref": "example://pets/pet_luna_001/emergency_contacts/actor_emergency_contact_001"
+          }
+        },
+        "preferred_contact_channel": {
+          "value": "phone",
+          "visibility": [
+            "owner_visible",
+            "facility_shareable"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor_owner_001",
+            "source_system": "example-ccp-server",
+            "recorded_at": "2026-05-01T14:30:00Z",
+            "confidence": 0.82,
+            "source_record_ref": "example://pets/pet_luna_001/emergency_contacts/actor_emergency_contact_001/channel"
+          }
+        },
+        "contact_priority": {
+          "value": 2,
+          "visibility": [
+            "owner_visible",
+            "facility_shareable"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor_owner_001",
+            "source_system": "example-ccp-server",
+            "recorded_at": "2026-05-01T14:30:00Z",
+            "confidence": 0.82,
+            "source_record_ref": "example://pets/pet_luna_001/emergency_contacts/actor_emergency_contact_001/priority"
+          }
+        },
+        "metadata": {
+          "visibility": [
+            "owner_visible",
+            "facility_shareable"
+          ],
+          "provenance": {
+            "source_type": "generated",
+            "source_system": "example-ccp-server",
+            "recorded_at": "2026-05-05T16:30:00Z",
+            "confidence": 0.82,
+            "derived_from": [
+              "example://pets/pet_luna_001/emergency_contacts/actor_emergency_contact_001"
+            ]
+          }
+        }
+      }
+    ],
+    "metadata": {
+      "visibility": [
+        "owner_visible",
+        "facility_shareable"
+      ],
+      "provenance": {
+        "source_type": "generated",
+        "source_system": "example-ccp-server",
+        "recorded_at": "2026-05-05T16:30:00Z",
+        "confidence": 0.84,
+        "derived_from": [
+          "example://services/svc_boarding_20260512_001",
+          "example://pets/pet_luna_001/care",
+          "example://pets/pet_luna_001/feeding",
+          "example://pets/pet_luna_001/vaccinations",
+          "example://pets/pet_luna_001/pickup",
+          "example://pets/pet_luna_001/emergency_contacts"
+        ]
+      }
+    }
+  },
+  "omissions": [
+    {
+      "field": "care_facility_context.medication_administration",
+      "reason": "scope_missing",
+      "required_scope": "pet.medications.administration.read",
+      "detail": "Medication administration is outside the first Care Facility schema slice."
+    },
+    {
+      "field": "care_facility_context.wellness_timeline",
+      "reason": "purpose_not_allowed",
+      "visibility_class": "restricted_sensitive",
+      "detail": "Full wellness timelines are outside boarding preparation context."
+    },
+    {
+      "field": "care_facility_context.diagnosis_history",
+      "reason": "purpose_not_allowed",
+      "visibility_class": "restricted_sensitive",
+      "detail": "Diagnosis history is not needed for boarding preparation."
+    },
+    {
+      "field": "care_facility_context.pickup_authorization.identity_document",
+      "reason": "visibility_restricted",
+      "visibility_class": "restricted_sensitive",
+      "detail": "Identity-check requirements may be returned, but identity document copies are not returned."
+    }
+  ]
+}

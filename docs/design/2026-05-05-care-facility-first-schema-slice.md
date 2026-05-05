@@ -274,6 +274,14 @@ Draft one positive partial response:
 
 This example should become the anchor for schema and conformance work.
 
+Draft artifacts:
+
+- `docs/design/care-facility-draft-examples/boarding-preparation-permission-grant.json`
+- `docs/design/care-facility-draft-examples/boarding-preparation-request.json`
+- `docs/design/care-facility-draft-examples/boarding-preparation-partial-response.json`
+
+These examples are intentionally outside `examples/` because they are not yet canonical schema-backed examples.
+
 ## Negative Fixtures To Draft Next
 
 Initial negative fixtures:
