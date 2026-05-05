@@ -540,6 +540,9 @@ if (failed) {
 
 console.log("ok - request/response round trip consistency");
 
+// Integration-level check: catches drift between paired example
+// request/grant fixtures. The mismatch branches fire only when the
+// fixtures are schema-valid but inconsistent with each other.
 const reportGrantRequestMismatches = ({ label, request, grant, fieldChecks }) => {
   let blockFailed = false;
 
