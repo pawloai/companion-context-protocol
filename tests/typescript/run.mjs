@@ -86,6 +86,24 @@ const checks = [
     valid: validators.careFacilityContextResponse(
       readJson("examples/care-facility-boarding-preparation-response.json")
     )
+  },
+  {
+    name: "pickup verification request validator accepts example",
+    valid: validators.careFacilityPickupVerificationRequest(
+      readJson("examples/care-facility-pickup-verification-request.json")
+    )
+  },
+  {
+    name: "pickup verification response validator accepts example",
+    valid: validators.careFacilityPickupVerificationResponse(
+      readJson("examples/care-facility-pickup-verification-response.json")
+    )
+  },
+  {
+    name: "pickup verification partial response validator accepts example",
+    valid: validators.careFacilityPickupVerificationResponse(
+      readJson("examples/care-facility-pickup-verification-owner-confirmation-response.json")
+    )
   }
 ];
 
@@ -139,6 +157,16 @@ const invalidFixtures = [
     name: "care facility response validator rejects identity document leak",
     validator: validators.careFacilityContextResponse,
     data: "tests/conformance/fixtures/invalid/care-facility-pickup-authorization-identity-document-leak.json"
+  },
+  {
+    name: "pickup verification response validator rejects denied response with context",
+    validator: validators.careFacilityPickupVerificationResponse,
+    data: "tests/conformance/fixtures/invalid/care-facility-pickup-verification-denied-response-with-context.json"
+  },
+  {
+    name: "pickup verification response validator rejects identity document leak",
+    validator: validators.careFacilityPickupVerificationResponse,
+    data: "tests/conformance/fixtures/invalid/care-facility-pickup-verification-identity-document-leak.json"
   }
 ];
 
@@ -155,6 +183,8 @@ const schemaNames = [
   "commerce-context-response.schema.json",
   "care-facility-context-request.schema.json",
   "care-facility-context-response.schema.json",
+  "care-facility-pickup-verification-request.schema.json",
+  "care-facility-pickup-verification-response.schema.json",
   "permission-grant.schema.json"
 ];
 

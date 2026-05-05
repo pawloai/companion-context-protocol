@@ -1,0 +1,22 @@
+{
+  "grant_id": "grant_owner_to_boarding_facility_pickup_001",
+  "subject_pet_id": "pet_luna_001",
+  "grantor_actor_id": "actor_owner_001",
+  "grantee_actor_id": "actor_boarding_facility_app_001",
+  "facility_id": "facility_boarding_001",
+  "service_id": "svc_boarding_20260512_001",
+  "service_type": "boarding",
+  "service_window": {
+    "starts_at": "2026-05-12T16:00:00Z",
+    "ends_at": "2026-05-16T18:00:00Z"
+  },
+  "scopes": [
+    "pet.pickup_authorization.read"
+  ],
+  "purposes": [
+    "pickup_verification"
+  ],
+  "expires_at": "2026-05-16T20:00:00Z",
+  "status": "active",
+  "created_at": "2026-05-05T16:00:00Z"
+}

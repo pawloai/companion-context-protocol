@@ -12,7 +12,7 @@ This repository is ready for design-partner review, but it should not yet be tre
 
 The first profile is the Commerce Context Profile, focused on product recommendations and filtering without exposing unrelated staff notes, wellness timelines, diagnosis or treatment history, billing data, household data, or sensitive facility operations data.
 
-The draft also includes a first Care Facility Context schema slice for boarding preparation. It is intentionally narrower than the full care-facility design and excludes medication administration, writeback, payment authority, emergency override access, full wellness timelines, diagnosis history, treatment history, billing records, and identity document copies.
+The draft also includes Care Facility Context schema slices for boarding preparation and pickup verification. They are intentionally narrower than the full care-facility design and exclude medication administration, writeback, payment authority, emergency override access, full wellness timelines, diagnosis history, treatment history, billing records, household exports, and identity document copies.
 
 ## What CCP Defines
 
@@ -20,6 +20,7 @@ The draft also includes a first Care Facility Context schema slice for boarding 
 - Permission grants scoped to pets, purposes, and time windows.
 - Commerce-safe context bundles.
 - Care-facility boarding-preparation context bundles.
+- Care-facility pickup-verification context bundles.
 - Visibility classes for returned facts and summaries.
 - Provenance metadata for returned context.
 - Authorization decisions for allowed, partial, and denied responses.
@@ -71,6 +72,8 @@ companion-context-protocol/
 - [Core JSON Schema](schemas/ccp-core.schema.json)
 - [Care Facility Context request schema](schemas/care-facility-context-request.schema.json)
 - [Care Facility Context response schema](schemas/care-facility-context-response.schema.json)
+- [Care Facility Pickup Verification request schema](schemas/care-facility-pickup-verification-request.schema.json)
+- [Care Facility Pickup Verification response schema](schemas/care-facility-pickup-verification-response.schema.json)
 - [Commerce permission grant example](examples/permission-grant-commerce-context.json)
 - [Commerce context request example](examples/commerce-context-request.json)
 - [Commerce context partial response example](examples/commerce-context-response.json)
@@ -80,12 +83,20 @@ companion-context-protocol/
 - [Care Facility context partial response example](examples/care-facility-boarding-preparation-response.json)
 - [Care Facility facility-mismatch denied response example](examples/care-facility-facility-mismatch-denied-response.json)
 - [Care Facility expired service-window denied response example](examples/care-facility-expired-service-window-denied-response.json)
+- [Care Facility Pickup Verification permission grant example](examples/permission-grant-care-facility-pickup-verification.json)
+- [Care Facility Pickup Verification request example](examples/care-facility-pickup-verification-request.json)
+- [Care Facility Pickup Verification allowed response example](examples/care-facility-pickup-verification-response.json)
+- [Care Facility Pickup Verification owner-confirmation partial response example](examples/care-facility-pickup-verification-owner-confirmation-response.json)
+- [Care Facility Pickup Verification facility-mismatch denied response example](examples/care-facility-pickup-verification-facility-mismatch-denied-response.json)
+- [Care Facility Pickup Verification inactive service-window denied response example](examples/care-facility-pickup-verification-inactive-service-window-denied-response.json)
 - [Draft changelog](CHANGELOG.md)
 - [Maintainer and contact path](MAINTAINERS.md)
 - [Commerce Context OpenAPI adapter](openapi/commerce-context.openapi.json)
 - [Commerce Context MCP tool sketches](mcp/commerce-context.tools.json)
 - [Care Facility Context OpenAPI adapter](openapi/care-facility-context.openapi.json)
 - [Care Facility Context MCP tool sketches](mcp/care-facility-context.tools.json)
+- [Care Facility Pickup Verification OpenAPI adapter](openapi/care-facility-pickup-verification.openapi.json)
+- [Care Facility Pickup Verification MCP tool sketches](mcp/care-facility-pickup-verification.tools.json)
 - [Commerce Context server implementer guide](docs/implementers/commerce-context-server.md)
 - [Care Facility Context server implementer guide](docs/implementers/care-facility-context-server.md)
 - [Known compatibility risks](docs/implementers/compatibility-risks.md)
@@ -100,6 +111,8 @@ companion-context-protocol/
 - [Open-source adoption roadmap](docs/design/2026-05-04-ccp-open-source-adoption-roadmap.md)
 - [Care Facility Context Profile design draft](docs/design/2026-05-05-care-facility-context-profile.md)
 - [Care Facility first schema slice proposal](docs/design/2026-05-05-care-facility-first-schema-slice.md)
+- [Care Network Profile design draft](docs/design/2026-05-05-care-network-profile.md)
+- [Care Facility Pickup Verification slice proposal](docs/design/2026-05-05-care-facility-pickup-verification-slice.md)
 
 ## Getting Started
 

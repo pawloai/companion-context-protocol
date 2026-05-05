@@ -95,6 +95,12 @@ const cases = [
     valid: true
   },
   {
+    name: "care facility pickup verification permission grant example",
+    schema: "schemas/permission-grant.schema.json",
+    data: "examples/permission-grant-care-facility-pickup-verification.json",
+    valid: true
+  },
+  {
     name: "care facility context request example",
     schema: "schemas/care-facility-context-request.schema.json",
     data: "examples/care-facility-boarding-preparation-request.json",
@@ -231,6 +237,84 @@ const cases = [
     schema: "schemas/care-facility-context-response.schema.json",
     data: "tests/conformance/fixtures/invalid/care-facility-response-with-commerce-context-purpose.json",
     valid: false
+  },
+  {
+    name: "care facility pickup verification request example",
+    schema: "schemas/care-facility-pickup-verification-request.schema.json",
+    data: "examples/care-facility-pickup-verification-request.json",
+    valid: true
+  },
+  {
+    name: "care facility pickup verification allowed response example",
+    schema: "schemas/care-facility-pickup-verification-response.schema.json",
+    data: "examples/care-facility-pickup-verification-response.json",
+    valid: true
+  },
+  {
+    name: "care facility pickup verification owner confirmation response example",
+    schema: "schemas/care-facility-pickup-verification-response.schema.json",
+    data: "examples/care-facility-pickup-verification-owner-confirmation-response.json",
+    valid: true
+  },
+  {
+    name: "care facility pickup verification facility mismatch denied response example",
+    schema: "schemas/care-facility-pickup-verification-response.schema.json",
+    data: "examples/care-facility-pickup-verification-facility-mismatch-denied-response.json",
+    valid: true
+  },
+  {
+    name: "care facility pickup verification inactive service window denied response example",
+    schema: "schemas/care-facility-pickup-verification-response.schema.json",
+    data: "examples/care-facility-pickup-verification-inactive-service-window-denied-response.json",
+    valid: true
+  },
+  {
+    name: "reject care facility pickup verification denied response with context",
+    schema: "schemas/care-facility-pickup-verification-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-pickup-verification-denied-response-with-context.json",
+    valid: false
+  },
+  {
+    name: "reject care facility pickup verification ok response with release disallowed",
+    schema: "schemas/care-facility-pickup-verification-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-pickup-verification-ok-release-false.json",
+    valid: false
+  },
+  {
+    name: "reject care facility pickup verification ok response requiring owner confirmation",
+    schema: "schemas/care-facility-pickup-verification-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-pickup-verification-ok-owner-confirmation-required.json",
+    valid: false
+  },
+  {
+    name: "reject care facility pickup verification identity document leak",
+    schema: "schemas/care-facility-pickup-verification-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-pickup-verification-identity-document-leak.json",
+    valid: false
+  },
+  {
+    name: "reject care facility pickup verification payment authority leak",
+    schema: "schemas/care-facility-pickup-verification-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-pickup-verification-payment-authority-leak.json",
+    valid: false
+  },
+  {
+    name: "reject care facility pickup verification feeding or medication leak",
+    schema: "schemas/care-facility-pickup-verification-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-pickup-verification-feeding-medication-leak.json",
+    valid: false
+  },
+  {
+    name: "reject care facility pickup verification Care Network or unrelated contact leak",
+    schema: "schemas/care-facility-pickup-verification-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-pickup-verification-care-network-contact-leak.json",
+    valid: false
+  },
+  {
+    name: "reject care facility pickup verification purpose mismatch",
+    schema: "schemas/care-facility-pickup-verification-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-pickup-verification-purpose-mismatch.json",
+    valid: false
   }
 ];
 
@@ -293,6 +377,12 @@ const roundTripPairs = [
     request: "examples/care-facility-boarding-preparation-request.json",
     response: "examples/care-facility-boarding-preparation-response.json",
     contextKey: "care_facility_context"
+  },
+  {
+    name: "care facility pickup verification example",
+    request: "examples/care-facility-pickup-verification-request.json",
+    response: "examples/care-facility-pickup-verification-response.json",
+    contextKey: "pickup_verification_context"
   }
 ];
 
@@ -320,13 +410,24 @@ for (const pair of roundTripPairs) {
       [`${contextKey}.purpose`, context?.purpose, request.purpose]
     );
 
-    if (contextKey === "care_facility_context") {
+    if (
+      contextKey === "care_facility_context" ||
+      contextKey === "pickup_verification_context"
+    ) {
       roundTripChecks.push(
         [`${contextKey}.facility_id`, context?.facility_id, request.facility_id],
         [`${contextKey}.service_id`, context?.service_id, request.service_id],
         [`${contextKey}.service_type`, context?.service_type, request.service_type],
         [`${contextKey}.service_window`, context?.service_window, request.service_window]
       );
+    }
+
+    if (contextKey === "pickup_verification_context") {
+      roundTripChecks.push([
+        `${contextKey}.pickup_actor.actor_id`,
+        context?.pickup_actor?.actor_id,
+        request.pickup_actor_id
+      ]);
     }
   }
 
@@ -389,3 +490,47 @@ if (failed) {
 }
 
 console.log("ok - care facility grant/request consistency");
+
+const pickupVerificationRequest = readJson("examples/care-facility-pickup-verification-request.json");
+const pickupVerificationGrant = readJson("examples/permission-grant-care-facility-pickup-verification.json");
+const pickupGrantRequestChecks = [
+  ["grant_id", pickupVerificationGrant.grant_id, pickupVerificationRequest.grant_id],
+  ["subject_pet_id", pickupVerificationGrant.subject_pet_id, pickupVerificationRequest.pet_id],
+  ["grantee_actor_id", pickupVerificationGrant.grantee_actor_id, pickupVerificationRequest.requester_actor_id],
+  ["facility_id", pickupVerificationGrant.facility_id, pickupVerificationRequest.facility_id],
+  ["service_id", pickupVerificationGrant.service_id, pickupVerificationRequest.service_id],
+  ["service_type", pickupVerificationGrant.service_type, pickupVerificationRequest.service_type],
+  ["service_window", pickupVerificationGrant.service_window, pickupVerificationRequest.service_window]
+];
+
+for (const [name, actual, expected] of pickupGrantRequestChecks) {
+  if (actual === expected || isDeepStrictEqual(actual, expected)) {
+    continue;
+  }
+
+  failed = true;
+  console.error(`not ok - pickup verification grant/request mismatch: ${name}`);
+  console.error(`  expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+}
+
+if (!pickupVerificationGrant.purposes.includes(pickupVerificationRequest.purpose)) {
+  failed = true;
+  console.error("not ok - pickup verification grant/request mismatch: purpose");
+  console.error(`  expected grant purposes to include ${pickupVerificationRequest.purpose}`);
+}
+
+for (const scope of pickupVerificationRequest.scopes) {
+  if (pickupVerificationGrant.scopes.includes(scope)) {
+    continue;
+  }
+
+  failed = true;
+  console.error("not ok - pickup verification grant/request mismatch: scope");
+  console.error(`  expected grant scopes to include ${scope}`);
+}
+
+if (failed) {
+  process.exit(1);
+}
+
+console.log("ok - pickup verification grant/request consistency");

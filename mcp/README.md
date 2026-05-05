@@ -15,17 +15,21 @@ Care Facility Context schemas:
 
 - `schemas/care-facility-context-request.schema.json`
 - `schemas/care-facility-context-response.schema.json`
+- `schemas/care-facility-pickup-verification-request.schema.json`
+- `schemas/care-facility-pickup-verification-response.schema.json`
 
 ## Current Adapters
 
 - [`commerce-context.tools.json`](commerce-context.tools.json): illustrative MCP tool sketches for the Commerce Context Profile.
 - [`care-facility-context.tools.json`](care-facility-context.tools.json): illustrative MCP tool sketches for the first Care Facility Context boarding-preparation slice.
+- [`care-facility-pickup-verification.tools.json`](care-facility-pickup-verification.tools.json): illustrative MCP tool sketches for the Care Facility Pickup Verification slice.
 
 Current tool sketches:
 
 - `ccp_commerce_context_request`: request commerce-safe context for one pet.
 - `ccp_care_facility_context_request`: request boarding-preparation context for one pet, facility, and service window.
-- `ccp_permission_grant_get`: optional lookup for a permission grant visible to the requester.
+- `ccp_care_facility_pickup_verification_request`: verify pickup authorization for one pet, facility, service window, and pickup actor.
+- `ccp_permission_grant_get`: optional lookup for a permission grant visible to the requester on adapters that expose grant lookup. The pickup-verification adapter intentionally omits this tool to keep the pickup surface minimized.
 
 The MCP adapter preserves the same authorization decision, visibility, provenance, and omission semantics rather than defining a separate protocol.
 

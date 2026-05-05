@@ -100,7 +100,7 @@ The initial profile should exclude by default:
 - Unrelated owner or household data.
 - Sensitive facility operations data.
 
-The draft also includes a first Care Facility Context schema slice for `boarding_preparation`. This slice lets an authorized care facility request boarding-preparation context for one pet, facility, and service window.
+The draft also includes Care Facility Context schema slices for `boarding_preparation` and `pickup_verification`. The boarding-preparation slice lets an authorized care facility request boarding-preparation context for one pet, facility, and service window. The pickup-verification slice lets an authorized care facility verify whether one pickup actor may pick up one pet for one facility and service window.
 
 The first care-facility slice can include:
 
@@ -341,6 +341,7 @@ Initial commerce purposes:
 Initial care-facility purpose:
 
 - `boarding_preparation`
+- `pickup_verification`
 
 ## Omission Reasons
 
@@ -407,6 +408,27 @@ The illustrative HTTP adapter for this flow is `openapi/care-facility-context.op
 The illustrative MCP adapter for this flow is `mcp/care-facility-context.tools.json`.
 
 Implementation guidance for this flow is `docs/implementers/care-facility-context-server.md`.
+
+## Care Facility Pickup Verification Flow
+
+Example flow:
+
+1. Owner grants `pet.pickup_authorization.read` to a facility for one pet and service window.
+2. Facility requests pickup verification for `purpose: pickup_verification`.
+3. Server evaluates requester, grant, pet, facility, service window, pickup actor, purpose, scopes, visibility, and freshness.
+4. Server returns an `authorization_decision`.
+5. Server returns a minimized `PickupVerificationContext` only when pickup verification context may be returned.
+6. `ok` responses require `authorization_status: authorized` and `release_allowed: true`.
+7. Denied responses return `pickup_verification_context: null`.
+8. Restricted, unrelated, or unresolved fields are omitted with machine-readable reasons.
+
+The pickup-verification slice must not return feeding instructions, medication details, billing data, payment authority, household context, identity document copies or numbers, full Care Network data, wellness timelines, diagnosis history, treatment history, staff-only notes, or unrelated contacts.
+
+See `examples/permission-grant-care-facility-pickup-verification.json`, `examples/care-facility-pickup-verification-request.json`, `examples/care-facility-pickup-verification-response.json`, `examples/care-facility-pickup-verification-owner-confirmation-response.json`, `examples/care-facility-pickup-verification-facility-mismatch-denied-response.json`, and `examples/care-facility-pickup-verification-inactive-service-window-denied-response.json`.
+
+The illustrative HTTP adapter for this flow is `openapi/care-facility-pickup-verification.openapi.json`.
+
+The illustrative MCP adapter for this flow is `mcp/care-facility-pickup-verification.tools.json`.
 
 ## Conformance Requirements
 

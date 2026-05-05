@@ -1,0 +1,37 @@
+{
+  "adapter": "mcp",
+  "status": "draft",
+  "ccp_version": "0.1.0-draft",
+  "profile": "care-facility-pickup-verification",
+  "description": "Illustrative MCP tool sketches for CCP Care Facility Pickup Verification. JSON Schema remains the canonical CCP contract.",
+  "canonical_contract": "../schemas/ccp-core.schema.json",
+  "tools": [
+    {
+      "name": "ccp_care_facility_pickup_verification_request",
+      "title": "Request CCP Care Facility Pickup Verification",
+      "description": "Verify whether a specific pickup actor is authorized to pick up one pet for a specific facility and service window. The server evaluates requester identity, pet identity, facility identity, service identity, pickup actor identity, scopes, purpose, active grant, visibility classes, and freshness. Protocol-level denials return a CCP response envelope with status `denied`.",
+      "inputSchema": {
+        "$ref": "../schemas/ccp-core.schema.json#/$defs/CareFacilityPickupVerificationRequest"
+      },
+      "outputSchema": {
+        "$ref": "../schemas/ccp-core.schema.json#/$defs/CareFacilityPickupVerificationResponse"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "x-ccp-required-scope": "pet.pickup_authorization.read",
+      "x-ccp-canonical-request-schema": "../schemas/care-facility-pickup-verification-request.schema.json",
+      "x-ccp-canonical-response-schema": "../schemas/care-facility-pickup-verification-response.schema.json",
+      "examples": {
+        "input": "../examples/care-facility-pickup-verification-request.json",
+        "ok_output": "../examples/care-facility-pickup-verification-response.json",
+        "owner_confirmation_required_partial_output": "../examples/care-facility-pickup-verification-owner-confirmation-response.json",
+        "facility_mismatch_denied_output": "../examples/care-facility-pickup-verification-facility-mismatch-denied-response.json",
+        "inactive_service_window_denied_output": "../examples/care-facility-pickup-verification-inactive-service-window-denied-response.json"
+      }
+    }
+  ]
+}

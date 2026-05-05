@@ -10,6 +10,15 @@ This package is intentionally small. It provides hand-written TypeScript types f
 
 - `CommerceContextRequest`
 - `CommerceContextResponse`
+- `CareFacilityContextRequest`
+- `CareFacilityContextResponse`
+- `CareFacilityPickupVerificationRequest`
+- `CareFacilityPickupVerificationResponse`
+- `PickupVerificationContext`
+- `PickupActor`
+- `PickupAuthorizationVerification`
+- `PickupVerificationAuthorization`
+- `ReleaseConstraint`
 - `PermissionGrant`
 - `AuthorizationDecision`
 - `Omission`
@@ -26,6 +35,10 @@ This package is intentionally small. It provides hand-written TypeScript types f
 - `createCcpAjv`
 - `createCommerceContextRequestValidator`
 - `createCommerceContextResponseValidator`
+- `createCareFacilityContextRequestValidator`
+- `createCareFacilityContextResponseValidator`
+- `createCareFacilityPickupVerificationRequestValidator`
+- `createCareFacilityPickupVerificationResponseValidator`
 - `createPermissionGrantValidator`
 - `createCcpValidators`
 

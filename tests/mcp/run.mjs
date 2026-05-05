@@ -19,6 +19,14 @@ const adapterFiles = [
     requiredTool: "ccp_care_facility_context_request",
     requestSchema: "../schemas/care-facility-context-request.schema.json",
     responseSchema: "../schemas/care-facility-context-response.schema.json"
+  },
+  {
+    path: "mcp/care-facility-pickup-verification.tools.json",
+    profile: "care-facility-pickup-verification",
+    requiredTool: "ccp_care_facility_pickup_verification_request",
+    requestSchema: "../schemas/care-facility-pickup-verification-request.schema.json",
+    responseSchema: "../schemas/care-facility-pickup-verification-response.schema.json",
+    grantLookup: false
   }
 ];
 
@@ -131,10 +139,14 @@ for (const adapterFile of adapterFiles) {
     }
   }
 
-  for (const requiredTool of [
-    adapterFile.requiredTool,
-    "ccp_permission_grant_get"
-  ]) {
+  const requiredTools = [adapterFile.requiredTool];
+  if (adapterFile.grantLookup !== false) {
+    requiredTools.push("ccp_permission_grant_get");
+  } else if (toolNames.has("ccp_permission_grant_get")) {
+    addError(`${adapterFile.path} must not expose grant lookup for minimized pickup verification`);
+  }
+
+  for (const requiredTool of requiredTools) {
     if (!toolNames.has(requiredTool)) {
       addError(`${adapterFile.path} missing required tool sketch: ${requiredTool}`);
     }

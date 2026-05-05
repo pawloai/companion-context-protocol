@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://companioncontext.org/schemas/care-facility-pickup-verification-request.schema.json",
+  "title": "CCP Care Facility Pickup Verification Request",
+  "$ref": "ccp-core.schema.json#/$defs/CareFacilityPickupVerificationRequest"
+}

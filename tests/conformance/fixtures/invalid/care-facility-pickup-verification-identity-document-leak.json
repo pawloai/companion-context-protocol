@@ -1,0 +1,152 @@
+{
+  "request_id": "req_pickup_invalid_identity_doc_001",
+  "status": "ok",
+  "authorization_decision": {
+    "decision": "allowed",
+    "evaluated_at": "2026-05-15T21:05:00Z",
+    "requester_actor_id": "actor_boarding_facility_app_001",
+    "pet_id": "pet_luna_001",
+    "purpose": "pickup_verification",
+    "grant_id": "grant_owner_to_boarding_facility_pickup_001",
+    "applied_scopes": [
+      "pet.pickup_authorization.read"
+    ],
+    "denied_scopes": [],
+    "reasons": [
+      "Pickup verification was allowed."
+    ]
+  },
+  "pickup_verification_context": {
+    "pet_id": "pet_luna_001",
+    "purpose": "pickup_verification",
+    "facility_id": "facility_boarding_001",
+    "service_id": "svc_boarding_20260512_001",
+    "service_type": "boarding",
+    "service_window": {
+      "starts_at": "2026-05-12T16:00:00Z",
+      "ends_at": "2026-05-16T18:00:00Z"
+    },
+    "pickup_actor": {
+      "actor_id": "actor_pickup_contact_001",
+      "display_name": {
+        "value": "Authorized pickup contact",
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-01T14:30:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/pickup/actor_pickup_contact_001"
+        }
+      },
+      "identity_document_number": {
+        "value": "SYNTHETIC-DOCUMENT-NUMBER",
+        "visibility": [
+          "restricted_sensitive",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-01T14:30:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/pickup/actor_pickup_contact_001/identity_document"
+        }
+      },
+      "identity_document_copy": {
+        "value": "synthetic-redacted-copy-placeholder",
+        "visibility": [
+          "restricted_sensitive",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-01T14:30:00Z",
+          "source_record_ref": "example://pets/pet_luna_001/pickup/actor_pickup_contact_001/identity_document_copy"
+        }
+      },
+      "metadata": {
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-15T21:05:00Z",
+          "derived_from": [
+            "example://pets/pet_luna_001/pickup/actor_pickup_contact_001"
+          ]
+        }
+      }
+    },
+    "pickup_authorization": {
+      "authorization_status": {
+        "value": "authorized",
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-15T20:30:00Z",
+          "confidence": 0.94,
+          "derived_from": [
+            "example://grants/grant_owner_to_boarding_facility_pickup_001",
+            "example://services/svc_boarding_20260512_001/pickup"
+          ]
+        }
+      },
+      "release_allowed": {
+        "value": true,
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-15T21:05:00Z",
+          "derived_from": [
+            "example://grants/grant_owner_to_boarding_facility_pickup_001"
+          ]
+        }
+      },
+      "metadata": {
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-15T21:05:00Z",
+          "derived_from": [
+            "example://grants/grant_owner_to_boarding_facility_pickup_001"
+          ]
+        }
+      }
+    },
+    "metadata": {
+      "visibility": [
+        "owner_visible",
+        "facility_shareable"
+      ],
+      "provenance": {
+        "source_type": "generated",
+        "source_system": "example-ccp-server",
+        "recorded_at": "2026-05-15T21:05:00Z",
+        "derived_from": [
+          "example://services/svc_boarding_20260512_001/pickup"
+        ]
+      }
+    }
+  },
+  "omissions": []
+}

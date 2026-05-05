@@ -11,6 +11,8 @@ const schemaNames = [
   "commerce-context-response.schema.json",
   "care-facility-context-request.schema.json",
   "care-facility-context-response.schema.json",
+  "care-facility-pickup-verification-request.schema.json",
+  "care-facility-pickup-verification-response.schema.json",
   "permission-grant.schema.json"
 ];
 

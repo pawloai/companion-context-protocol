@@ -1,0 +1,115 @@
+{
+  "request_id": "req_pickup_invalid_denied_context_001",
+  "status": "denied",
+  "authorization_decision": {
+    "decision": "denied",
+    "evaluated_at": "2026-05-15T21:00:00Z",
+    "requester_actor_id": "actor_boarding_facility_app_001",
+    "pet_id": "pet_luna_001",
+    "purpose": "pickup_verification",
+    "grant_id": "grant_owner_to_boarding_facility_pickup_001",
+    "applied_scopes": [],
+    "denied_scopes": [
+      "pet.pickup_authorization.read"
+    ],
+    "reasons": [
+      "The pickup actor could not be verified."
+    ]
+  },
+  "pickup_verification_context": {
+    "pet_id": "pet_luna_001",
+    "purpose": "pickup_verification",
+    "facility_id": "facility_boarding_001",
+    "service_id": "svc_boarding_20260512_001",
+    "service_type": "boarding",
+    "service_window": {
+      "starts_at": "2026-05-12T16:00:00Z",
+      "ends_at": "2026-05-16T18:00:00Z"
+    },
+    "pickup_actor": {
+      "actor_id": "actor_pickup_contact_001",
+      "metadata": {
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-15T21:00:00Z",
+          "derived_from": [
+            "example://pets/pet_luna_001/pickup/actor_pickup_contact_001"
+          ]
+        }
+      }
+    },
+    "pickup_authorization": {
+      "authorization_status": {
+        "value": "unknown",
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-15T21:00:00Z",
+          "derived_from": [
+            "example://services/svc_boarding_20260512_001/pickup"
+          ]
+        }
+      },
+      "release_allowed": {
+        "value": false,
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-15T21:00:00Z",
+          "derived_from": [
+            "example://services/svc_boarding_20260512_001/pickup"
+          ]
+        }
+      },
+      "metadata": {
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "generated",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-15T21:00:00Z",
+          "derived_from": [
+            "example://services/svc_boarding_20260512_001/pickup"
+          ]
+        }
+      }
+    },
+    "metadata": {
+      "visibility": [
+        "owner_visible",
+        "facility_shareable"
+      ],
+      "provenance": {
+        "source_type": "generated",
+        "source_system": "example-ccp-server",
+        "recorded_at": "2026-05-15T21:00:00Z",
+        "derived_from": [
+          "example://services/svc_boarding_20260512_001/pickup"
+        ]
+      }
+    }
+  },
+  "omissions": [
+    {
+      "field": "pickup_verification_context",
+      "reason": "not_available",
+      "required_scope": "pet.pickup_authorization.read",
+      "detail": "Pickup verification context is unavailable."
+    }
+  ]
+}

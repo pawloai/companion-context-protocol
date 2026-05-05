@@ -18,6 +18,8 @@ const schemaNames = [
   "commerce-context-response.schema.json",
   "care-facility-context-request.schema.json",
   "care-facility-context-response.schema.json",
+  "care-facility-pickup-verification-request.schema.json",
+  "care-facility-pickup-verification-response.schema.json",
   "permission-grant.schema.json"
 ];
 
@@ -38,6 +40,8 @@ expected_names = {
     "commerce-context-response",
     "care-facility-context-request",
     "care-facility-context-response",
+    "care-facility-pickup-verification-request",
+    "care-facility-pickup-verification-response",
     "permission-grant",
 }
 
@@ -53,6 +57,7 @@ assert core_schema["title"] == "Companion Context Protocol Core"
 assert core_schema["$defs"]["CommerceContextRequest"]
 assert load_schema("commerce-context-request")["$ref"] == "ccp-core.schema.json#/$defs/CommerceContextRequest"
 assert load_schema("care-facility-context-request")["$ref"] == "ccp-core.schema.json#/$defs/CareFacilityContextRequest"
+assert load_schema("care-facility-pickup-verification-request")["$ref"] == "ccp-core.schema.json#/$defs/CareFacilityPickupVerificationRequest"
 assert set(load_schemas()) == expected_names
 
 schema_module._repo_root = lambda: Path("/ccp-source-tree-not-present")

@@ -35,7 +35,11 @@ export type Scope =
   | "pet.emergency_contacts.read"
   | "pet.medications.administration.read";
 
-export type Purpose = "product_recommendation" | "product_filtering" | "boarding_preparation";
+export type Purpose =
+  | "product_recommendation"
+  | "product_filtering"
+  | "boarding_preparation"
+  | "pickup_verification";
 
 export type OmissionReasonCode =
   | "not_requested"
@@ -239,6 +243,67 @@ export interface EmergencyContact {
   metadata: ObjectMetadata;
 }
 
+export type PickupAuthorizationStatus =
+  | "authorized"
+  | "not_authorized"
+  | "expired"
+  | "revoked"
+  | "unknown"
+  | "owner_confirmation_required";
+
+export type ReleaseConstraintType =
+  | "specific_window_only"
+  | "specific_location_only"
+  | "owner_confirmation_required"
+  | "photo_or_id_check_required"
+  | "code_required"
+  | "do_not_release"
+  | "staff_manager_review_required";
+
+export interface PickupActor {
+  actor_id: string;
+  display_name?: FieldEnvelope<string>;
+  relationship?: FieldEnvelope<string>;
+  role?: FieldEnvelope<string>;
+  contact_channel?: FieldEnvelope<string>;
+  care_network_source?: FieldEnvelope<string>;
+  metadata: ObjectMetadata;
+}
+
+export interface PickupAuthorizationVerification {
+  authorization_status: FieldEnvelope<PickupAuthorizationStatus>;
+  authorization_source?: FieldEnvelope<string>;
+  authorized_by_actor_id?: FieldEnvelope<string>;
+  effective_at?: FieldEnvelope<string>;
+  expires_at?: FieldEnvelope<string>;
+  revocation_status?: FieldEnvelope<string>;
+  identity_check_required?: FieldEnvelope<boolean>;
+  identity_check_method?: FieldEnvelope<string>;
+  release_allowed: FieldEnvelope<boolean>;
+  metadata: ObjectMetadata;
+}
+
+export interface ReleaseConstraint {
+  constraint_type: FieldEnvelope<ReleaseConstraintType>;
+  summary?: FieldEnvelope<string>;
+  applies_until?: FieldEnvelope<string>;
+  source?: FieldEnvelope<string>;
+  metadata: ObjectMetadata;
+}
+
+export interface PickupVerificationContext {
+  pet_id: string;
+  purpose: "pickup_verification";
+  facility_id: string;
+  service_id: string;
+  service_type: string;
+  service_window: ServiceWindow;
+  pickup_actor: PickupActor;
+  pickup_authorization: PickupAuthorizationVerification;
+  release_constraints?: ReleaseConstraint[];
+  metadata: ObjectMetadata;
+}
+
 export interface CareFacilityContext {
   pet_id: string;
   purpose: "boarding_preparation";
@@ -314,6 +379,20 @@ export interface CareFacilityContextRequest {
   grant_id: string;
 }
 
+export interface CareFacilityPickupVerificationRequest {
+  request_id: string;
+  requester_actor_id: string;
+  pet_id: string;
+  facility_id: string;
+  service_id: string;
+  service_type: string;
+  service_window: ServiceWindow;
+  purpose: "pickup_verification";
+  scopes: Scope[];
+  grant_id: string;
+  pickup_actor_id: string;
+}
+
 export interface CommerceContextResponse {
   request_id: string;
   status: "ok" | "partial" | "denied";
@@ -327,6 +406,14 @@ export interface CareFacilityContextResponse {
   status: "ok" | "partial" | "denied";
   authorization_decision: AuthorizationDecision;
   care_facility_context: CareFacilityContext | null;
+  omissions: Omission[];
+}
+
+export interface CareFacilityPickupVerificationResponse {
+  request_id: string;
+  status: "ok" | "partial" | "denied";
+  authorization_decision: AuthorizationDecision;
+  pickup_verification_context: PickupVerificationContext | null;
   omissions: Omission[];
 }
 
@@ -349,6 +436,10 @@ export const schemaPaths = {
   commerceContextResponse: "schemas/commerce-context-response.schema.json",
   careFacilityContextRequest: "schemas/care-facility-context-request.schema.json",
   careFacilityContextResponse: "schemas/care-facility-context-response.schema.json",
+  careFacilityPickupVerificationRequest:
+    "schemas/care-facility-pickup-verification-request.schema.json",
+  careFacilityPickupVerificationResponse:
+    "schemas/care-facility-pickup-verification-response.schema.json",
   permissionGrant: "schemas/permission-grant.schema.json"
 } as const;
 
@@ -387,6 +478,24 @@ export function createCareFacilityContextResponseValidator(
   return compileSchema<CareFacilityContextResponse>(ajv, schemaPaths.careFacilityContextResponse);
 }
 
+export function createCareFacilityPickupVerificationRequestValidator(
+  ajv = createCcpAjv()
+): ValidateFunction<CareFacilityPickupVerificationRequest> {
+  return compileSchema<CareFacilityPickupVerificationRequest>(
+    ajv,
+    schemaPaths.careFacilityPickupVerificationRequest
+  );
+}
+
+export function createCareFacilityPickupVerificationResponseValidator(
+  ajv = createCcpAjv()
+): ValidateFunction<CareFacilityPickupVerificationResponse> {
+  return compileSchema<CareFacilityPickupVerificationResponse>(
+    ajv,
+    schemaPaths.careFacilityPickupVerificationResponse
+  );
+}
+
 export function createPermissionGrantValidator(
   ajv = createCcpAjv()
 ): ValidateFunction<PermissionGrant> {
@@ -399,6 +508,10 @@ export function createCcpValidators(ajv = createCcpAjv()) {
     commerceContextResponse: createCommerceContextResponseValidator(ajv),
     careFacilityContextRequest: createCareFacilityContextRequestValidator(ajv),
     careFacilityContextResponse: createCareFacilityContextResponseValidator(ajv),
+    careFacilityPickupVerificationRequest:
+      createCareFacilityPickupVerificationRequestValidator(ajv),
+    careFacilityPickupVerificationResponse:
+      createCareFacilityPickupVerificationResponseValidator(ajv),
     permissionGrant: createPermissionGrantValidator(ajv)
   };
 }

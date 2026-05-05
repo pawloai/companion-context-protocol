@@ -22,6 +22,14 @@ const adapterFiles = [
     requestPath: "/care-facility-context",
     requestSchema: "../schemas/care-facility-context-request.schema.json",
     responseSchema: "../schemas/care-facility-context-response.schema.json"
+  },
+  {
+    file: "care-facility-pickup-verification.openapi.json",
+    profile: "care-facility-pickup-verification",
+    requestPath: "/care-facility-pickup-verification",
+    requestSchema: "../schemas/care-facility-pickup-verification-request.schema.json",
+    responseSchema: "../schemas/care-facility-pickup-verification-response.schema.json",
+    grantLookup: false
   }
 ];
 
@@ -68,11 +76,15 @@ for (const adapterFile of adapterFiles) {
     errors.push(`${adapterFile.file} POST ${adapterFile.requestPath} has wrong canonical response schema`);
   }
 
-  if (
-    openApi.paths?.["/permission-grants/{grant_id}"]?.get?.["x-ccp-required-scope"] !==
-    "pet.permission_grants.read"
-  ) {
-    errors.push(`${adapterFile.file} GET /permission-grants/{grant_id} must declare pet.permission_grants.read`);
+  if (adapterFile.grantLookup !== false) {
+    if (
+      openApi.paths?.["/permission-grants/{grant_id}"]?.get?.["x-ccp-required-scope"] !==
+      "pet.permission_grants.read"
+    ) {
+      errors.push(`${adapterFile.file} GET /permission-grants/{grant_id} must declare pet.permission_grants.read`);
+    }
+  } else if (openApi.paths?.["/permission-grants/{grant_id}"]) {
+    errors.push(`${adapterFile.file} must not expose grant lookup for minimized pickup verification`);
   }
 }
 
