@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
+import { schemaFilenames } from "../../scripts/schema-names.mjs";
 
 const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
 
@@ -210,20 +211,7 @@ for (const fixture of invalidFixtures) {
   });
 }
 
-const schemaNames = [
-  "ccp-core.schema.json",
-  "commerce-context-request.schema.json",
-  "commerce-context-response.schema.json",
-  "care-facility-context-request.schema.json",
-  "care-facility-context-response.schema.json",
-  "care-facility-pickup-verification-request.schema.json",
-  "care-facility-pickup-verification-response.schema.json",
-  "care-network-lookup-request.schema.json",
-  "care-network-lookup-response.schema.json",
-  "permission-grant.schema.json"
-];
-
-for (const schemaName of schemaNames) {
+for (const schemaName of schemaFilenames) {
   checks.push({
     name: `TypeScript build copied canonical schema ${schemaName}`,
     valid:

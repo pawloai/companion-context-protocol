@@ -3,27 +3,17 @@ import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
+import { pythonSchemaKey, schemaFilenames } from "../../scripts/schema-names.mjs";
 
 const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
 const pythonSource = path.join(repoRoot, "packages/python/src");
 const pythonEnv = {
   ...process.env,
-  PYTHONPATH: pythonSource
+  PYTHONPATH: pythonSource,
+  CCP_EXPECTED_SCHEMA_NAMES: JSON.stringify(schemaFilenames.map(pythonSchemaKey))
 };
 
 const python = process.env.PYTHON ?? "python3";
-const schemaNames = [
-  "ccp-core.schema.json",
-  "commerce-context-request.schema.json",
-  "commerce-context-response.schema.json",
-  "care-facility-context-request.schema.json",
-  "care-facility-context-response.schema.json",
-  "care-facility-pickup-verification-request.schema.json",
-  "care-facility-pickup-verification-response.schema.json",
-  "care-network-lookup-request.schema.json",
-  "care-network-lookup-response.schema.json",
-  "permission-grant.schema.json"
-];
 
 execFileSync(python, ["-m", "compileall", "-q", pythonSource], {
   cwd: repoRoot,
@@ -32,22 +22,13 @@ execFileSync(python, ["-m", "compileall", "-q", pythonSource], {
 });
 
 const checkScript = `
+import json
+import os
 from pathlib import Path
 import ccp_types.schemas as schema_module
 from ccp_types import CCP_VERSION, load_schema, load_schemas, schema_path, schema_paths
 
-expected_names = {
-    "core",
-    "commerce-context-request",
-    "commerce-context-response",
-    "care-facility-context-request",
-    "care-facility-context-response",
-    "care-facility-pickup-verification-request",
-    "care-facility-pickup-verification-response",
-    "care-network-lookup-request",
-    "care-network-lookup-response",
-    "permission-grant",
-}
+expected_names = set(json.loads(os.environ["CCP_EXPECTED_SCHEMA_NAMES"]))
 
 assert CCP_VERSION == "0.1.0-draft"
 paths = schema_paths()
@@ -76,7 +57,7 @@ execFileSync(python, ["-c", checkScript], {
   stdio: "inherit"
 });
 
-for (const schemaName of schemaNames) {
+for (const schemaName of schemaFilenames) {
   const canonicalSchema = fs.readFileSync(path.join(repoRoot, "schemas", schemaName), "utf8");
   const packagedSchema = fs.readFileSync(
     path.join(pythonSource, "ccp_types/json_schemas", schemaName),
