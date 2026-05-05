@@ -290,14 +290,16 @@ These examples are intentionally outside `examples/` because they are not yet ca
 
 Initial negative fixtures:
 
-- Facility mismatch returns denied.
-- Expired service window returns denied.
-- Denied response includes non-null `care_facility_context`.
-- Returned care-facility field is missing provenance.
-- Returned pickup authorization includes identity document data.
-- Boarding preparation response includes full wellness timeline.
-- Boarding preparation response includes diagnosis history.
-- Pickup authorization implies billing or payment authority.
+- Facility mismatch returns denied: `docs/design/care-facility-draft-examples/invalid/facility-mismatch-denied-response.json`
+- Expired service window returns denied: `docs/design/care-facility-draft-examples/invalid/expired-service-window-denied-response.json`
+- Denied response includes non-null `care_facility_context`: `docs/design/care-facility-draft-examples/invalid/denied-response-with-context.json`
+- Returned care-facility field is missing provenance: `docs/design/care-facility-draft-examples/invalid/care-field-missing-provenance.json`
+- Returned pickup authorization includes identity document data: `docs/design/care-facility-draft-examples/invalid/pickup-authorization-identity-document-leak.json`
+- Boarding preparation response includes full wellness timeline: `docs/design/care-facility-draft-examples/invalid/boarding-response-with-wellness-timeline.json`
+- Boarding preparation response includes diagnosis history: `docs/design/care-facility-draft-examples/invalid/boarding-response-with-diagnosis-history.json`
+- Pickup authorization implies billing or payment authority: `docs/design/care-facility-draft-examples/invalid/pickup-authorization-payment-authority-leak.json`
+
+These fixtures are design drafts only. They should move into `tests/conformance/fixtures/invalid/` only after Care Facility schemas exist.
 
 ## Open Decisions Before Schema Work
 

@@ -11,3 +11,5 @@ Draft boarding preparation flow:
 - `boarding-preparation-permission-grant.json`
 - `boarding-preparation-request.json`
 - `boarding-preparation-partial-response.json`
+
+Draft invalid fixtures live in `invalid/`. They sketch future conformance cases but are not executed by the current test suite.
