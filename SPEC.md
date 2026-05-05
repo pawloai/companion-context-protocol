@@ -450,6 +450,8 @@ The illustrative HTTP adapter for this flow is `openapi/care-facility-pickup-ver
 
 The illustrative MCP adapter for this flow is `mcp/care-facility-pickup-verification.tools.json`.
 
+Implementation guidance for this flow is `docs/implementers/care-facility-pickup-verification-server.md`.
+
 ## Care Network Lookup Flow
 
 Example flow:
@@ -469,6 +471,8 @@ See `examples/permission-grant-care-network-lookup.json`, `examples/care-network
 The illustrative HTTP adapter for this flow is `openapi/care-network-lookup.openapi.json`.
 
 The illustrative MCP adapter for this flow is `mcp/care-network-lookup.tools.json`.
+
+Implementation guidance for this flow is `docs/implementers/care-network-lookup-server.md`.
 
 ## Conformance Requirements
 
