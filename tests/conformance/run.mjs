@@ -540,132 +540,98 @@ if (failed) {
 
 console.log("ok - request/response round trip consistency");
 
+const reportGrantRequestMismatches = ({ label, request, grant, fieldChecks }) => {
+  let blockFailed = false;
+
+  for (const [name, actual, expected] of fieldChecks) {
+    if (actual === expected || isDeepStrictEqual(actual, expected)) {
+      continue;
+    }
+
+    blockFailed = true;
+    console.error(`not ok - ${label} grant/request mismatch: ${name}`);
+    console.error(`  expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+  }
+
+  if (!grant.purposes.includes(request.purpose)) {
+    blockFailed = true;
+    console.error(`not ok - ${label} grant/request mismatch: purpose`);
+    console.error(`  expected grant purposes to include ${request.purpose}`);
+  }
+
+  for (const scope of request.scopes) {
+    if (grant.scopes.includes(scope)) {
+      continue;
+    }
+
+    blockFailed = true;
+    console.error(`not ok - ${label} grant/request mismatch: scope`);
+    console.error(`  expected grant scopes to include ${scope}`);
+  }
+
+  if (blockFailed) return true;
+
+  console.log(`ok - ${label} grant/request consistency`);
+  return false;
+};
+
 const careFacilityRequest = readJson("examples/care-facility-boarding-preparation-request.json");
 const careFacilityGrant = readJson("examples/permission-grant-care-facility-boarding-preparation.json");
-const grantRequestChecks = [
-  ["grant_id", careFacilityGrant.grant_id, careFacilityRequest.grant_id],
-  ["subject_pet_id", careFacilityGrant.subject_pet_id, careFacilityRequest.pet_id],
-  ["grantee_actor_id", careFacilityGrant.grantee_actor_id, careFacilityRequest.requester_actor_id],
-  ["facility_id", careFacilityGrant.facility_id, careFacilityRequest.facility_id],
-  ["service_id", careFacilityGrant.service_id, careFacilityRequest.service_id],
-  ["service_type", careFacilityGrant.service_type, careFacilityRequest.service_type],
-  ["service_window", careFacilityGrant.service_window, careFacilityRequest.service_window]
-];
-
-for (const [name, actual, expected] of grantRequestChecks) {
-  if (actual === expected || isDeepStrictEqual(actual, expected)) {
-    continue;
-  }
-
-  failed = true;
-  console.error(`not ok - care facility grant/request mismatch: ${name}`);
-  console.error(`  expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
-}
-
-if (!careFacilityGrant.purposes.includes(careFacilityRequest.purpose)) {
-  failed = true;
-  console.error("not ok - care facility grant/request mismatch: purpose");
-  console.error(`  expected grant purposes to include ${careFacilityRequest.purpose}`);
-}
-
-for (const scope of careFacilityRequest.scopes) {
-  if (careFacilityGrant.scopes.includes(scope)) {
-    continue;
-  }
-
-  failed = true;
-  console.error("not ok - care facility grant/request mismatch: scope");
-  console.error(`  expected grant scopes to include ${scope}`);
-}
+failed ||= reportGrantRequestMismatches({
+  label: "care facility",
+  request: careFacilityRequest,
+  grant: careFacilityGrant,
+  fieldChecks: [
+    ["grant_id", careFacilityGrant.grant_id, careFacilityRequest.grant_id],
+    ["subject_pet_id", careFacilityGrant.subject_pet_id, careFacilityRequest.pet_id],
+    ["grantee_actor_id", careFacilityGrant.grantee_actor_id, careFacilityRequest.requester_actor_id],
+    ["facility_id", careFacilityGrant.facility_id, careFacilityRequest.facility_id],
+    ["service_id", careFacilityGrant.service_id, careFacilityRequest.service_id],
+    ["service_type", careFacilityGrant.service_type, careFacilityRequest.service_type],
+    ["service_window", careFacilityGrant.service_window, careFacilityRequest.service_window]
+  ]
+});
 
 if (failed) {
   process.exit(1);
 }
-
-console.log("ok - care facility grant/request consistency");
 
 const pickupVerificationRequest = readJson("examples/care-facility-pickup-verification-request.json");
 const pickupVerificationGrant = readJson("examples/permission-grant-care-facility-pickup-verification.json");
-const pickupGrantRequestChecks = [
-  ["grant_id", pickupVerificationGrant.grant_id, pickupVerificationRequest.grant_id],
-  ["subject_pet_id", pickupVerificationGrant.subject_pet_id, pickupVerificationRequest.pet_id],
-  ["grantee_actor_id", pickupVerificationGrant.grantee_actor_id, pickupVerificationRequest.requester_actor_id],
-  ["facility_id", pickupVerificationGrant.facility_id, pickupVerificationRequest.facility_id],
-  ["service_id", pickupVerificationGrant.service_id, pickupVerificationRequest.service_id],
-  ["service_type", pickupVerificationGrant.service_type, pickupVerificationRequest.service_type],
-  ["service_window", pickupVerificationGrant.service_window, pickupVerificationRequest.service_window]
-];
-
-for (const [name, actual, expected] of pickupGrantRequestChecks) {
-  if (actual === expected || isDeepStrictEqual(actual, expected)) {
-    continue;
-  }
-
-  failed = true;
-  console.error(`not ok - pickup verification grant/request mismatch: ${name}`);
-  console.error(`  expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
-}
-
-if (!pickupVerificationGrant.purposes.includes(pickupVerificationRequest.purpose)) {
-  failed = true;
-  console.error("not ok - pickup verification grant/request mismatch: purpose");
-  console.error(`  expected grant purposes to include ${pickupVerificationRequest.purpose}`);
-}
-
-for (const scope of pickupVerificationRequest.scopes) {
-  if (pickupVerificationGrant.scopes.includes(scope)) {
-    continue;
-  }
-
-  failed = true;
-  console.error("not ok - pickup verification grant/request mismatch: scope");
-  console.error(`  expected grant scopes to include ${scope}`);
-}
+failed ||= reportGrantRequestMismatches({
+  label: "pickup verification",
+  request: pickupVerificationRequest,
+  grant: pickupVerificationGrant,
+  fieldChecks: [
+    ["grant_id", pickupVerificationGrant.grant_id, pickupVerificationRequest.grant_id],
+    ["subject_pet_id", pickupVerificationGrant.subject_pet_id, pickupVerificationRequest.pet_id],
+    ["grantee_actor_id", pickupVerificationGrant.grantee_actor_id, pickupVerificationRequest.requester_actor_id],
+    ["facility_id", pickupVerificationGrant.facility_id, pickupVerificationRequest.facility_id],
+    ["service_id", pickupVerificationGrant.service_id, pickupVerificationRequest.service_id],
+    ["service_type", pickupVerificationGrant.service_type, pickupVerificationRequest.service_type],
+    ["service_window", pickupVerificationGrant.service_window, pickupVerificationRequest.service_window]
+  ]
+});
 
 if (failed) {
   process.exit(1);
 }
-
-console.log("ok - pickup verification grant/request consistency");
 
 const careNetworkLookupRequest = readJson("examples/care-network-lookup-request.json");
 const careNetworkLookupGrant = readJson("examples/permission-grant-care-network-lookup.json");
-const careNetworkGrantRequestChecks = [
-  ["grant_id", careNetworkLookupGrant.grant_id, careNetworkLookupRequest.grant_id],
-  ["subject_pet_id", careNetworkLookupGrant.subject_pet_id, careNetworkLookupRequest.pet_id],
-  ["grantee_actor_id", careNetworkLookupGrant.grantee_actor_id, careNetworkLookupRequest.requester_actor_id],
-  ["service_id", careNetworkLookupGrant.service_id, careNetworkLookupRequest.service_id],
-  ["service_window", careNetworkLookupGrant.service_window, careNetworkLookupRequest.service_window]
-];
-
-for (const [name, actual, expected] of careNetworkGrantRequestChecks) {
-  if (actual === expected || isDeepStrictEqual(actual, expected)) {
-    continue;
-  }
-
-  failed = true;
-  console.error(`not ok - care network lookup grant/request mismatch: ${name}`);
-  console.error(`  expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
-}
-
-if (!careNetworkLookupGrant.purposes.includes(careNetworkLookupRequest.purpose)) {
-  failed = true;
-  console.error("not ok - care network lookup grant/request mismatch: purpose");
-  console.error(`  expected grant purposes to include ${careNetworkLookupRequest.purpose}`);
-}
-
-for (const scope of careNetworkLookupRequest.scopes) {
-  if (careNetworkLookupGrant.scopes.includes(scope)) {
-    continue;
-  }
-
-  failed = true;
-  console.error("not ok - care network lookup grant/request mismatch: scope");
-  console.error(`  expected grant scopes to include ${scope}`);
-}
+failed ||= reportGrantRequestMismatches({
+  label: "care network lookup",
+  request: careNetworkLookupRequest,
+  grant: careNetworkLookupGrant,
+  fieldChecks: [
+    ["grant_id", careNetworkLookupGrant.grant_id, careNetworkLookupRequest.grant_id],
+    ["subject_pet_id", careNetworkLookupGrant.subject_pet_id, careNetworkLookupRequest.pet_id],
+    ["grantee_actor_id", careNetworkLookupGrant.grantee_actor_id, careNetworkLookupRequest.requester_actor_id],
+    ["service_id", careNetworkLookupGrant.service_id, careNetworkLookupRequest.service_id],
+    ["service_window", careNetworkLookupGrant.service_window, careNetworkLookupRequest.service_window]
+  ]
+});
 
 if (failed) {
   process.exit(1);
 }
-
-console.log("ok - care network lookup grant/request consistency");
