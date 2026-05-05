@@ -28,6 +28,6 @@ The Python test compiles the package, verifies that exported schema helpers reso
 
 ## Compatibility
 
-The canonical JSON Schemas remain the source of truth. Python implementers should validate request, response, pickup verification, and permission grant objects against `../../schemas/` until generated models are introduced.
+The canonical JSON Schemas remain the source of truth. Python implementers should validate request, response, pickup verification, Care Network lookup, and permission grant objects against `../../schemas/` until generated models are introduced.
 
 Future work may add Pydantic models generated from the canonical schemas. Generated models should preserve the schema contract rather than replacing it.

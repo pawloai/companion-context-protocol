@@ -27,6 +27,14 @@ const adapterFiles = [
     requestSchema: "../schemas/care-facility-pickup-verification-request.schema.json",
     responseSchema: "../schemas/care-facility-pickup-verification-response.schema.json",
     grantLookup: false
+  },
+  {
+    path: "mcp/care-network-lookup.tools.json",
+    profile: "care-network-lookup",
+    requiredTool: "ccp_care_network_lookup_request",
+    requestSchema: "../schemas/care-network-lookup-request.schema.json",
+    responseSchema: "../schemas/care-network-lookup-response.schema.json",
+    grantLookup: false
   }
 ];
 

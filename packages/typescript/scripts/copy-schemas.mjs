@@ -13,6 +13,8 @@ const schemaNames = [
   "care-facility-context-response.schema.json",
   "care-facility-pickup-verification-request.schema.json",
   "care-facility-pickup-verification-response.schema.json",
+  "care-network-lookup-request.schema.json",
+  "care-network-lookup-response.schema.json",
   "permission-grant.schema.json"
 ];
 

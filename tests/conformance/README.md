@@ -13,11 +13,13 @@ The current test suite verifies:
 - Tracked files do not contain vendor-specific protocol or package metadata.
 - Commerce context fields include `commerce_safe` visibility and do not include `staff_only` or `restricted_sensitive`.
 - Care facility context fields include `facility_shareable` visibility and do not include `staff_only` or `restricted_sensitive`.
+- Care Network lookup fields include care-network visibility classes and do not include `staff_only` or `restricted_sensitive`.
 - Response `status`, `authorization_decision.decision`, `commerce_context`, and omissions are internally consistent.
 - Grant lifecycle fields are internally consistent.
 - Example request/response pairs preserve request id, requester, pet, purpose, and grant identity.
 - The Care Facility request/response pair preserves facility, service, service type, and service-window identity.
 - The Care Facility permission grant example matches the public request's pet, requester, facility, service, service window, purpose, and requested scopes.
+- The Care Network lookup request/response pair preserves subject actor identity, and its grant example matches the public request's pet, requester, service window, purpose, and requested scopes.
 - A valid purchase-history summary response is accepted.
 - The OpenAPI adapter sketches parse as valid API descriptions.
 - The OpenAPI adapter external examples resolve to existing files.
@@ -53,6 +55,12 @@ Current invalid fixtures:
 - `fixtures/invalid/care-facility-pickup-authorization-payment-authority-leak.json`
 - `fixtures/invalid/care-facility-response-with-commerce-decision-purpose.json`
 - `fixtures/invalid/care-facility-response-with-commerce-context-purpose.json`
+- `fixtures/invalid/care-network-lookup-broad-scope-request.json`
+- `fixtures/invalid/care-network-lookup-denied-response-with-context.json`
+- `fixtures/invalid/care-network-lookup-household-leak.json`
+- `fixtures/invalid/care-network-lookup-sensitive-provenance-ref.json`
+- `fixtures/invalid/care-network-lookup-staff-only-visibility.json`
+- `fixtures/invalid/care-network-lookup-unrelated-contact-list.json`
 
 Current valid fixtures:
 

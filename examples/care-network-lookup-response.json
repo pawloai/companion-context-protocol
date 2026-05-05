@@ -1,0 +1,238 @@
+{
+  "request_id": "req-care-network-lookup-001",
+  "status": "ok",
+  "authorization_decision": {
+    "decision": "allowed",
+    "evaluated_at": "2026-05-10T15:05:00Z",
+    "requester_actor_id": "actor-sitter-001",
+    "pet_id": "pet-001",
+    "purpose": "care_network_lookup",
+    "grant_id": "grant-care-network-lookup-001",
+    "applied_scopes": [
+      "pet.care_network.actor_refs.read",
+      "pet.care_network.relationships.read",
+      "pet.care_network.contact_channels.read",
+      "pet.care_network.action_authorizations.read"
+    ],
+    "denied_scopes": [],
+    "reasons": [
+      "active grant permits care-network lookup for this actor and service window"
+    ]
+  },
+  "care_network_context": {
+    "pet_id": "pet-001",
+    "purpose": "care_network_lookup",
+    "subject_actor": {
+      "actor_id": "actor-owner-001",
+      "actor_type": {
+        "value": "owner",
+        "visibility": [
+          "care_network_visible"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor-owner-001",
+          "recorded_at": "2026-04-20T10:00:00Z",
+          "verified_at": "2026-04-20T10:05:00Z"
+        }
+      },
+      "display_name": {
+        "value": "Jordan Lee",
+        "visibility": [
+          "care_network_visible"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor-owner-001",
+          "recorded_at": "2026-04-20T10:00:00Z"
+        }
+      },
+      "role_label": {
+        "value": "Primary caregiver",
+        "visibility": [
+          "care_network_visible"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor-owner-001",
+          "recorded_at": "2026-04-20T10:00:00Z"
+        }
+      },
+      "metadata": {
+        "visibility": [
+          "care_network_visible"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor-owner-001",
+          "recorded_at": "2026-04-20T10:00:00Z"
+        }
+      }
+    },
+    "relationship": {
+      "actor_id": "actor-owner-001",
+      "pet_id": "pet-001",
+      "relationship_type": {
+        "value": "owner",
+        "visibility": [
+          "care_network_visible"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor-owner-001",
+          "recorded_at": "2026-04-20T10:00:00Z"
+        }
+      },
+      "relationship_label": {
+        "value": "Primary caregiver",
+        "visibility": [
+          "care_network_visible"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor-owner-001",
+          "recorded_at": "2026-04-20T10:00:00Z"
+        }
+      },
+      "status": {
+        "value": "active",
+        "visibility": [
+          "care_network_visible"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor-owner-001",
+          "recorded_at": "2026-04-20T10:00:00Z"
+        }
+      },
+      "metadata": {
+        "visibility": [
+          "care_network_visible"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor-owner-001",
+          "recorded_at": "2026-04-20T10:00:00Z"
+        }
+      }
+    },
+    "contact_channels": [
+      {
+        "actor_id": "actor-owner-001",
+        "channel_type": {
+          "value": "sms",
+          "visibility": [
+            "contact_shareable"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor-owner-001",
+            "recorded_at": "2026-04-20T10:00:00Z",
+            "verified_at": "2026-04-20T10:05:00Z"
+          }
+        },
+        "channel_value": {
+          "value": "+15550101010",
+          "visibility": [
+            "contact_shareable"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor-owner-001",
+            "recorded_at": "2026-04-20T10:00:00Z",
+            "verified_at": "2026-04-20T10:05:00Z"
+          }
+        },
+        "preferred": {
+          "value": true,
+          "visibility": [
+            "contact_shareable"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor-owner-001",
+            "recorded_at": "2026-04-20T10:00:00Z"
+          }
+        },
+        "allowed_purposes": {
+          "value": [
+            "care_network_lookup"
+          ],
+          "visibility": [
+            "contact_shareable"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor-owner-001",
+            "recorded_at": "2026-04-20T10:00:00Z"
+          }
+        },
+        "metadata": {
+          "visibility": [
+            "contact_shareable"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor-owner-001",
+            "recorded_at": "2026-04-20T10:00:00Z"
+          }
+        }
+      }
+    ],
+    "action_authorizations": [
+      {
+        "authorization_id": "auth-care-updates-001",
+        "actor_id": "actor-owner-001",
+        "pet_id": "pet-001",
+        "action": {
+          "value": "receive_care_updates",
+          "visibility": [
+            "action_authorization_visible"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor-owner-001",
+            "recorded_at": "2026-04-20T10:00:00Z"
+          }
+        },
+        "status": {
+          "value": "active",
+          "visibility": [
+            "action_authorization_visible"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor-owner-001",
+            "recorded_at": "2026-04-20T10:00:00Z"
+          }
+        },
+        "service_id": "care-session-001",
+        "service_window": {
+          "starts_at": "2026-05-10T15:00:00Z",
+          "ends_at": "2026-05-10T18:00:00Z"
+        },
+        "metadata": {
+          "visibility": [
+            "action_authorization_visible"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor-owner-001",
+            "recorded_at": "2026-04-20T10:00:00Z"
+          }
+        }
+      }
+    ],
+    "metadata": {
+      "visibility": [
+        "care_network_visible"
+      ],
+      "provenance": {
+        "source_type": "owner_entered",
+        "source_actor_id": "actor-owner-001",
+        "recorded_at": "2026-04-20T10:00:00Z"
+      }
+    }
+  },
+  "omissions": []
+}

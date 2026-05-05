@@ -14,7 +14,10 @@
         "facility_shareable",
         "commerce_safe",
         "agent_summary_only",
-        "restricted_sensitive"
+        "restricted_sensitive",
+        "care_network_visible",
+        "contact_shareable",
+        "action_authorization_visible"
       ]
     },
     "Scope": {
@@ -33,7 +36,12 @@
         "pet.vaccinations.status.read",
         "pet.pickup_authorization.read",
         "pet.emergency_contacts.read",
-        "pet.medications.administration.read"
+        "pet.medications.administration.read",
+        "pet.care_network.actor_refs.read",
+        "pet.care_network.relationships.read",
+        "pet.care_network.contact_channels.read",
+        "pet.care_network.action_authorizations.read",
+        "pet.care_network.revocation_status.read"
       ]
     },
     "Purpose": {
@@ -42,7 +50,8 @@
         "product_recommendation",
         "product_filtering",
         "boarding_preparation",
-        "pickup_verification"
+        "pickup_verification",
+        "care_network_lookup"
       ]
     },
     "OmissionReasonCode": {
@@ -2514,6 +2523,807 @@
               },
               "omissions": {
                 "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "CareNetworkVisibilitySet": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/VisibilitySet"
+        },
+        {
+          "contains": {
+            "enum": [
+              "care_network_visible",
+              "contact_shareable",
+              "action_authorization_visible"
+            ]
+          }
+        },
+        {
+          "not": {
+            "contains": {
+              "enum": [
+                "staff_only",
+                "restricted_sensitive"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "CareNetworkObjectMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "visibility",
+        "provenance"
+      ],
+      "properties": {
+        "visibility": {
+          "$ref": "#/$defs/CareNetworkVisibilitySet"
+        },
+        "provenance": {
+          "$ref": "#/$defs/CareNetworkProvenance"
+        }
+      }
+    },
+    "CareNetworkStringField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/StringField"
+        },
+        {
+          "properties": {
+            "value": {
+              "not": {
+                "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- ][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- ][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- ][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- ][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
+              }
+            },
+            "visibility": {
+              "$ref": "#/$defs/CareNetworkVisibilitySet"
+            },
+            "provenance": {
+              "$ref": "#/$defs/CareNetworkProvenance"
+            }
+          }
+        }
+      ]
+    },
+    "CareNetworkStringArrayField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/StringArrayField"
+        },
+        {
+          "properties": {
+            "value": {
+              "items": {
+                "not": {
+                  "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- ][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- ][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- ][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- ][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
+                }
+              }
+            },
+            "visibility": {
+              "$ref": "#/$defs/CareNetworkVisibilitySet"
+            },
+            "provenance": {
+              "$ref": "#/$defs/CareNetworkProvenance"
+            }
+          }
+        }
+      ]
+    },
+    "CareNetworkBooleanField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/BooleanField"
+        },
+        {
+          "properties": {
+            "visibility": {
+              "$ref": "#/$defs/CareNetworkVisibilitySet"
+            },
+            "provenance": {
+              "$ref": "#/$defs/CareNetworkProvenance"
+            }
+          }
+        }
+      ]
+    },
+    "CareNetworkActorTypeField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CareNetworkStringField"
+        },
+        {
+          "properties": {
+            "value": {
+              "enum": [
+                "owner",
+                "caregiver",
+                "family_contact",
+                "friend_contact",
+                "pickup_contact",
+                "emergency_contact",
+                "facility_staff",
+                "organization",
+                "integration_client"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "CareNetworkRelationshipTypeField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CareNetworkStringField"
+        },
+        {
+          "properties": {
+            "value": {
+              "enum": [
+                "owner",
+                "primary_caregiver",
+                "family_contact",
+                "friend_contact",
+                "pickup_contact",
+                "emergency_contact",
+                "facility_staff",
+                "temporary_caregiver"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "CareNetworkContactChannelTypeField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CareNetworkStringField"
+        },
+        {
+          "properties": {
+            "value": {
+              "enum": [
+                "phone",
+                "sms",
+                "email",
+                "in_app"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "CareNetworkActionField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CareNetworkStringField"
+        },
+        {
+          "properties": {
+            "value": {
+              "enum": [
+                "pickup_pet",
+                "drop_off_pet",
+                "receive_care_updates",
+                "receive_emergency_contact",
+                "approve_minor_service_change",
+                "manage_care_network"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "CareNetworkAuthorizationStatusField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CareNetworkStringField"
+        },
+        {
+          "properties": {
+            "value": {
+              "enum": [
+                "active",
+                "expired",
+                "revoked",
+                "unknown"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "CareNetworkActorRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actor_id",
+        "actor_type",
+        "metadata"
+      ],
+      "properties": {
+        "actor_id": {
+          "type": "string"
+        },
+        "actor_type": {
+          "$ref": "#/$defs/CareNetworkActorTypeField"
+        },
+        "display_name": {
+          "$ref": "#/$defs/CareNetworkStringField"
+        },
+        "role_label": {
+          "$ref": "#/$defs/CareNetworkStringField"
+        },
+        "organization_id": {
+          "type": "string"
+        },
+        "metadata": {
+          "$ref": "#/$defs/CareNetworkObjectMetadata"
+        }
+      }
+    },
+    "CareNetworkPetRelationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actor_id",
+        "pet_id",
+        "relationship_type",
+        "status",
+        "metadata"
+      ],
+      "properties": {
+        "actor_id": {
+          "type": "string"
+        },
+        "pet_id": {
+          "type": "string"
+        },
+        "relationship_type": {
+          "$ref": "#/$defs/CareNetworkRelationshipTypeField"
+        },
+        "relationship_label": {
+          "$ref": "#/$defs/CareNetworkStringField"
+        },
+        "starts_at": {
+          "$ref": "#/$defs/CareNetworkStringField"
+        },
+        "ends_at": {
+          "$ref": "#/$defs/CareNetworkStringField"
+        },
+        "status": {
+          "$ref": "#/$defs/CareNetworkAuthorizationStatusField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/CareNetworkObjectMetadata"
+        }
+      }
+    },
+    "CareNetworkContactChannel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actor_id",
+        "channel_type",
+        "channel_value",
+        "allowed_purposes",
+        "metadata"
+      ],
+      "properties": {
+        "actor_id": {
+          "type": "string"
+        },
+        "channel_type": {
+          "$ref": "#/$defs/CareNetworkContactChannelTypeField"
+        },
+        "channel_value": {
+          "$ref": "#/$defs/CareNetworkStringField"
+        },
+        "preferred": {
+          "$ref": "#/$defs/CareNetworkBooleanField"
+        },
+        "allowed_purposes": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/CareNetworkStringArrayField"
+            },
+            {
+              "properties": {
+                "value": {
+                  "items": {
+                    "enum": [
+                      "care_network_lookup",
+                      "pickup_verification"
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "valid_from": {
+          "$ref": "#/$defs/CareNetworkStringField"
+        },
+        "valid_until": {
+          "$ref": "#/$defs/CareNetworkStringField"
+        },
+        "verification_status": {
+          "$ref": "#/$defs/CareNetworkStringField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/CareNetworkObjectMetadata"
+        }
+      }
+    },
+    "CareNetworkActionAuthorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authorization_id",
+        "actor_id",
+        "pet_id",
+        "action",
+        "status",
+        "metadata"
+      ],
+      "properties": {
+        "authorization_id": {
+          "type": "string"
+        },
+        "actor_id": {
+          "type": "string"
+        },
+        "pet_id": {
+          "type": "string"
+        },
+        "action": {
+          "$ref": "#/$defs/CareNetworkActionField"
+        },
+        "status": {
+          "$ref": "#/$defs/CareNetworkAuthorizationStatusField"
+        },
+        "authorized_by_actor_id": {
+          "type": "string"
+        },
+        "service_id": {
+          "type": "string"
+        },
+        "service_window": {
+          "$ref": "#/$defs/ServiceWindow"
+        },
+        "constraints": {
+          "$ref": "#/$defs/CareNetworkStringArrayField"
+        },
+        "expires_at": {
+          "$ref": "#/$defs/CareNetworkStringField"
+        },
+        "revoked_at": {
+          "$ref": "#/$defs/CareNetworkStringField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/CareNetworkObjectMetadata"
+        }
+      }
+    },
+    "CareNetworkRevocationRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "revocation_id",
+        "target_authorization_id",
+        "target_actor_id",
+        "pet_id",
+        "revoked_at",
+        "reason_code",
+        "metadata"
+      ],
+      "properties": {
+        "revocation_id": {
+          "type": "string"
+        },
+        "target_authorization_id": {
+          "type": "string"
+        },
+        "target_actor_id": {
+          "type": "string"
+        },
+        "pet_id": {
+          "type": "string"
+        },
+        "revoked_at": {
+          "$ref": "#/$defs/CareNetworkStringField"
+        },
+        "revoked_by_actor_id": {
+          "type": "string"
+        },
+        "reason_code": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/CareNetworkStringField"
+            },
+            {
+              "properties": {
+                "value": {
+                  "enum": [
+                    "owner_revoked",
+                    "grant_expired",
+                    "service_window_ended",
+                    "source_replaced",
+                    "not_available"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "effective_at": {
+          "$ref": "#/$defs/CareNetworkStringField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/CareNetworkObjectMetadata"
+        }
+      }
+    },
+    "CareNetworkContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pet_id",
+        "purpose",
+        "subject_actor",
+        "metadata"
+      ],
+      "properties": {
+        "pet_id": {
+          "type": "string"
+        },
+        "purpose": {
+          "const": "care_network_lookup"
+        },
+        "subject_actor": {
+          "$ref": "#/$defs/CareNetworkActorRef"
+        },
+        "relationship": {
+          "$ref": "#/$defs/CareNetworkPetRelationship"
+        },
+        "contact_channels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CareNetworkContactChannel"
+          }
+        },
+        "action_authorizations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CareNetworkActionAuthorization"
+          }
+        },
+        "revocation_records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CareNetworkRevocationRecord"
+          }
+        },
+        "metadata": {
+          "$ref": "#/$defs/CareNetworkObjectMetadata"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "relationship"
+          ]
+        },
+        {
+          "required": [
+            "contact_channels"
+          ]
+        },
+        {
+          "required": [
+            "action_authorizations"
+          ]
+        },
+        {
+          "required": [
+            "revocation_records"
+          ]
+        }
+      ]
+    },
+    "CareNetworkLookupRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "requester_actor_id",
+        "pet_id",
+        "purpose",
+        "scopes",
+        "grant_id",
+        "subject_actor_id"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string"
+        },
+        "requester_actor_id": {
+          "type": "string"
+        },
+        "pet_id": {
+          "type": "string"
+        },
+        "purpose": {
+          "const": "care_network_lookup"
+        },
+        "scopes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "pet.care_network.actor_refs.read",
+              "pet.care_network.relationships.read",
+              "pet.care_network.contact_channels.read",
+              "pet.care_network.action_authorizations.read",
+              "pet.care_network.revocation_status.read"
+            ]
+          }
+        },
+        "grant_id": {
+          "type": "string"
+        },
+        "subject_actor_id": {
+          "type": "string"
+        },
+        "requested_action": {
+          "type": "string",
+          "enum": [
+            "pickup_pet",
+            "drop_off_pet",
+            "receive_care_updates",
+            "receive_emergency_contact",
+            "approve_minor_service_change",
+            "manage_care_network"
+          ]
+        },
+        "service_id": {
+          "type": "string"
+        },
+        "service_window": {
+          "$ref": "#/$defs/ServiceWindow"
+        }
+      }
+    },
+    "CareNetworkLookupResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "status",
+        "authorization_decision",
+        "care_network_context",
+        "omissions"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "ok",
+            "partial",
+            "denied"
+          ]
+        },
+        "authorization_decision": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/AuthorizationDecision"
+            },
+            {
+              "properties": {
+                "purpose": {
+                  "const": "care_network_lookup"
+                },
+                "applied_scopes": {
+                  "items": {
+                    "enum": [
+                      "pet.care_network.actor_refs.read",
+                      "pet.care_network.relationships.read",
+                      "pet.care_network.contact_channels.read",
+                      "pet.care_network.action_authorizations.read",
+                      "pet.care_network.revocation_status.read"
+                    ]
+                  }
+                },
+                "denied_scopes": {
+                  "items": {
+                    "enum": [
+                      "pet.care_network.actor_refs.read",
+                      "pet.care_network.relationships.read",
+                      "pet.care_network.contact_channels.read",
+                      "pet.care_network.action_authorizations.read",
+                      "pet.care_network.revocation_status.read"
+                    ]
+                  }
+                },
+                "reasons": {
+                  "items": {
+                    "not": {
+                      "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- ][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- ][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- ][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- ][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "care_network_context": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CareNetworkContext"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "omissions": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/Omission"
+              },
+              {
+                "properties": {
+                  "required_scope": {
+                    "enum": [
+                      "pet.care_network.actor_refs.read",
+                      "pet.care_network.relationships.read",
+                      "pet.care_network.contact_channels.read",
+                      "pet.care_network.action_authorizations.read",
+                      "pet.care_network.revocation_status.read"
+                    ]
+                  },
+                  "detail": {
+                    "not": {
+                      "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- ][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- ][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- ][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- ][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "ok"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "authorization_decision": {
+                "properties": {
+                  "decision": {
+                    "const": "allowed"
+                  },
+                  "denied_scopes": {
+                    "maxItems": 0
+                  }
+                }
+              },
+              "care_network_context": {
+                "$ref": "#/$defs/CareNetworkContext"
+              },
+              "omissions": {
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "partial"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "authorization_decision": {
+                "properties": {
+                  "decision": {
+                    "const": "partial"
+                  }
+                }
+              },
+              "care_network_context": {
+                "$ref": "#/$defs/CareNetworkContext"
+              },
+              "omissions": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "denied"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "authorization_decision": {
+                "properties": {
+                  "decision": {
+                    "const": "denied"
+                  },
+                  "applied_scopes": {
+                    "maxItems": 0
+                  }
+                }
+              },
+              "care_network_context": {
+                "type": "null"
+              },
+              "omissions": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "CareNetworkProvenance": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ContextProvenance"
+        },
+        {
+          "properties": {
+            "source_system": {
+              "not": {
+                "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- ][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- ][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- ][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- ][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
+              }
+            },
+            "source_record_ref": {
+              "not": {
+                "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- ][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- ][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- ][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- ][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
+              }
+            },
+            "derived_from": {
+              "items": {
+                "not": {
+                  "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- ][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- ][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- ][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- ][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
+                }
               }
             }
           }

@@ -11,6 +11,10 @@ Current draft schemas:
 - `commerce-context-response.schema.json`: response wrapper for Commerce Context Profile responses.
 - `care-facility-context-request.schema.json`: request wrapper for the first Care Facility Context Profile slice.
 - `care-facility-context-response.schema.json`: response wrapper for the first Care Facility Context Profile slice.
+- `care-facility-pickup-verification-request.schema.json`: request wrapper for the Care Facility Pickup Verification slice.
+- `care-facility-pickup-verification-response.schema.json`: response wrapper for the Care Facility Pickup Verification slice.
+- `care-network-lookup-request.schema.json`: request wrapper for the first Care Network lookup slice.
+- `care-network-lookup-response.schema.json`: response wrapper for the first Care Network lookup slice.
 - `permission-grant.schema.json`: wrapper for permission grant examples.
 
 Schema `$id` values are stable identifiers for the draft schema documents. They are not required to be dereferenceable URLs for local validation.
@@ -21,6 +25,8 @@ Initial core objects:
 - `DietProfile`
 - `CommerceContext`
 - `CareFacilityContext`
+- `PickupVerificationContext`
+- `CareNetworkContext`
 - `PermissionGrant`
 - `ContextProvenance`
 

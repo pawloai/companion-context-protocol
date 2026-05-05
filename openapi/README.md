@@ -9,6 +9,7 @@ JSON Schema remains the canonical CCP contract. OpenAPI documents in this direct
 - [`commerce-context.openapi.json`](commerce-context.openapi.json): illustrative HTTP surface for the Commerce Context Profile.
 - [`care-facility-context.openapi.json`](care-facility-context.openapi.json): illustrative HTTP surface for the first Care Facility Context boarding-preparation slice.
 - [`care-facility-pickup-verification.openapi.json`](care-facility-pickup-verification.openapi.json): illustrative HTTP surface for the Care Facility Pickup Verification slice.
+- [`care-network-lookup.openapi.json`](care-network-lookup.openapi.json): illustrative HTTP surface for the first Care Network lookup slice.
 
 The Commerce Context adapter defines:
 
@@ -30,6 +31,14 @@ The Care Facility Pickup Verification adapter defines:
 
 - `POST /care-facility-pickup-verification` for verifying pickup authorization for one pet, facility, service window, and pickup actor.
 - No grant lookup endpoint. The pickup adapter intentionally keeps the HTTP surface limited to pickup verification.
+- Bearer authentication as an illustrative transport mechanism only.
+- Headers for draft version, profile, and request correlation.
+- Request and response bodies that reference the canonical JSON Schemas.
+
+The Care Network Lookup adapter defines:
+
+- `POST /care-network-lookup` for looking up one subject actor's relationship, contact channels, action authorizations, or revocation status for one pet.
+- No grant lookup endpoint. The lookup adapter intentionally keeps the HTTP surface limited to one-subject lookup.
 - Bearer authentication as an illustrative transport mechanism only.
 - Headers for draft version, profile, and request correlation.
 - Request and response bodies that reference the canonical JSON Schemas.

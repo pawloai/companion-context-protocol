@@ -2,7 +2,7 @@
 
 Date: 2026-05-05
 
-Status: Design draft, non-normative
+Status: Design draft with first schema-backed lookup slice, non-normative
 
 Related profile: Care Facility Context Profile
 
@@ -10,11 +10,11 @@ Related parallel slice: `docs/design/2026-05-05-care-facility-pickup-verificatio
 
 ## Design Status
 
-This document scopes a possible Care Network profile or shared object model for CCP. It is design material only. It does not define a stable schema, conformance requirement, or implementation commitment.
+This document scopes a possible Care Network profile or shared object model for CCP. It remains design material and does not define a stable standard. The repository now includes a first schema-backed `care_network_lookup` slice that exercises a narrow subset of this design for one pet and one subject actor.
 
 Care Network is intentionally scoped as reusable permission and contact primitives, not as a broad household export. It should define how actors, relationships, contact methods, action authority, revocation, and expiration can be represented across CCP profiles.
 
-The immediate reason to scope Care Network is the next Care Facility Pickup Verification slice. Pickup Verification should be able to consume a minimized Care Network subset without waiting for the entire Care Network model to become stable.
+The immediate reason to scope Care Network was Pickup Verification. Pickup Verification consumes a minimized Care Network subset, and the first standalone lookup slice now tests whether reusable actor, relationship, contact-channel, action-authorization, and revocation primitives can be exposed safely without becoming a full household export.
 
 ## Purpose
 
@@ -544,16 +544,35 @@ Defer from the first slice:
 
 This keeps Pickup Verification useful and reviewable while allowing Care Network to evolve as a shared object model.
 
+## First Standalone Lookup Slice
+
+The first schema-backed Care Network slice is `care_network_lookup`.
+
+It includes:
+
+- `CareNetworkLookupRequest`
+- `CareNetworkLookupResponse`
+- `CareNetworkContext`
+- `CareNetworkActorRef`
+- `CareNetworkPetRelationship`
+- `CareNetworkContactChannel`
+- `CareNetworkActionAuthorization`
+- `CareNetworkRevocationRecord`
+
+The request requires `subject_actor_id`, so the response can answer questions about one actor without returning the full network. Contact channels and action authorizations are separate arrays with separate scopes. A server can return actor and relationship context while omitting contact channels, or return contact information without implying pickup, payment, medical, or care-decision authority.
+
+The first lookup slice is intentionally read-only. Care-network writes, invitations, revocation mutations, broad management views, emergency contact handoff, and sitter/in-home profiles remain separate future work.
+
 ## Schema Patch Plan
 
-Do not schema-back the full Care Network design before proving one narrow consumer workflow. The first schema work should support Pickup Verification and keep reusable primitives small.
+Do not schema-back the full Care Network design before proving narrow consumer workflows. Pickup Verification provided the first consumer workflow. The first standalone schema work now supports `care_network_lookup` for one pet and one subject actor, with separate scopes for actor references, relationships, contact channels, action authorizations, and revocation status.
 
 Recommended patch order:
 
 1. Decide whether the first pickup slice needs shared `ActorRef`, `ActionAuthorization`, and `RevocationRecord` definitions, or whether pickup-specific objects should carry those fields until a second workflow reuses them.
 2. If shared definitions are needed, add only the minimal fields required by `pickup_verification`: actor id, display label, relationship or role label, action, authorization status, expiration, revocation status, service-window applicability, constraints, visibility, and provenance.
 3. Keep `ContactChannel` optional in the first schema patch unless partner review confirms front-desk pickup workflows need a channel in the response.
-4. Do not add standalone `CareNetworkRequest`, `CareNetworkResponse`, or full `CareNetworkContext` until there is a management or lookup workflow that needs them.
+4. The first standalone lookup workflow may return `CareNetworkContext`, but only as a minimized one-subject-actor bundle. It must not list the full network.
 5. Do not add care-network write scopes, contact-channel write scopes, or revocation mutation scopes until management workflows are separately scoped.
 6. Add negative fixtures anywhere shared Care Network definitions are used to ensure contact access does not imply action authority, relationship existence does not imply pickup authority, and revocation or expiration fails closed.
 
@@ -614,8 +633,10 @@ Ask facility, sitter, commerce, and care-management partners:
 - How should custody disputes, blocked contacts, and sensitive relationship notes be represented without leaking unsafe detail?
 - Should revocation records expose reason codes to requesters, or only effective status?
 - How should booking-derived pickup authority work when no explicit grant id exists?
-- How much of this model should be schema-backed before design-partner review?
+- How much broader should this model become before design-partner review beyond the first lookup slice?
 
 ## Recommended Next Step
+
+Run design-partner review against the first lookup slice before adding management writes, broad list views, emergency handoff, or sitter-specific behavior.
 
 Compare this draft against the Care Facility Pickup Verification slice before any schema work. The pickup slice should define the concrete request, response, examples, and negative fixtures for `pickup_verification`, while this document stays focused on reusable Care Network primitives and boundaries.

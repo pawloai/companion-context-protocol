@@ -1,0 +1,100 @@
+{
+  "request_id": "req-care-network-lookup-invalid-context",
+  "status": "denied",
+  "authorization_decision": {
+    "decision": "denied",
+    "evaluated_at": "2026-05-10T15:05:00Z",
+    "requester_actor_id": "actor-sitter-001",
+    "pet_id": "pet-001",
+    "purpose": "care_network_lookup",
+    "grant_id": "grant-care-network-lookup-001",
+    "applied_scopes": [],
+    "denied_scopes": [
+      "pet.care_network.actor_refs.read"
+    ],
+    "reasons": [
+      "grant is not active for care-network lookup"
+    ]
+  },
+  "care_network_context": {
+    "pet_id": "pet-001",
+    "purpose": "care_network_lookup",
+    "subject_actor": {
+      "actor_id": "actor-owner-001",
+      "actor_type": {
+        "value": "owner",
+        "visibility": [
+          "care_network_visible"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor-owner-001",
+          "recorded_at": "2026-04-20T10:00:00Z"
+        }
+      },
+      "metadata": {
+        "visibility": [
+          "care_network_visible"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor-owner-001",
+          "recorded_at": "2026-04-20T10:00:00Z"
+        }
+      }
+    },
+    "relationship": {
+      "actor_id": "actor-owner-001",
+      "pet_id": "pet-001",
+      "relationship_type": {
+        "value": "owner",
+        "visibility": [
+          "care_network_visible"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor-owner-001",
+          "recorded_at": "2026-04-20T10:00:00Z"
+        }
+      },
+      "status": {
+        "value": "active",
+        "visibility": [
+          "care_network_visible"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor-owner-001",
+          "recorded_at": "2026-04-20T10:00:00Z"
+        }
+      },
+      "metadata": {
+        "visibility": [
+          "care_network_visible"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor-owner-001",
+          "recorded_at": "2026-04-20T10:00:00Z"
+        }
+      }
+    },
+    "metadata": {
+      "visibility": [
+        "care_network_visible"
+      ],
+      "provenance": {
+        "source_type": "owner_entered",
+        "source_actor_id": "actor-owner-001",
+        "recorded_at": "2026-04-20T10:00:00Z"
+      }
+    }
+  },
+  "omissions": [
+    {
+      "field": "care_network_context",
+      "reason": "grant_revoked",
+      "detail": "care-network lookup was denied"
+    }
+  ]
+}

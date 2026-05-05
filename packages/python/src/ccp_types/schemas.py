@@ -17,6 +17,8 @@ SchemaName = Literal[
     "care-facility-context-response",
     "care-facility-pickup-verification-request",
     "care-facility-pickup-verification-response",
+    "care-network-lookup-request",
+    "care-network-lookup-response",
     "permission-grant",
 ]
 
@@ -28,6 +30,8 @@ _SCHEMA_FILENAMES: dict[SchemaName, str] = {
     "care-facility-context-response": "care-facility-context-response.schema.json",
     "care-facility-pickup-verification-request": "care-facility-pickup-verification-request.schema.json",
     "care-facility-pickup-verification-response": "care-facility-pickup-verification-response.schema.json",
+    "care-network-lookup-request": "care-network-lookup-request.schema.json",
+    "care-network-lookup-response": "care-network-lookup-response.schema.json",
     "permission-grant": "permission-grant.schema.json",
 }
 

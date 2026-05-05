@@ -12,7 +12,7 @@ This repository is ready for design-partner review, but it should not yet be tre
 
 The first profile is the Commerce Context Profile, focused on product recommendations and filtering without exposing unrelated staff notes, wellness timelines, diagnosis or treatment history, billing data, household data, or sensitive facility operations data.
 
-The draft also includes Care Facility Context schema slices for boarding preparation and pickup verification. They are intentionally narrower than the full care-facility design and exclude medication administration, writeback, payment authority, emergency override access, full wellness timelines, diagnosis history, treatment history, billing records, household exports, and identity document copies.
+The draft also includes Care Facility Context schema slices for boarding preparation and pickup verification, plus a first Care Network lookup slice for one pet and one subject actor. They are intentionally narrower than the full care-facility and care-network designs and exclude medication administration, writeback, payment authority, emergency override access, full wellness timelines, diagnosis history, treatment history, billing records, household exports, and identity document copies.
 
 ## What CCP Defines
 
@@ -21,6 +21,7 @@ The draft also includes Care Facility Context schema slices for boarding prepara
 - Commerce-safe context bundles.
 - Care-facility boarding-preparation context bundles.
 - Care-facility pickup-verification context bundles.
+- Care-network actor, relationship, contact, and action-authorization lookup bundles.
 - Visibility classes for returned facts and summaries.
 - Provenance metadata for returned context.
 - Authorization decisions for allowed, partial, and denied responses.
@@ -74,6 +75,8 @@ companion-context-protocol/
 - [Care Facility Context response schema](schemas/care-facility-context-response.schema.json)
 - [Care Facility Pickup Verification request schema](schemas/care-facility-pickup-verification-request.schema.json)
 - [Care Facility Pickup Verification response schema](schemas/care-facility-pickup-verification-response.schema.json)
+- [Care Network Lookup request schema](schemas/care-network-lookup-request.schema.json)
+- [Care Network Lookup response schema](schemas/care-network-lookup-response.schema.json)
 - [Commerce permission grant example](examples/permission-grant-commerce-context.json)
 - [Commerce context request example](examples/commerce-context-request.json)
 - [Commerce context partial response example](examples/commerce-context-response.json)
@@ -89,6 +92,11 @@ companion-context-protocol/
 - [Care Facility Pickup Verification owner-confirmation partial response example](examples/care-facility-pickup-verification-owner-confirmation-response.json)
 - [Care Facility Pickup Verification facility-mismatch denied response example](examples/care-facility-pickup-verification-facility-mismatch-denied-response.json)
 - [Care Facility Pickup Verification inactive service-window denied response example](examples/care-facility-pickup-verification-inactive-service-window-denied-response.json)
+- [Care Network Lookup permission grant example](examples/permission-grant-care-network-lookup.json)
+- [Care Network Lookup request example](examples/care-network-lookup-request.json)
+- [Care Network Lookup allowed response example](examples/care-network-lookup-response.json)
+- [Care Network Lookup contact-withheld partial response example](examples/care-network-lookup-contact-withheld-response.json)
+- [Care Network Lookup denied response example](examples/care-network-lookup-denied-response.json)
 - [Draft changelog](CHANGELOG.md)
 - [Maintainer and contact path](MAINTAINERS.md)
 - [Commerce Context OpenAPI adapter](openapi/commerce-context.openapi.json)
@@ -97,6 +105,8 @@ companion-context-protocol/
 - [Care Facility Context MCP tool sketches](mcp/care-facility-context.tools.json)
 - [Care Facility Pickup Verification OpenAPI adapter](openapi/care-facility-pickup-verification.openapi.json)
 - [Care Facility Pickup Verification MCP tool sketches](mcp/care-facility-pickup-verification.tools.json)
+- [Care Network Lookup OpenAPI adapter](openapi/care-network-lookup.openapi.json)
+- [Care Network Lookup MCP tool sketch](mcp/care-network-lookup.tools.json)
 - [Commerce Context server implementer guide](docs/implementers/commerce-context-server.md)
 - [Care Facility Context server implementer guide](docs/implementers/care-facility-context-server.md)
 - [Known compatibility risks](docs/implementers/compatibility-risks.md)
@@ -132,7 +142,9 @@ If you are implementing a Commerce Context server, use [docs/implementers/commer
 
 If you are implementing the first Care Facility Context slice, use [docs/implementers/care-facility-context-server.md](docs/implementers/care-facility-context-server.md) as the implementation guide. Validate incoming `CareFacilityContextRequest` objects, authenticate the requester outside the CCP payload, evaluate grants, facility identity, service-window boundaries, scopes, purpose, `facility_shareable` visibility, freshness, and provenance, then validate outgoing `CareFacilityContextResponse` objects before returning them.
 
-If you are integrating over HTTP, start with [openapi/](openapi/) for Commerce Context and Care Facility Context adapter sketches. If you are integrating with agents or assistant clients, start with [mcp/](mcp/) for the matching tool sketches. Compatibility is based on preserving the canonical CCP semantics, not on copying a specific transport shape.
+If you are implementing the first Care Network lookup slice, validate incoming `CareNetworkLookupRequest` objects, authenticate the requester outside the CCP payload, evaluate grants, subject actor identity, scopes, purpose, `care_network_visible`, `contact_shareable`, and `action_authorization_visible` boundaries, freshness, revocation, and provenance, then validate outgoing `CareNetworkLookupResponse` objects before returning them. The first slice is a lookup for one subject actor, not a full care-network export.
+
+If you are integrating over HTTP, start with [openapi/](openapi/) for Commerce Context, Care Facility Context, Pickup Verification, and Care Network Lookup adapter sketches. If you are integrating with agents or assistant clients, start with [mcp/](mcp/) for the matching tool sketches. Compatibility is based on preserving the canonical CCP semantics, not on copying a specific transport shape.
 
 If you are using helper packages, see [packages/typescript](packages/typescript) for TypeScript types and AJV validator helpers, and [packages/python](packages/python) for Python schema-loading helpers. The canonical schemas still win if package helpers and schemas disagree.
 
@@ -147,7 +159,7 @@ npm install
 npm test
 ```
 
-The test suite validates the current positive examples and core `$defs` fixtures, rejects negative fixtures for duplicate scopes, invalid grant lifecycle state, inconsistent response status, provenance gaps, unsafe commerce context fields, and unsafe care-facility context fields, checks example request/response consistency, verifies OpenAPI external examples, checks MCP tool sketches, scans tracked files for vendor-neutrality regressions, builds/tests the draft TypeScript package, and compiles/tests the draft Python package.
+The test suite validates the current positive examples and core `$defs` fixtures, rejects negative fixtures for duplicate scopes, invalid grant lifecycle state, inconsistent response status, provenance gaps, unsafe commerce context fields, unsafe care-facility context fields, and unsafe care-network lookup fields, checks example request/response consistency, verifies OpenAPI external examples, checks MCP tool sketches, scans tracked files for vendor-neutrality regressions, builds/tests the draft TypeScript package, and compiles/tests the draft Python package.
 
 ## Design Principles
 
@@ -162,10 +174,11 @@ The test suite validates the current positive examples and core `$defs` fixtures
 
 ## Contributing
 
-This project is early. The most useful contributions are concrete reviews of the Commerce Context Profile and the first Care Facility boarding-preparation slice:
+This project is early. The most useful contributions are concrete reviews of the Commerce Context Profile, the first Care Facility boarding-preparation slice, pickup verification, and the first Care Network lookup slice:
 
 - Is the context bundle useful for product filtering or recommendations?
 - Is the boarding-preparation bundle useful for facility intake and stay planning?
+- Is the Care Network lookup useful without becoming a broad household or contact export?
 - Are the scope and purpose boundaries clear?
 - Are facility identity and service-window boundaries clear enough for implementation?
 - Are privacy and safety expectations enforceable?

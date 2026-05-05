@@ -100,7 +100,7 @@ The initial profile should exclude by default:
 - Unrelated owner or household data.
 - Sensitive facility operations data.
 
-The draft also includes Care Facility Context schema slices for `boarding_preparation` and `pickup_verification`. The boarding-preparation slice lets an authorized care facility request boarding-preparation context for one pet, facility, and service window. The pickup-verification slice lets an authorized care facility verify whether one pickup actor may pick up one pet for one facility and service window.
+The draft also includes Care Facility Context schema slices for `boarding_preparation` and `pickup_verification`, plus a first Care Network lookup slice for `care_network_lookup`. The boarding-preparation slice lets an authorized care facility request boarding-preparation context for one pet, facility, and service window. The pickup-verification slice lets an authorized care facility verify whether one pickup actor may pick up one pet for one facility and service window. The Care Network lookup slice lets an authorized requester retrieve a minimized actor, relationship, contact-channel, action-authorization, or revocation subset for one pet and one subject actor.
 
 The first care-facility slice can include:
 
@@ -282,6 +282,9 @@ Initial visibility classes:
 - `vet_shareable`
 - `facility_shareable`
 - `commerce_safe`
+- `care_network_visible`
+- `contact_shareable`
+- `action_authorization_visible`
 - `agent_summary_only`
 - `restricted_sensitive`
 
@@ -301,6 +304,8 @@ Initial precedence rules:
 6. `commerce_safe` must not be combined with `staff_only` or `restricted_sensitive` on the same returned field.
 7. `facility_shareable` may be returned for care-facility purposes only when the requested scope, purpose, grant, facility, and service window also allow it.
 8. `facility_shareable` must not be combined with `staff_only` or `restricted_sensitive` on the same returned field.
+9. `care_network_visible`, `contact_shareable`, and `action_authorization_visible` may be returned for Care Network lookup only when the requested actor, scope, purpose, grant, and freshness checks allow that field.
+10. `contact_shareable` does not imply action authority, and `action_authorization_visible` does not imply access to contact channels.
 
 ## Scope Registry
 
@@ -325,6 +330,14 @@ Initial care-facility scopes:
 - `pet.pickup_authorization.read`
 - `pet.emergency_contacts.read`
 
+Initial care-network lookup scopes:
+
+- `pet.care_network.actor_refs.read`
+- `pet.care_network.relationships.read`
+- `pet.care_network.contact_channels.read`
+- `pet.care_network.action_authorizations.read`
+- `pet.care_network.revocation_status.read`
+
 Deferred medication scope recognized for omissions and denied-scope reporting:
 
 - `pet.medications.administration.read`
@@ -342,6 +355,10 @@ Initial care-facility purpose:
 
 - `boarding_preparation`
 - `pickup_verification`
+
+Initial care-network purpose:
+
+- `care_network_lookup`
 
 ## Omission Reasons
 
@@ -430,6 +447,26 @@ The illustrative HTTP adapter for this flow is `openapi/care-facility-pickup-ver
 
 The illustrative MCP adapter for this flow is `mcp/care-facility-pickup-verification.tools.json`.
 
+## Care Network Lookup Flow
+
+Example flow:
+
+1. Owner grants Care Network lookup scopes to a requester for one pet, purpose, and optional service window.
+2. Requester asks for `purpose: care_network_lookup` with one `subject_actor_id`.
+3. Server evaluates requester, grant, pet, subject actor, purpose, scopes, visibility classes, contact permission, action authority, revocation, freshness, and provenance.
+4. Server returns an `authorization_decision`.
+5. Server returns a minimized `CareNetworkContext` only for that subject actor.
+6. Denied responses return `care_network_context: null`.
+7. Restricted, unrelated, or unresolved fields are omitted with machine-readable reasons.
+
+The Care Network lookup slice must not return full household records, unrelated people, unrelated pets, billing data, payment authority, identity document copies or numbers, medical or wellness history, diagnosis history, treatment history, staff-only notes, sensitive relationship narratives, or free-text dispute details. A relationship may be visible without contact access, and a contact channel may be visible without action authority.
+
+See `examples/permission-grant-care-network-lookup.json`, `examples/care-network-lookup-request.json`, `examples/care-network-lookup-response.json`, `examples/care-network-lookup-contact-withheld-response.json`, and `examples/care-network-lookup-denied-response.json`.
+
+The illustrative HTTP adapter for this flow is `openapi/care-network-lookup.openapi.json`.
+
+The illustrative MCP adapter for this flow is `mcp/care-network-lookup.tools.json`.
+
 ## Conformance Requirements
 
 A CCP Commerce Context Profile implementation should:
@@ -458,3 +495,17 @@ A CCP Care Facility Context Profile implementation should:
 - Omit restricted data by default.
 - Provide machine-readable omission reasons.
 - Avoid exposing medication administration, raw wellness timelines, diagnosis history, billing data, payment authority, identity document copies, or staff-only records unless explicitly allowed by a future profile or scope.
+
+A CCP Care Network Lookup implementation should:
+
+- Validate request and response objects against the canonical schema.
+- Enforce purpose-bound access.
+- Enforce the one-pet and one-subject-actor boundary.
+- Enforce visibility precedence.
+- Evaluate actor knowledge, contact access, action authority, expiration, and revocation separately.
+- Return only granted scopes.
+- Attach provenance and visibility metadata to returned facts or summaries.
+- Include an authorization decision in each response.
+- Omit restricted data by default.
+- Provide machine-readable omission reasons.
+- Avoid exposing full household records, unrelated contacts, billing data, payment authority, identity documents, medical or wellness history, diagnosis history, treatment history, staff-only records, or sensitive relationship narratives.

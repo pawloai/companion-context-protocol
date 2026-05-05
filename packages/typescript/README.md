@@ -4,7 +4,7 @@ Draft TypeScript helpers for CCP implementers live here.
 
 Status: Draft helper package, pre-1.0
 
-This package is intentionally small. It provides hand-written TypeScript types for the Commerce Context Profile plus AJV validator helpers that load packaged copies of the canonical JSON Schemas.
+This package is intentionally small. It provides hand-written TypeScript types for the current schema-backed CCP slices plus AJV validator helpers that load packaged copies of the canonical JSON Schemas.
 
 ## Current Exports
 
@@ -14,10 +14,17 @@ This package is intentionally small. It provides hand-written TypeScript types f
 - `CareFacilityContextResponse`
 - `CareFacilityPickupVerificationRequest`
 - `CareFacilityPickupVerificationResponse`
+- `CareNetworkLookupRequest`
+- `CareNetworkLookupResponse`
+- `CareNetworkContext`
+- `CareNetworkActorRef`
+- `CareNetworkPetRelationship`
+- `CareNetworkContactChannel`
+- `CareNetworkActionAuthorization`
+- `CareNetworkRevocationRecord`
 - `PickupVerificationContext`
 - `PickupActor`
 - `PickupAuthorizationVerification`
-- `PickupVerificationAuthorization`
 - `ReleaseConstraint`
 - `PermissionGrant`
 - `AuthorizationDecision`
@@ -39,6 +46,8 @@ This package is intentionally small. It provides hand-written TypeScript types f
 - `createCareFacilityContextResponseValidator`
 - `createCareFacilityPickupVerificationRequestValidator`
 - `createCareFacilityPickupVerificationResponseValidator`
+- `createCareNetworkLookupRequestValidator`
+- `createCareNetworkLookupResponseValidator`
 - `createPermissionGrantValidator`
 - `createCcpValidators`
 

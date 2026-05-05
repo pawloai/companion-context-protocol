@@ -6,7 +6,7 @@ Working name: Companion Context Protocol
 
 Acronym: CCP
 
-Status note: This roadmap has partially been implemented. The repository now includes the draft spec, canonical schemas, vendor-neutral Commerce Context examples, a schema-backed first Care Facility boarding-preparation slice, positive and negative conformance fixtures, public-facing README/security/conduct/governance docs, OpenAPI adapter sketches for Commerce and Care Facility Context, draft MCP tool sketches for Commerce and Care Facility Context, Commerce and Care Facility server implementer guides, a draft TypeScript helper package with exported types and AJV validators, a draft Python helper package with schema-loading helpers, launch materials, Care Facility design-partner review and triage docs, and the first `v0.1.0-draft` tag. Care Network and Care Facility Pickup Verification design drafts have started as the next protocol-scope candidates. Generated model work and design-partner feedback remain future work.
+Status note: This roadmap has partially been implemented. The repository now includes the draft spec, canonical schemas, vendor-neutral Commerce Context examples, schema-backed Care Facility boarding-preparation and pickup-verification slices, a schema-backed first Care Network lookup slice, positive and negative conformance fixtures, public-facing README/security/conduct/governance docs, OpenAPI adapter sketches for Commerce, Care Facility Context, Care Facility Pickup Verification, and Care Network Lookup, draft MCP tool sketches for the same surfaces, Commerce and Care Facility server implementer guides, a draft TypeScript helper package with exported types and AJV validators, a draft Python helper package with schema-loading helpers, launch materials, Care Facility design-partner review and triage docs, Care Network design material, and the first `v0.1.0-draft` tag. Generated model work, design-partner feedback, and broader Care Network management work remain future work.
 
 ## Goal
 
@@ -162,8 +162,8 @@ Defer broader areas until the base model is proven:
 - Wellness timelines.
 - Vet exports.
 - Facility booking context beyond the first boarding-preparation slice.
-- Pickup authorization beyond the first boarding-preparation slice.
-- Care Network and delegated caregiver semantics.
+- Pickup authorization beyond the pickup-verification slice.
+- Care Network and delegated caregiver semantics beyond the pickup-verification and first lookup subsets.
 - Payment authority.
 - Medication administration.
 - Multi-facility consent.
@@ -193,20 +193,27 @@ Avoid asking partners to react to the whole long-term protocol vision at first.
 
 ## Next Scope Candidates
 
-After Commerce Context and the first Care Facility boarding-preparation slice, the strongest next design candidates are:
+After Commerce Context, Care Facility boarding preparation, Care Facility pickup verification, and the first Care Network lookup slice, the strongest next design candidates are:
 
-- Care Network profile or shared object model, now drafted in `docs/design/2026-05-05-care-network-profile.md`.
-- Care Facility Pickup Verification slice, now drafted in `docs/design/2026-05-05-care-facility-pickup-verification-slice.md`.
+- Broader Care Network management and delegated caregiver semantics beyond the one-subject lookup slice.
 - Care Facility Daycare Booking Eligibility slice.
 - Veterinary Export profile.
 - Pet Sitter or In-Home Care profile.
 
-Care Network and Pickup Verification can be scoped in parallel if their boundary stays clear:
+Pickup Verification has now been schema-backed as a narrow care-facility workflow. Its boundary should remain clear:
 
 - Care Network should define reusable actor, relationship, contact, authorization, revocation, and expiration primitives without becoming a broad household export.
-- Pickup Verification should be a narrow care-facility workflow that consumes a minimized Care Network subset to answer whether a specific actor may pick up a specific pet for a specific facility and service window.
+- Pickup Verification consumes only a minimized Care Network subset to answer whether a specific actor may pick up a specific pet for a specific facility and service window.
 
-Pickup Verification should not expose feeding instructions, medication details, billing data, household context, identity document copies, or broader care history. It is a good follow-on slice because it tests purpose-specific minimization against an operational workflow that facilities already understand.
+Pickup Verification does not expose feeding instructions, medication details, billing data, household context, identity document copies or numbers, full Care Network data, wellness timelines, diagnosis history, treatment history, staff-only notes, or unrelated contacts. It is useful because it tests purpose-specific minimization against an operational workflow that facilities already understand.
+
+The first Care Network lookup slice is now schema-backed as a read-only one-subject-actor lookup. Its boundary should remain clear:
+
+- It may return only actor reference, relationship, allowed contact channel, action authorization, and revocation status for the requested subject actor.
+- Actor knowledge, contact access, action authority, expiration, and revocation remain separate checks.
+- It must not return full household records, unrelated contacts, unrelated pets, billing data, payment authority, identity documents, medical or wellness history, diagnosis history, treatment history, staff-only notes, or sensitive relationship narratives.
+
+The Care Network lookup slice is ready for design-partner review as a read-only lookup workflow. Do not expand it into writes, invitation flows, revocation mutations, broad care-network listings, emergency handoff, or sitter-specific context until partners validate the one-subject lookup boundary.
 
 Daycare Booking Eligibility is also a strong care-facility follow-on, but it should come after or alongside partner feedback on boarding preparation because it may reuse facility booking context, vaccination status, temperament summaries, and missing-record omissions.
 
@@ -277,15 +284,19 @@ Completed surfaces:
 - Canonical JSON Schemas.
 - Positive Commerce Context examples.
 - First Care Facility boarding-preparation schema slice and public examples.
+- Care Facility pickup-verification schema slice and public examples.
+- Care Network lookup schema slice and public examples.
 - Care Facility denied response examples for facility mismatch and expired service windows.
 - Negative conformance fixtures.
-- Care Facility fail-closed conformance fixtures for denied responses, provenance gaps, unsafe purpose mixing, identity-document leakage, payment-authority leakage, wellness timeline leakage, and diagnosis-history leakage.
+- Care Facility and Care Network fail-closed conformance fixtures for denied responses, provenance gaps, unsafe purpose mixing, identity-document leakage, payment-authority leakage, wellness timeline leakage, diagnosis-history leakage, non-authorized pickup `ok` responses, broad care-network scopes, staff-only visibility, unrelated contacts, and full Care Network leakage.
 - Conformance runner wired into `npm test`.
-- OpenAPI Commerce and Care Facility Context adapters.
-- MCP Commerce and Care Facility Context tool sketches.
+- OpenAPI Commerce, Care Facility Context, Care Facility Pickup Verification, and Care Network Lookup adapters.
+- MCP Commerce, Care Facility Context, Care Facility Pickup Verification, and Care Network Lookup tool sketches.
 - Commerce Context and Care Facility Context server implementer guides.
 - Draft TypeScript helper package with exported types and AJV validators.
 - Draft Python helper package with schema-loading helpers.
+- Care Network design draft and first lookup schema slice for shared actor, relationship, contact, authorization, revocation, and expiration primitives.
+- Care Network lookup review gate with two full-review-suite rounds, including `npm test`, `git diff --check`, `npm audit --audit-level=moderate`, and targeted sensitive-term schema checks.
 - Public-facing README, governance, security, and code of conduct.
 - Public launch checklist, announcement copy, design-partner outreach notes, Care Facility review packet, Care Facility feedback triage log, issue templates, and pull request template.
 - First tagged draft release for feedback preview.
@@ -333,6 +344,9 @@ Current status:
 - Done: implementer guide for a Commerce Context server.
 - Done: first Care Facility boarding-preparation schema slice with request, response, grant, partial response, and denied-response examples.
 - Done: Care Facility authorization, facility identity, service-window, scope, purpose, visibility, provenance, and omission boundaries in `SPEC.md`, schemas, examples, adapters, helper packages, and conformance tests.
+- Done: Care Facility pickup-verification schema slice with request, response, grant, allowed response, owner-confirmation partial response, denied-response examples, OpenAPI and MCP adapters, helper package validators, and fail-closed conformance fixtures.
+- Done: Care Network design draft as shared context for actor, relationship, contact, authorization, revocation, and expiration primitives.
+- Done: Care Network lookup schema slice with request, response, grant, allowed response, contact-withheld partial response, denied-response examples, OpenAPI and MCP adapters, helper package validators, and fail-closed conformance fixtures.
 - Done: implementer guide for the first Care Facility boarding-preparation slice.
 - Done: draft TypeScript package with exported types and AJV validators.
 - Done: draft Python package with schema-loading helpers and generated-model guidance.
@@ -344,7 +358,8 @@ Current status:
 - Done: Care Facility design-partner review packet and feedback triage log.
 - Next: identify 3-5 Commerce Context design partners for review.
 - Next: identify 3-5 Care Facility design partners for boarding-preparation review.
-- In progress: scope Care Network as a shared authorization and relationship model.
-- In progress: scope Care Facility Pickup Verification as a narrow follow-on slice that consumes a minimized Care Network subset.
+- Next: identify 2-3 Care Facility design partners for pickup-verification review.
+- Next: identify 2-3 Care Network design partners for one-subject lookup review.
+- Next: review whether the first Care Network lookup slice should expand into management writes, remain read-only, or stay as shared primitives embedded in purpose-specific profiles.
 - Next: complete remaining public launch checklist items after partner review.
 - Next: generated Python model plan or Pydantic model generation spike, if partner feedback shows demand for runtime models.

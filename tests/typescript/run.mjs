@@ -104,6 +104,24 @@ const checks = [
     valid: validators.careFacilityPickupVerificationResponse(
       readJson("examples/care-facility-pickup-verification-owner-confirmation-response.json")
     )
+  },
+  {
+    name: "care network lookup request validator accepts example",
+    valid: validators.careNetworkLookupRequest(
+      readJson("examples/care-network-lookup-request.json")
+    )
+  },
+  {
+    name: "care network lookup response validator accepts example",
+    valid: validators.careNetworkLookupResponse(
+      readJson("examples/care-network-lookup-response.json")
+    )
+  },
+  {
+    name: "care network lookup partial response validator accepts example",
+    valid: validators.careNetworkLookupResponse(
+      readJson("examples/care-network-lookup-contact-withheld-response.json")
+    )
   }
 ];
 
@@ -167,6 +185,21 @@ const invalidFixtures = [
     name: "pickup verification response validator rejects identity document leak",
     validator: validators.careFacilityPickupVerificationResponse,
     data: "tests/conformance/fixtures/invalid/care-facility-pickup-verification-identity-document-leak.json"
+  },
+  {
+    name: "care network lookup request validator rejects broad scope",
+    validator: validators.careNetworkLookupRequest,
+    data: "tests/conformance/fixtures/invalid/care-network-lookup-broad-scope-request.json"
+  },
+  {
+    name: "care network lookup response validator rejects household leak",
+    validator: validators.careNetworkLookupResponse,
+    data: "tests/conformance/fixtures/invalid/care-network-lookup-household-leak.json"
+  },
+  {
+    name: "care network lookup response validator rejects sensitive provenance ref",
+    validator: validators.careNetworkLookupResponse,
+    data: "tests/conformance/fixtures/invalid/care-network-lookup-sensitive-provenance-ref.json"
   }
 ];
 
@@ -185,6 +218,8 @@ const schemaNames = [
   "care-facility-context-response.schema.json",
   "care-facility-pickup-verification-request.schema.json",
   "care-facility-pickup-verification-response.schema.json",
+  "care-network-lookup-request.schema.json",
+  "care-network-lookup-response.schema.json",
   "permission-grant.schema.json"
 ];
 

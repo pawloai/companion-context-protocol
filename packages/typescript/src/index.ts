@@ -16,6 +16,9 @@ export type VisibilityClass =
   | "vet_shareable"
   | "facility_shareable"
   | "commerce_safe"
+  | "care_network_visible"
+  | "contact_shareable"
+  | "action_authorization_visible"
   | "agent_summary_only"
   | "restricted_sensitive";
 
@@ -32,6 +35,11 @@ export type Scope =
   | "pet.feeding_instructions.read"
   | "pet.vaccinations.status.read"
   | "pet.pickup_authorization.read"
+  | "pet.care_network.actor_refs.read"
+  | "pet.care_network.relationships.read"
+  | "pet.care_network.contact_channels.read"
+  | "pet.care_network.action_authorizations.read"
+  | "pet.care_network.revocation_status.read"
   | "pet.emergency_contacts.read"
   | "pet.medications.administration.read";
 
@@ -39,7 +47,8 @@ export type Purpose =
   | "product_recommendation"
   | "product_filtering"
   | "boarding_preparation"
-  | "pickup_verification";
+  | "pickup_verification"
+  | "care_network_lookup";
 
 export type OmissionReasonCode =
   | "not_requested"
@@ -304,6 +313,109 @@ export interface PickupVerificationContext {
   metadata: ObjectMetadata;
 }
 
+export type CareNetworkActorType =
+  | "owner"
+  | "caregiver"
+  | "family_contact"
+  | "friend_contact"
+  | "pickup_contact"
+  | "emergency_contact"
+  | "facility_staff"
+  | "organization"
+  | "integration_client";
+
+export type CareNetworkRelationshipType =
+  | "owner"
+  | "primary_caregiver"
+  | "family_contact"
+  | "friend_contact"
+  | "pickup_contact"
+  | "emergency_contact"
+  | "facility_staff"
+  | "temporary_caregiver";
+
+export type CareNetworkContactChannelType = "phone" | "sms" | "email" | "in_app";
+
+export type CareNetworkAction =
+  | "pickup_pet"
+  | "drop_off_pet"
+  | "receive_care_updates"
+  | "receive_emergency_contact"
+  | "approve_minor_service_change"
+  | "manage_care_network";
+
+export type CareNetworkAuthorizationStatus = "active" | "expired" | "revoked" | "unknown";
+
+export interface CareNetworkActorRef {
+  actor_id: string;
+  actor_type: FieldEnvelope<CareNetworkActorType>;
+  display_name?: FieldEnvelope<string>;
+  role_label?: FieldEnvelope<string>;
+  organization_id?: string;
+  metadata: ObjectMetadata;
+}
+
+export interface CareNetworkPetRelationship {
+  actor_id: string;
+  pet_id: string;
+  relationship_type: FieldEnvelope<CareNetworkRelationshipType>;
+  relationship_label?: FieldEnvelope<string>;
+  starts_at?: FieldEnvelope<string>;
+  ends_at?: FieldEnvelope<string>;
+  status: FieldEnvelope<CareNetworkAuthorizationStatus>;
+  metadata: ObjectMetadata;
+}
+
+export interface CareNetworkContactChannel {
+  actor_id: string;
+  channel_type: FieldEnvelope<CareNetworkContactChannelType>;
+  channel_value: FieldEnvelope<string>;
+  preferred?: FieldEnvelope<boolean>;
+  allowed_purposes: FieldEnvelope<string[]>;
+  valid_from?: FieldEnvelope<string>;
+  valid_until?: FieldEnvelope<string>;
+  verification_status?: FieldEnvelope<string>;
+  metadata: ObjectMetadata;
+}
+
+export interface CareNetworkActionAuthorization {
+  authorization_id: string;
+  actor_id: string;
+  pet_id: string;
+  action: FieldEnvelope<CareNetworkAction>;
+  status: FieldEnvelope<CareNetworkAuthorizationStatus>;
+  authorized_by_actor_id?: string;
+  service_id?: string;
+  service_window?: ServiceWindow;
+  constraints?: FieldEnvelope<string[]>;
+  expires_at?: FieldEnvelope<string>;
+  revoked_at?: FieldEnvelope<string>;
+  metadata: ObjectMetadata;
+}
+
+export interface CareNetworkRevocationRecord {
+  revocation_id: string;
+  target_authorization_id: string;
+  target_actor_id: string;
+  pet_id: string;
+  revoked_at: FieldEnvelope<string>;
+  revoked_by_actor_id?: string;
+  reason_code: FieldEnvelope<string>;
+  effective_at?: FieldEnvelope<string>;
+  metadata: ObjectMetadata;
+}
+
+export interface CareNetworkContext {
+  pet_id: string;
+  purpose: "care_network_lookup";
+  subject_actor: CareNetworkActorRef;
+  relationship?: CareNetworkPetRelationship;
+  contact_channels?: CareNetworkContactChannel[];
+  action_authorizations?: CareNetworkActionAuthorization[];
+  revocation_records?: CareNetworkRevocationRecord[];
+  metadata: ObjectMetadata;
+}
+
 export interface CareFacilityContext {
   pet_id: string;
   purpose: "boarding_preparation";
@@ -393,6 +505,19 @@ export interface CareFacilityPickupVerificationRequest {
   pickup_actor_id: string;
 }
 
+export interface CareNetworkLookupRequest {
+  request_id: string;
+  requester_actor_id: string;
+  pet_id: string;
+  purpose: "care_network_lookup";
+  scopes: Scope[];
+  grant_id: string;
+  subject_actor_id: string;
+  requested_action?: CareNetworkAction;
+  service_id?: string;
+  service_window?: ServiceWindow;
+}
+
 export interface CommerceContextResponse {
   request_id: string;
   status: "ok" | "partial" | "denied";
@@ -414,6 +539,14 @@ export interface CareFacilityPickupVerificationResponse {
   status: "ok" | "partial" | "denied";
   authorization_decision: AuthorizationDecision;
   pickup_verification_context: PickupVerificationContext | null;
+  omissions: Omission[];
+}
+
+export interface CareNetworkLookupResponse {
+  request_id: string;
+  status: "ok" | "partial" | "denied";
+  authorization_decision: AuthorizationDecision;
+  care_network_context: CareNetworkContext | null;
   omissions: Omission[];
 }
 
@@ -440,6 +573,8 @@ export const schemaPaths = {
     "schemas/care-facility-pickup-verification-request.schema.json",
   careFacilityPickupVerificationResponse:
     "schemas/care-facility-pickup-verification-response.schema.json",
+  careNetworkLookupRequest: "schemas/care-network-lookup-request.schema.json",
+  careNetworkLookupResponse: "schemas/care-network-lookup-response.schema.json",
   permissionGrant: "schemas/permission-grant.schema.json"
 } as const;
 
@@ -496,6 +631,18 @@ export function createCareFacilityPickupVerificationResponseValidator(
   );
 }
 
+export function createCareNetworkLookupRequestValidator(
+  ajv = createCcpAjv()
+): ValidateFunction<CareNetworkLookupRequest> {
+  return compileSchema<CareNetworkLookupRequest>(ajv, schemaPaths.careNetworkLookupRequest);
+}
+
+export function createCareNetworkLookupResponseValidator(
+  ajv = createCcpAjv()
+): ValidateFunction<CareNetworkLookupResponse> {
+  return compileSchema<CareNetworkLookupResponse>(ajv, schemaPaths.careNetworkLookupResponse);
+}
+
 export function createPermissionGrantValidator(
   ajv = createCcpAjv()
 ): ValidateFunction<PermissionGrant> {
@@ -512,6 +659,8 @@ export function createCcpValidators(ajv = createCcpAjv()) {
       createCareFacilityPickupVerificationRequestValidator(ajv),
     careFacilityPickupVerificationResponse:
       createCareFacilityPickupVerificationResponseValidator(ajv),
+    careNetworkLookupRequest: createCareNetworkLookupRequestValidator(ajv),
+    careNetworkLookupResponse: createCareNetworkLookupResponseValidator(ajv),
     permissionGrant: createPermissionGrantValidator(ajv)
   };
 }

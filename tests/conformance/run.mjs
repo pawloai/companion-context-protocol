@@ -101,6 +101,12 @@ const cases = [
     valid: true
   },
   {
+    name: "care network lookup permission grant example",
+    schema: "schemas/permission-grant.schema.json",
+    data: "examples/permission-grant-care-network-lookup.json",
+    valid: true
+  },
+  {
     name: "care facility context request example",
     schema: "schemas/care-facility-context-request.schema.json",
     data: "examples/care-facility-boarding-preparation-request.json",
@@ -315,6 +321,66 @@ const cases = [
     schema: "schemas/care-facility-pickup-verification-response.schema.json",
     data: "tests/conformance/fixtures/invalid/care-facility-pickup-verification-purpose-mismatch.json",
     valid: false
+  },
+  {
+    name: "care network lookup request example",
+    schema: "schemas/care-network-lookup-request.schema.json",
+    data: "examples/care-network-lookup-request.json",
+    valid: true
+  },
+  {
+    name: "care network lookup allowed response example",
+    schema: "schemas/care-network-lookup-response.schema.json",
+    data: "examples/care-network-lookup-response.json",
+    valid: true
+  },
+  {
+    name: "care network lookup contact withheld response example",
+    schema: "schemas/care-network-lookup-response.schema.json",
+    data: "examples/care-network-lookup-contact-withheld-response.json",
+    valid: true
+  },
+  {
+    name: "care network lookup denied response example",
+    schema: "schemas/care-network-lookup-response.schema.json",
+    data: "examples/care-network-lookup-denied-response.json",
+    valid: true
+  },
+  {
+    name: "reject care network lookup broad scope request",
+    schema: "schemas/care-network-lookup-request.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-network-lookup-broad-scope-request.json",
+    valid: false
+  },
+  {
+    name: "reject care network lookup denied response with context",
+    schema: "schemas/care-network-lookup-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-network-lookup-denied-response-with-context.json",
+    valid: false
+  },
+  {
+    name: "reject care network lookup household leak",
+    schema: "schemas/care-network-lookup-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-network-lookup-household-leak.json",
+    valid: false
+  },
+  {
+    name: "reject care network lookup staff-only visibility",
+    schema: "schemas/care-network-lookup-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-network-lookup-staff-only-visibility.json",
+    valid: false
+  },
+  {
+    name: "reject care network lookup sensitive provenance ref",
+    schema: "schemas/care-network-lookup-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-network-lookup-sensitive-provenance-ref.json",
+    valid: false
+  },
+  {
+    name: "reject care network lookup unrelated contact list",
+    schema: "schemas/care-network-lookup-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-network-lookup-unrelated-contact-list.json",
+    valid: false
   }
 ];
 
@@ -383,6 +449,12 @@ const roundTripPairs = [
     request: "examples/care-facility-pickup-verification-request.json",
     response: "examples/care-facility-pickup-verification-response.json",
     contextKey: "pickup_verification_context"
+  },
+  {
+    name: "care network lookup example",
+    request: "examples/care-network-lookup-request.json",
+    response: "examples/care-network-lookup-response.json",
+    contextKey: "care_network_context"
   }
 ];
 
@@ -427,6 +499,14 @@ for (const pair of roundTripPairs) {
         `${contextKey}.pickup_actor.actor_id`,
         context?.pickup_actor?.actor_id,
         request.pickup_actor_id
+      ]);
+    }
+
+    if (contextKey === "care_network_context") {
+      roundTripChecks.push([
+        `${contextKey}.subject_actor.actor_id`,
+        context?.subject_actor?.actor_id,
+        request.subject_actor_id
       ]);
     }
   }
@@ -534,3 +614,45 @@ if (failed) {
 }
 
 console.log("ok - pickup verification grant/request consistency");
+
+const careNetworkLookupRequest = readJson("examples/care-network-lookup-request.json");
+const careNetworkLookupGrant = readJson("examples/permission-grant-care-network-lookup.json");
+const careNetworkGrantRequestChecks = [
+  ["grant_id", careNetworkLookupGrant.grant_id, careNetworkLookupRequest.grant_id],
+  ["subject_pet_id", careNetworkLookupGrant.subject_pet_id, careNetworkLookupRequest.pet_id],
+  ["grantee_actor_id", careNetworkLookupGrant.grantee_actor_id, careNetworkLookupRequest.requester_actor_id],
+  ["service_id", careNetworkLookupGrant.service_id, careNetworkLookupRequest.service_id],
+  ["service_window", careNetworkLookupGrant.service_window, careNetworkLookupRequest.service_window]
+];
+
+for (const [name, actual, expected] of careNetworkGrantRequestChecks) {
+  if (actual === expected || isDeepStrictEqual(actual, expected)) {
+    continue;
+  }
+
+  failed = true;
+  console.error(`not ok - care network lookup grant/request mismatch: ${name}`);
+  console.error(`  expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+}
+
+if (!careNetworkLookupGrant.purposes.includes(careNetworkLookupRequest.purpose)) {
+  failed = true;
+  console.error("not ok - care network lookup grant/request mismatch: purpose");
+  console.error(`  expected grant purposes to include ${careNetworkLookupRequest.purpose}`);
+}
+
+for (const scope of careNetworkLookupRequest.scopes) {
+  if (careNetworkLookupGrant.scopes.includes(scope)) {
+    continue;
+  }
+
+  failed = true;
+  console.error("not ok - care network lookup grant/request mismatch: scope");
+  console.error(`  expected grant scopes to include ${scope}`);
+}
+
+if (failed) {
+  process.exit(1);
+}
+
+console.log("ok - care network lookup grant/request consistency");

@@ -30,6 +30,14 @@ const adapterFiles = [
     requestSchema: "../schemas/care-facility-pickup-verification-request.schema.json",
     responseSchema: "../schemas/care-facility-pickup-verification-response.schema.json",
     grantLookup: false
+  },
+  {
+    file: "care-network-lookup.openapi.json",
+    profile: "care-network-lookup",
+    requestPath: "/care-network-lookup",
+    requestSchema: "../schemas/care-network-lookup-request.schema.json",
+    responseSchema: "../schemas/care-network-lookup-response.schema.json",
+    grantLookup: false
   }
 ];
 
