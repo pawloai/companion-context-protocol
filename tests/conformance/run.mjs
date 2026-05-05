@@ -569,10 +569,11 @@ const reportGrantRequestMismatches = ({ label, request, grant, fieldChecks }) =>
     console.error(`  expected grant scopes to include ${scope}`);
   }
 
-  if (blockFailed) return true;
+  if (!blockFailed) {
+    console.log(`ok - ${label} grant/request consistency`);
+  }
 
-  console.log(`ok - ${label} grant/request consistency`);
-  return false;
+  return blockFailed;
 };
 
 const careFacilityRequest = readJson("examples/care-facility-boarding-preparation-request.json");
