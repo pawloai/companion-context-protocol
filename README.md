@@ -152,7 +152,9 @@ The test suite validates the current positive examples and core `$defs` fixtures
 This project is early. The most useful contributions are concrete reviews of the Commerce Context Profile and the first Care Facility boarding-preparation slice:
 
 - Is the context bundle useful for product filtering or recommendations?
+- Is the boarding-preparation bundle useful for facility intake and stay planning?
 - Are the scope and purpose boundaries clear?
+- Are facility identity and service-window boundaries clear enough for implementation?
 - Are privacy and safety expectations enforceable?
 - Can an implementer build against the schemas without private context?
 

@@ -6,7 +6,7 @@ Working name: Companion Context Protocol
 
 Acronym: CCP
 
-Status note: This roadmap has partially been implemented. The repository now includes the draft spec, canonical schemas, vendor-neutral Commerce Context examples, a first Care Facility boarding-preparation schema slice with public examples, conformance runner, positive and negative fixtures, public-facing README/security/conduct/governance docs, OpenAPI adapter sketches for Commerce and Care Facility Context, draft MCP tool sketches for Commerce and Care Facility Context, a Commerce Context server implementer guide, a draft TypeScript helper package with exported types and AJV validators, a draft Python helper package with schema-loading helpers, launch materials, and the first `v0.1.0-draft` tag. Generated model work and design-partner feedback remain future work.
+Status note: This roadmap has partially been implemented. The repository now includes the draft spec, canonical schemas, vendor-neutral Commerce Context examples, a first Care Facility boarding-preparation schema slice with public examples, conformance runner, positive and negative fixtures, public-facing README/security/conduct/governance docs, OpenAPI adapter sketches for Commerce and Care Facility Context, draft MCP tool sketches for Commerce and Care Facility Context, Commerce and Care Facility server implementer guides, a draft TypeScript helper package with exported types and AJV validators, a draft Python helper package with schema-loading helpers, launch materials, Care Facility design-partner review and triage docs, and the first `v0.1.0-draft` tag. Generated model work and design-partner feedback remain future work.
 
 ## Goal
 
@@ -184,6 +184,10 @@ The partner question should be concrete:
 
 > Would you implement this Commerce Context Profile if it existed?
 
+For Care Facility design partners, use `docs/launch/care-facility-design-partner-review.md` and ask:
+
+> Would your team implement this boarding-preparation slice for a facility system if it existed?
+
 Avoid asking partners to react to the whole long-term protocol vision at first.
 
 ## Governance
@@ -255,11 +259,11 @@ Completed surfaces:
 - Conformance runner wired into `npm test`.
 - OpenAPI Commerce and Care Facility Context adapters.
 - MCP Commerce and Care Facility Context tool sketches.
-- Commerce Context server implementer guide.
+- Commerce Context and Care Facility Context server implementer guides.
 - Draft TypeScript helper package with exported types and AJV validators.
 - Draft Python helper package with schema-loading helpers.
 - Public-facing README, governance, security, and code of conduct.
-- Public launch checklist, announcement copy, design-partner outreach notes, issue templates, and pull request template.
+- Public launch checklist, announcement copy, design-partner outreach notes, Care Facility review packet, Care Facility feedback triage log, issue templates, and pull request template.
 - First tagged draft release for feedback preview.
 
 Remaining implementation surfaces:
@@ -290,7 +294,7 @@ See:
 - `docs/launch/public-launch-checklist.md`
 - `docs/launch/design-partner-outreach.md`
 
-The repo can be shared privately with design partners now. Broad public launch should wait until the public launch checklist is materially complete and 2-3 design partners have reviewed the Commerce Context Profile.
+The repo can be shared privately with design partners now. Broad public launch should wait until the public launch checklist is materially complete, 2-3 design partners have reviewed the Commerce Context Profile, and 2-3 design partners have reviewed the first Care Facility boarding-preparation slice.
 
 ## Near-Term Execution Plan
 
@@ -303,6 +307,7 @@ Current status:
 - Done: OpenAPI sketch for the Commerce Context flow, including external example validation and grant lookup scope metadata.
 - Done: MCP tool sketch for requesting commerce context, including strict schema ref validation and grant lookup scope metadata.
 - Done: implementer guide for a Commerce Context server.
+- Done: implementer guide for the first Care Facility boarding-preparation slice.
 - Done: draft TypeScript package with exported types and AJV validators.
 - Done: draft Python package with schema-loading helpers and generated-model guidance.
 - Done: public launch checklist and design-partner outreach notes.
@@ -310,6 +315,8 @@ Current status:
 - Done: draft `v0.1.0-draft` changelog entry.
 - Done: maintainer contact path, launch announcement copy, and initial issue labels.
 - Done: first tagged `v0.1.0-draft` feedback preview.
-- Next: identify 3-5 design partners for review.
+- Done: Care Facility design-partner review packet and feedback triage log.
+- Next: identify 3-5 Commerce Context design partners for review.
+- Next: identify 3-5 Care Facility design partners for boarding-preparation review.
 - Next: complete remaining public launch checklist items after partner review.
 - Next: generated Python model plan or Pydantic model generation spike, if partner feedback shows demand for runtime models.

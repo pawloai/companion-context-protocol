@@ -6,20 +6,21 @@ Use this copy for a public feedback preview. Do not describe CCP as a finished s
 
 ## One-Paragraph Positioning
 
-Companion Context Protocol is a draft open specification for permissioned companion-animal context exchange. The first profile, Commerce Context, lets pet care, commerce, and agent systems request only the pet context needed for product recommendation or filtering, with consent, purpose limits, provenance, visibility classes, and machine-readable omissions.
+Companion Context Protocol is a draft open specification for permissioned companion-animal context exchange. The first profile, Commerce Context, lets pet care, commerce, and agent systems request only the pet context needed for product recommendation or filtering, with consent, purpose limits, provenance, visibility classes, and machine-readable omissions. The draft also includes a first Care Facility boarding-preparation slice for one pet, facility, and service window.
 
 ## Short Announcement
 
 ```text
 I am opening a draft of Companion Context Protocol for feedback.
 
-CCP is an open, transport-neutral specification for permissioned companion-animal context exchange. The first profile is intentionally narrow: commerce-safe pet context for product recommendation and filtering, without exposing staff notes, wellness timelines, diagnosis history, billing data, or unrelated owner data.
+CCP is an open, transport-neutral specification for permissioned companion-animal context exchange. The first profile is intentionally narrow: commerce-safe pet context for product recommendation and filtering, without exposing staff notes, wellness timelines, diagnosis history, billing data, or unrelated owner data. The draft also includes a narrower Care Facility boarding-preparation slice that excludes medication administration, writeback, payment authority, emergency override access, full medical history, and identity document copies.
 
 The repo includes a draft spec, canonical JSON Schemas, examples, conformance tests, OpenAPI and MCP adapter sketches, and draft TypeScript/Python helper packages.
 
 I am looking for design-partner feedback from pet retailers, care operators, vet-adjacent software teams, agent tooling builders, and pet data platforms:
 
 - Would you implement this Commerce Context Profile?
+- Would you implement the first Care Facility boarding-preparation slice?
 - Are the scope and purpose boundaries clear?
 - What context is missing or too sensitive?
 - Can you validate compatibility with the current tests?
@@ -36,7 +37,7 @@ Draft CCP feedback preview: permissioned pet context for trusted interoperabilit
 ## Feedback Request
 
 ```text
-If you work on pet commerce, pet care operations, vet-adjacent software, agent tooling, or pet data infrastructure, I would value focused feedback on the Commerce Context Profile.
+If you work on pet commerce, pet care operations, vet-adjacent software, agent tooling, or pet data infrastructure, I would value focused feedback on the Commerce Context Profile or the first Care Facility boarding-preparation slice.
 
 The most useful feedback is concrete:
 

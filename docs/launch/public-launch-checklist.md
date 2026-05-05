@@ -11,6 +11,7 @@ Current recommendation: public feedback preview.
 The repository can be made public to gather feedback now, but broad positioning as a standard should wait until:
 
 - 2-3 design partners have reviewed the Commerce Context Profile.
+- 2-3 design partners have reviewed the first Care Facility boarding-preparation slice.
 - At least one partner has confirmed that the request and response shape is implementable.
 - Open questions from partner review are triaged into accepted changes, deferred work, or explicit non-goals.
 - The announcement copy is reviewed for vendor-neutral positioning.
@@ -37,6 +38,7 @@ The repository can be made public to gather feedback now, but broad positioning 
 ## Spec Readiness
 
 - [x] Commerce Context Profile has a narrow first use case.
+- [x] Care Facility Context has a narrow first boarding-preparation slice.
 - [x] Scope registry is documented.
 - [x] Purpose registry is documented.
 - [x] Visibility precedence is documented.
@@ -45,6 +47,7 @@ The repository can be made public to gather feedback now, but broad positioning 
 - [x] Response status consistency is enforced by schema.
 - [x] Permission grant lifecycle constraints are enforced by schema.
 - [ ] Design partners have reviewed the Commerce Context Profile.
+- [ ] Design partners have reviewed the first Care Facility boarding-preparation slice.
 - [ ] Feedback has been triaged into v0.1.0-draft updates or later milestones.
 - [x] Known compatibility risks are documented.
 
@@ -86,6 +89,7 @@ Expected result:
 - [x] One-paragraph positioning statement.
 - [x] Short announcement post.
 - [x] Design-partner call for feedback.
+- [x] Care Facility design-partner review packet and triage log.
 - [x] Maintainer contact path.
 - [x] Initial issue labels.
 - [x] First 3-5 target partner categories.
@@ -109,7 +113,7 @@ Avoid these claims until adoption and conformance are real:
 
 Launch when the checklist is materially complete and maintainers can answer:
 
-- What exact profile is ready for review?
+- What exact profile or slice is ready for review?
 - What is intentionally out of scope?
 - How does an implementer validate compatibility?
 - How should external feedback be proposed?

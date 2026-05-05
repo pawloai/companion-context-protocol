@@ -17,9 +17,20 @@ body:
     validations:
       required: true
   - type: dropdown
+    id: profile
+    attributes:
+      label: Profile or slice reviewed
+      options:
+        - Commerce Context Profile
+        - Care Facility boarding-preparation slice
+        - Both
+        - Not sure
+    validations:
+      required: true
+  - type: dropdown
     id: would_implement
     attributes:
-      label: Would implement the Commerce Context Profile?
+      label: Would implement the reviewed profile or slice?
       options:
         - "Yes"
         - "Maybe"
@@ -52,6 +63,13 @@ body:
     attributes:
       label: Missing context
       description: What field, object, scope, or purpose is missing?
+    validations:
+      required: false
+  - type: textarea
+    id: care_facility_open_decisions
+    attributes:
+      label: Care Facility open-decision feedback
+      description: If reviewing Care Facility, comment on facility_shareable, grant_id, service_id, emergency contacts, and vaccination status values.
     validations:
       required: false
   - type: textarea

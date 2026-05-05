@@ -10,6 +10,7 @@ Use these labels for public feedback triage.
 | `spec` | `1d76db` | Normative spec, schema, scope, purpose, visibility, or profile behavior. |
 | `schema` | `0e8a16` | JSON Schema definitions or validation behavior. |
 | `conformance` | `5319e7` | Conformance runner, fixtures, examples, or compatibility checks. |
+| `care-facility` | `f9d0c4` | Care Facility Context profile, boarding-preparation slice, or related feedback. |
 | `partner-feedback` | `fbca04` | Feedback from a design partner or likely implementer. |
 | `documentation` | `0075ca` | README, guides, launch docs, or explanatory text. |
 | `adapter` | `c2e0c6` | OpenAPI, MCP, or future transport adapter surfaces. |
@@ -26,6 +27,7 @@ gh label create needs-triage --color ededed --description "New issue that has no
 gh label create spec --color 1d76db --description "Normative spec, schema, scope, purpose, visibility, or profile behavior."
 gh label create schema --color 0e8a16 --description "JSON Schema definitions or validation behavior."
 gh label create conformance --color 5319e7 --description "Conformance runner, fixtures, examples, or compatibility checks."
+gh label create care-facility --color f9d0c4 --description "Care Facility Context profile, boarding-preparation slice, or related feedback."
 gh label create partner-feedback --color fbca04 --description "Feedback from a design partner or likely implementer."
 gh label create documentation --color 0075ca --description "README, guides, launch docs, or explanatory text."
 gh label create adapter --color c2e0c6 --description "OpenAPI, MCP, or future transport adapter surfaces."
