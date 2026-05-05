@@ -227,6 +227,12 @@ const cases = [
     valid: false
   },
   {
+    name: "reject care facility array field sensitive keyword",
+    schema: "schemas/care-facility-context-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-boarding-array-sensitive-keyword.json",
+    valid: false
+  },
+  {
     name: "reject care facility pickup payment authority leak",
     schema: "schemas/care-facility-context-response.schema.json",
     data: "tests/conformance/fixtures/invalid/care-facility-pickup-authorization-payment-authority-leak.json",

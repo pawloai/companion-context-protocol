@@ -60,7 +60,7 @@ Every field in a returned `commerce_context` must include `commerce_safe` and mu
 
 ### Facility-shareable rule
 
-Every field in a returned `care_facility_context` or `pickup_verification_context` must include `facility_shareable` and must not include `staff_only` or `restricted_sensitive`. The boarding-preparation slice and the pickup-verification slice each preserve their own facility, service-window, purpose, scope, provenance, and omission boundaries.
+Every field in a returned `care_facility_context` or `pickup_verification_context` must include `facility_shareable` and must not include `staff_only` or `restricted_sensitive`. The boarding-preparation slice and the pickup-verification slice each preserve their own facility, service-window, purpose, scope, provenance, and omission boundaries. `FacilityStringField` and `FacilityStringArrayField` value content is filtered through `SensitiveKeywordPattern` so that array entries cannot smuggle banned keywords (billing, payment, household, medical, diagnosis, treatment, staff-only / staff-note, relationship-dispute, custody, identity-document) past the visibility check.
 
 ### Care-network visibility rule
 
