@@ -8,11 +8,15 @@ CCP defines how pet care, commerce, and agent systems can request only the pet c
 
 Status: Draft, pre-1.0
 
-This repository is ready for design-partner review, but it should not yet be treated as a stable standard. Draft versions may change incompatibly while the profile contracts and conformance tests are refined.
+This repository is ready to ask design partners for review, but it should not yet be treated as a stable standard, consensus specification, or adopted interoperability baseline. Draft versions may change incompatibly while the profile contracts, conformance tests, and partner requirements are refined.
+
+CCP is currently a protocol proposal with canonical schemas and validation tests. It is not yet endorsed by practice-management vendors, care-facility software vendors, veterinary bodies, insurers, registries, shelters, or other pet-data holders. A compatible implementation claim means "matches this draft and test suite," not "participates in an adopted industry standard."
 
 The first profile is the Commerce Context Profile, focused on product recommendations and filtering without exposing unrelated staff notes, wellness timelines, diagnosis or treatment history, billing data, household data, or sensitive facility operations data.
 
 The draft also includes Care Facility Context schema slices for boarding preparation and pickup verification, plus a first Care Network lookup slice for one pet and one subject actor. They are intentionally narrower than the full care-facility and care-network designs and exclude medication administration, writeback, payment authority, emergency override access, full wellness timelines, diagnosis history, treatment history, billing records, household exports, and identity document copies.
+
+Ecosystem feedback has also identified a Facility Truth Profile as an important design candidate for agent-facing accuracy: facility hours, services, eligibility constraints, certifications, service areas, and freshness/provenance for public operational facts. That profile is design material only until it has schemas, examples, adapters, tests, and design-partner review.
 
 ## What CCP Defines
 
@@ -29,6 +33,8 @@ The draft also includes Care Facility Context schema slices for boarding prepara
 - Conformance expectations for compatible implementations.
 
 CCP is not a database schema, product catalog, recommendation engine, payment protocol, medical diagnosis protocol, or identity system.
+
+CCP is also not a standards body. The path from this repository to a real standard requires outside review, implementation attempts, incompatible-feedback resolution, and visible adoption by independent systems.
 
 ## Transport Model
 
@@ -123,6 +129,8 @@ companion-context-protocol/
 - [Care Facility first schema slice proposal](docs/design/2026-05-05-care-facility-first-schema-slice.md)
 - [Care Network Profile design draft](docs/design/2026-05-05-care-network-profile.md)
 - [Care Facility Pickup Verification slice proposal](docs/design/2026-05-05-care-facility-pickup-verification-slice.md)
+- [Prior art and ecosystem map](docs/design/prior-art-and-ecosystem-map.md)
+- [Facility Truth Profile design draft](docs/design/2026-05-05-facility-truth-profile.md)
 
 ## Getting Started
 
@@ -149,6 +157,8 @@ If you are integrating over HTTP, start with [openapi/](openapi/) for Commerce C
 If you are using helper packages, see [packages/typescript](packages/typescript) for TypeScript types and AJV validator helpers, and [packages/python](packages/python) for Python schema-loading helpers. The canonical schemas still win if package helpers and schemas disagree.
 
 Before depending on this draft, read [docs/implementers/compatibility-risks.md](docs/implementers/compatibility-risks.md). CCP is pre-1.0, and draft versions may change incompatibly as the profile and conformance tests are refined.
+
+If you are evaluating whether CCP is credible as a protocol, also read [docs/design/prior-art-and-ecosystem-map.md](docs/design/prior-art-and-ecosystem-map.md). It records adjacent standards, ecosystem holders, and review gaps that must be addressed before CCP should be positioned as more than a draft proposal.
 
 ## Validate The Draft
 
@@ -178,6 +188,7 @@ This project is early. The most useful contributions are concrete reviews of the
 
 - Is the context bundle useful for product filtering or recommendations?
 - Is the boarding-preparation bundle useful for facility intake and stay planning?
+- Would a Facility Truth Profile for hours, services, certifications, accepted pets, and freshness better match your immediate interoperability problem?
 - Is the Care Network lookup useful without becoming a broad household or contact export?
 - Are the scope and purpose boundaries clear?
 - Are facility identity and service-window boundaries clear enough for implementation?

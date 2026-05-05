@@ -10,6 +10,8 @@ Companion Context Protocol (CCP) defines a vendor-neutral contract for permissio
 
 CCP lets authorized systems request only the pet context needed for a task, with consent, provenance, and safety boundaries.
 
+This document is a draft protocol proposal. It is not a consensus standard, certification program, or adopted industry baseline. Implementers should treat it as design-partner review material until independent systems have reviewed the model, attempted implementations, and resolved compatibility feedback in public artifacts.
+
 The protocol defines:
 
 - Context object shapes.
@@ -28,11 +30,13 @@ CCP is transport-neutral. JSON Schema is the canonical contract. MCP, OpenAPI/HT
 CCP is not:
 
 - A database schema.
+- A standards body.
 - A customer portal.
 - A product catalog.
 - A recommendation engine.
 - A medical diagnosis protocol.
 - A replacement for payment, identity, or facility management systems.
+- A claim that existing pet-data, care-facility, or veterinary software ecosystems have endorsed this draft.
 
 ## Transport Model
 
@@ -74,6 +78,8 @@ Omission: A machine-readable explanation that context exists or was requested bu
 ## Current Profiles
 
 The first profile is the Commerce Context Profile.
+
+Profile order is a draft artifact, not a claim about market priority or ecosystem consensus. Commerce Context was selected as a narrow, lower-risk schema slice, but design-partner feedback may show that a facility-truth or care-facility workflow should be validated first.
 
 This profile lets authorized clients request commerce-safe pet context for product recommendations and filtering while excluding unrelated sensitive context.
 
@@ -119,6 +125,8 @@ The boarding-preparation care-facility slice excludes by default:
 - Diagnosis or treatment history.
 - Billing data and payment authority.
 - Identity document copies.
+
+Facility Truth is a design candidate, not a schema-backed profile in this version. It would cover public or operational facility facts such as hours, services, service areas, eligibility constraints, certifications, contact methods, booking links, accepted pet types, freshness, and provenance. It should be developed separately from pet-specific context because public facility facts have different consent, authorization, and provenance requirements.
 
 ## Core Objects
 

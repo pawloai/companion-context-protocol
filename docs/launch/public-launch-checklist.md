@@ -10,8 +10,10 @@ Current recommendation: public feedback preview.
 
 The repository can be made public to gather feedback now, but broad positioning as a standard should wait until:
 
+- Prior-art and ecosystem gaps have been acknowledged in public docs.
 - 2-3 design partners have reviewed the Commerce Context Profile.
 - 2-3 design partners have reviewed the first Care Facility boarding-preparation slice.
+- 2-3 design partners have reviewed whether Facility Truth should be the first agent-accuracy profile.
 - At least one partner has confirmed that the request and response shape is implementable.
 - Open questions from partner review are triaged into accepted changes, deferred work, or explicit non-goals.
 - The announcement copy is reviewed for vendor-neutral positioning.
@@ -19,6 +21,7 @@ The repository can be made public to gather feedback now, but broad positioning 
 ## Repository Readiness
 
 - [x] Draft status is clear in `README.md` and `SPEC.md`.
+- [x] README distinguishes draft-test compatibility from adopted-standard status.
 - [x] JSON Schema is the canonical contract.
 - [x] OpenAPI and MCP are documented as adapters, not the protocol itself.
 - [x] Positive examples are vendor-neutral.
@@ -50,6 +53,8 @@ The repository can be made public to gather feedback now, but broad positioning 
 - [ ] Design partners have reviewed the first Care Facility boarding-preparation slice.
 - [ ] Feedback has been triaged into v0.1.0-draft updates or later milestones.
 - [x] Known compatibility risks are documented.
+- [x] Prior-art and ecosystem gaps are documented.
+- [ ] Facility Truth has completed discovery review or is explicitly deferred.
 
 ## Example And Data Safety
 
@@ -90,6 +95,8 @@ Expected result:
 - [x] Short announcement post.
 - [x] Design-partner call for feedback.
 - [x] Care Facility design-partner review packet and triage log.
+- [x] Prior-art and ecosystem map.
+- [x] Facility Truth design draft.
 - [x] Maintainer contact path.
 - [x] Initial issue labels.
 - [x] First 3-5 target partner categories.
@@ -103,6 +110,9 @@ Recommended positioning:
 Avoid these claims until adoption and conformance are real:
 
 - Industry standard.
+- Consensus standard.
+- Design-partner reviewed.
+- Ecosystem endorsed.
 - Production stable.
 - Certified compatible.
 - Broad pet health record interoperability.

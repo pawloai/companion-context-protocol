@@ -6,13 +6,15 @@ Working name: Companion Context Protocol
 
 Acronym: CCP
 
-Status note: This roadmap has partially been implemented. The repository now includes the draft spec, canonical schemas, vendor-neutral Commerce Context examples, schema-backed Care Facility boarding-preparation and pickup-verification slices, a schema-backed first Care Network lookup slice, positive and negative conformance fixtures, public-facing README/security/conduct/governance docs, OpenAPI adapter sketches for Commerce, Care Facility Context, Care Facility Pickup Verification, and Care Network Lookup, draft MCP tool sketches for the same surfaces, Commerce and Care Facility server implementer guides, a draft TypeScript helper package with exported types and AJV validators, a draft Python helper package with schema-loading helpers, launch materials, Care Facility design-partner review and triage docs, Care Network design material, and the first `v0.1.0-draft` tag. Generated model work, design-partner feedback, and broader Care Network management work remain future work.
+Status note: This roadmap has partially been implemented. The repository now includes the draft spec, canonical schemas, vendor-neutral Commerce Context examples, schema-backed Care Facility boarding-preparation and pickup-verification slices, a schema-backed first Care Network lookup slice, positive and negative conformance fixtures, public-facing README/security/conduct/governance docs, OpenAPI adapter sketches for Commerce, Care Facility Context, Care Facility Pickup Verification, and Care Network Lookup, draft MCP tool sketches for the same surfaces, Commerce and Care Facility server implementer guides, a draft TypeScript helper package with exported types and AJV validators, a draft Python helper package with schema-loading helpers, launch materials, Care Facility design-partner review and triage docs, Care Network design material, a prior-art and ecosystem map, a Facility Truth design draft, and the first `v0.1.0-draft` tag. Generated model work, design-partner feedback, Facility Truth schema work, and broader Care Network management work remain future work.
 
 ## Goal
 
-Open-source CCP and build enough industry trust for it to become an adopted standard for permissioned companion-animal context exchange.
+Open-source CCP and build enough industry trust for it to potentially become an adopted standard for permissioned companion-animal context exchange.
 
 The practical path is to ship a narrow, useful, vendor-neutral specification with a working reference implementation before positioning CCP as a broad standard.
+
+Do not treat a polished repository as proof of protocol legitimacy. Legitimacy requires outside review, implementation attempts, visible tradeoff resolution, and adoption by independent systems.
 
 ## Core Strategy
 
@@ -26,11 +28,11 @@ An early implementation should be framed as:
 
 > The first real implementation of CCP.
 
-Avoid making CCP look like a single-vendor export format. The public project should use vendor-neutral naming, examples, governance, and compatibility language.
+Avoid making CCP look like a single-vendor export format or a one-author standard. The public project should use vendor-neutral naming, examples, governance, and compatibility language while also acknowledging adjacent standards, prior art, and ecosystem holders.
 
-## Recommended v0.1 Wedge
+## Existing Schema-Backed Wedge
 
-Start with the Commerce Context Profile.
+The current schema-backed wedge is the Commerce Context Profile.
 
 This profile should support permissioned, commerce-safe pet context for product recommendations and product filtering.
 
@@ -57,7 +59,28 @@ The initial profile should exclude:
 - Unrelated owner or household data.
 - Sensitive facility operations data.
 
-This is the best first wedge because it is commercially useful, easier to explain to partners, and less risky than starting with full medical, wellness, booking, or payment authority.
+This wedge remains useful because it is commercially understandable and less risky than starting with full medical, wellness, booking, or payment authority. It should not be described as proven to be the best first ecosystem wedge until design partners validate it.
+
+## Facility Truth Challenge
+
+Ecosystem feedback identified a possible mismatch between the public agent-accuracy problem and the first schema-backed profile.
+
+If the motivating problem is agents giving wrong facility hours, outdated services, unsupported pet types, stale booking links, or invented certifications, then a Facility Truth Profile may be a more direct first review target than pet-specific commerce context.
+
+Facility Truth should cover facility facts rather than private pet context:
+
+- Hours and exception hours.
+- Services currently offered.
+- Accepted pet types, size classes, or eligibility constraints.
+- Service areas.
+- Contact and booking methods.
+- Certification or policy summaries.
+- Freshness, provenance, and verification metadata.
+- Machine-readable omissions for stale, unavailable, restricted, or unverified facts.
+
+Facility Truth should remain separate from Care Facility Context. The former describes a facility; the latter describes one pet's context for a facility workflow.
+
+Recommended next action: run discovery review against `docs/design/2026-05-05-facility-truth-profile.md` before deciding whether to add Facility Truth schemas.
 
 ## Transport-Neutral Design
 
@@ -177,7 +200,10 @@ Target partner types:
 
 - Daycare or boarding operator.
 - Pet retailer or ecommerce vendor.
+- Facility-management software builder.
+- Practice-management software builder.
 - Vet-adjacent software contact.
+- Insurance, registry, or claims-workflow reviewer.
 - AI agent or tooling developer.
 - Shelter or rescue operator later, after the first profile is stable.
 
@@ -188,6 +214,10 @@ The partner question should be concrete:
 For Care Facility design partners, use `docs/launch/care-facility-design-partner-review.md` and ask:
 
 > Would your team implement this boarding-preparation slice for a facility system if it existed?
+
+For Facility Truth discovery, use `docs/design/2026-05-05-facility-truth-profile.md` and ask:
+
+> Would facility hours, services, acceptance criteria, contact methods, booking links, certifications, freshness, and provenance solve a more urgent agent-accuracy problem than pet-specific context?
 
 Avoid asking partners to react to the whole long-term protocol vision at first.
 
