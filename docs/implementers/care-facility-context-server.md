@@ -192,7 +192,7 @@ Use `scope_missing` when the requested or relevant field has a defined scope but
 
 Omissions belong in the response envelope. Nested context objects should not carry their own `omissions` array.
 
-Omission details should be useful but not revealing. Do not disclose restricted source content in omission text.
+Omission details should be useful but not revealing. Do not disclose restricted source content in omission text. The Care Facility (boarding-preparation) response schema does not apply the `SensitiveKeywordPattern` overlay to `reasons` or omission `detail` strings, because legitimate boarding-preparation omission text references excluded categories by name (for example, "Diagnosis history is not needed for boarding preparation." or "Identity-check requirements may be returned, but identity document copies are not returned."). Implementers are the load-bearing enforcer here: a category name that explains why a field was withheld is fine, but the actual restricted source content must never appear in `reasons` or `detail` strings.
 
 ## First-Slice Exclusions
 
