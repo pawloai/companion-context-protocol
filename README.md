@@ -83,6 +83,7 @@ companion-context-protocol/
 - [Draft TypeScript package](packages/typescript)
 - [Draft Python package](packages/python)
 - [Open-source adoption roadmap](docs/design/2026-05-04-ccp-open-source-adoption-roadmap.md)
+- [Care Facility Context Profile design draft](docs/design/2026-05-05-care-facility-context-profile.md)
 
 ## Getting Started
 
