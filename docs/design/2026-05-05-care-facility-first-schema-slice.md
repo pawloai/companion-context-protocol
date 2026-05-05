@@ -2,13 +2,13 @@
 
 Date: 2026-05-05
 
-Status: Design draft, non-normative
+Status: Schema-backed design draft
 
 Related design: `docs/design/2026-05-05-care-facility-context-profile.md`
 
 ## Goal
 
-Define the smallest Care Facility Context schema slice worth taking to design partners and later conformance tests.
+Define the smallest Care Facility Context schema slice worth taking to design partners and conformance tests.
 
 This proposal intentionally narrows the broader Care Facility Context design. It chooses one initial workflow, one response style, and a small object set so the next schema pass can stay reviewable.
 
@@ -253,7 +253,7 @@ Emergency contacts should be limited to the boarding service window and should n
 
 The draft examples use `facility_shareable` as the candidate allow-oriented visibility class for returned care-facility fields.
 
-The next schema pass should either add `facility_shareable` with explicit precedence rules or replace it before these examples move into canonical `examples/`.
+The schema slice uses `facility_shareable` with explicit precedence rules. It can still be renamed before a stable release if design-partner feedback shows a clearer term.
 
 Existing visibility classes still matter:
 
@@ -284,7 +284,7 @@ Draft artifacts:
 - `docs/design/care-facility-draft-examples/boarding-preparation-request.json`
 - `docs/design/care-facility-draft-examples/boarding-preparation-partial-response.json`
 
-These examples are intentionally outside `examples/` because they are not yet canonical schema-backed examples.
+These examples are intentionally outside `examples/` because they are schema-backed design examples, not final public canonical examples.
 
 ## Negative Fixtures To Draft Next
 
@@ -304,11 +304,11 @@ These fixtures are design drafts only. They should move into `tests/conformance/
 ## Open Decisions Before Schema Work
 
 - Should `facility_shareable` be the final name for the first care-facility allow class?
-- Should `grant_id` be required for the first slice?
-- Should `service_id` be required, or can pre-booking boarding preparation exist?
+- Should later slices allow booking-derived access without `grant_id`?
+- Should later slices allow pre-booking boarding preparation without `service_id`?
 - Should `emergency_contacts` be in the first slice, or deferred with emergency handoff?
 - Should vaccination status values be schema enums in the first pass?
 
 ## Recommended Next Step
 
-Draft the boarding-preparation grant, request, and partial-response examples before editing canonical schemas. Examples will expose field-shape problems faster than schema definitions alone.
+Review the schema-backed examples with design partners, then decide whether to promote them into public canonical examples under `examples/` and add OpenAPI or MCP adapter sketches for the Care Facility Context Profile.

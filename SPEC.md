@@ -71,9 +71,9 @@ Provenance: Metadata describing where a fact came from, when it was recorded, an
 
 Omission: A machine-readable explanation that context exists or was requested but was not returned.
 
-## Initial Profile
+## Current Profiles
 
-The first planned profile is the Commerce Context Profile.
+The first profile is the Commerce Context Profile.
 
 This profile lets authorized clients request commerce-safe pet context for product recommendations and filtering while excluding unrelated sensitive context.
 
@@ -99,6 +99,26 @@ The initial profile should exclude by default:
 - Billing data.
 - Unrelated owner or household data.
 - Sensitive facility operations data.
+
+The draft also includes a first Care Facility Context schema slice for `boarding_preparation`. This slice lets an authorized care facility request boarding-preparation context for one pet, facility, and service window.
+
+The first care-facility slice can include:
+
+- Facility booking context.
+- Care instructions.
+- Feeding instructions.
+- Vaccination status.
+- Pickup authorization.
+- Emergency contacts.
+
+The first care-facility slice excludes by default:
+
+- Medication administration.
+- Facility observation writeback.
+- Full wellness timelines.
+- Diagnosis or treatment history.
+- Billing data and payment authority.
+- Identity document copies.
 
 ## Core Objects
 
@@ -260,6 +280,7 @@ Initial visibility classes:
 - `caregiver_visible`
 - `staff_only`
 - `vet_shareable`
+- `facility_shareable`
 - `commerce_safe`
 - `agent_summary_only`
 - `restricted_sensitive`
@@ -278,6 +299,8 @@ Initial precedence rules:
 4. `commerce_safe` may be returned for commerce purposes only when the requested scope and grant also allow it.
 5. `owner_visible`, `caregiver_visible`, and `vet_shareable` do not imply commerce access.
 6. `commerce_safe` must not be combined with `staff_only` or `restricted_sensitive` on the same returned field.
+7. `facility_shareable` may be returned for care-facility purposes only when the requested scope, purpose, grant, facility, and service window also allow it.
+8. `facility_shareable` must not be combined with `staff_only` or `restricted_sensitive` on the same returned field.
 
 ## Scope Registry
 
@@ -293,7 +316,20 @@ Initial commerce-safe scopes:
 
 `pet.permission_grants.read` is used by optional grant lookup adapter operations such as `GET /permission-grants/{grant_id}` and `ccp_permission_grant_get`.
 
-Future profiles may define additional scopes for wellness, vet export, facility booking, pickup authorization, medications, and payment authority.
+Initial care-facility scopes:
+
+- `pet.facility_booking_context.read`
+- `pet.care_instructions.read`
+- `pet.feeding_instructions.read`
+- `pet.vaccinations.status.read`
+- `pet.pickup_authorization.read`
+- `pet.emergency_contacts.read`
+
+Deferred medication scope recognized for omissions and denied-scope reporting:
+
+- `pet.medications.administration.read`
+
+Future profiles may define additional scopes for wellness, vet export, medication administration, facility writeback, and payment authority.
 
 ### Purpose Registry
 
@@ -301,6 +337,10 @@ Initial commerce purposes:
 
 - `product_recommendation`
 - `product_filtering`
+
+Initial care-facility purpose:
+
+- `boarding_preparation`
 
 ## Omission Reasons
 
@@ -348,6 +388,20 @@ The illustrative MCP adapter for this flow is `mcp/commerce-context.tools.json`.
 
 Implementation guidance for this flow is `docs/implementers/commerce-context-server.md`.
 
+## Care Facility Context Request Flow
+
+Example flow:
+
+1. Owner grants boarding-preparation scopes to a facility for one pet and service window.
+2. Facility requests care-facility context for `purpose: boarding_preparation`.
+3. Server evaluates requester, grant, pet, facility, service window, purpose, scopes, visibility, and freshness.
+4. Server returns an `authorization_decision`.
+5. Server returns a minimized `CareFacilityContext`.
+6. Returned context fields include `facility_shareable` visibility and provenance.
+7. Restricted or unrelated fields are omitted with machine-readable reasons.
+
+See `docs/design/care-facility-draft-examples/boarding-preparation-permission-grant.json`, `docs/design/care-facility-draft-examples/boarding-preparation-request.json`, and `docs/design/care-facility-draft-examples/boarding-preparation-partial-response.json`.
+
 ## Conformance Requirements
 
 A CCP Commerce Context Profile implementation should:
@@ -362,3 +416,17 @@ A CCP Commerce Context Profile implementation should:
 - Omit restricted data by default.
 - Provide machine-readable omission reasons.
 - Avoid exposing raw medical, wellness, billing, staff-only, or household data to commerce clients unless explicitly allowed by a future profile.
+
+A CCP Care Facility Context Profile implementation should:
+
+- Validate request and response objects against the canonical schema.
+- Enforce purpose-bound access.
+- Enforce facility and service-window boundaries.
+- Enforce visibility precedence.
+- Return only granted scopes.
+- Attach provenance to returned facts or summaries.
+- Attach visibility metadata to returned facts or summaries.
+- Include an authorization decision in each response.
+- Omit restricted data by default.
+- Provide machine-readable omission reasons.
+- Avoid exposing medication administration, raw wellness timelines, diagnosis history, billing data, payment authority, identity document copies, or staff-only records unless explicitly allowed by a future profile or scope.

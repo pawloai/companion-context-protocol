@@ -14,6 +14,7 @@ export type VisibilityClass =
   | "caregiver_visible"
   | "staff_only"
   | "vet_shareable"
+  | "facility_shareable"
   | "commerce_safe"
   | "agent_summary_only"
   | "restricted_sensitive";
@@ -25,9 +26,16 @@ export type Scope =
   | "pet.permission_grants.read"
   | "pet.product_exclusions.read"
   | "pet.preferences.read"
-  | "pet.purchase_history.summary.read";
+  | "pet.purchase_history.summary.read"
+  | "pet.facility_booking_context.read"
+  | "pet.care_instructions.read"
+  | "pet.feeding_instructions.read"
+  | "pet.vaccinations.status.read"
+  | "pet.pickup_authorization.read"
+  | "pet.emergency_contacts.read"
+  | "pet.medications.administration.read";
 
-export type Purpose = "product_recommendation" | "product_filtering";
+export type Purpose = "product_recommendation" | "product_filtering" | "boarding_preparation";
 
 export type OmissionReasonCode =
   | "not_requested"
@@ -36,6 +44,8 @@ export type OmissionReasonCode =
   | "visibility_restricted"
   | "grant_expired"
   | "grant_revoked"
+  | "facility_mismatch"
+  | "service_window_inactive"
   | "source_stale"
   | "not_available"
   | "summary_only";
@@ -75,6 +85,11 @@ export interface ObjectMetadata {
 export interface Weight {
   value: number;
   unit: "lb" | "kg";
+}
+
+export interface ServiceWindow {
+  starts_at: string;
+  ends_at: string;
 }
 
 export type Species = "dog" | "cat" | "other";
@@ -160,11 +175,95 @@ export interface CommerceContext {
   metadata: ObjectMetadata;
 }
 
+export interface FacilityBookingContext {
+  eligibility_status?: FieldEnvelope<string>;
+  missing_required_context?: FieldEnvelope<string[]>;
+  service_restrictions?: FieldEnvelope<string[]>;
+  required_owner_approvals?: FieldEnvelope<string[]>;
+  metadata: ObjectMetadata;
+}
+
+export interface CareInstructions {
+  handling_summary?: FieldEnvelope<string>;
+  comfort_routines?: FieldEnvelope<string[]>;
+  rest_preferences?: FieldEnvelope<string[]>;
+  playgroup_constraints?: FieldEnvelope<string[]>;
+  stress_triggers?: FieldEnvelope<string[]>;
+  activity_restrictions?: FieldEnvelope<string[]>;
+  metadata: ObjectMetadata;
+}
+
+export interface FeedingInstructions {
+  food_description?: FieldEnvelope<string>;
+  portion?: FieldEnvelope<string>;
+  schedule?: FieldEnvelope<string[]>;
+  treat_rules?: FieldEnvelope<string[]>;
+  allergy_notes?: FieldEnvelope<string[]>;
+  sensitivity_notes?: FieldEnvelope<string[]>;
+  owner_supplied_food?: FieldEnvelope<boolean>;
+  substitution_constraints?: FieldEnvelope<string[]>;
+  metadata: ObjectMetadata;
+}
+
+export interface VaccinationStatus {
+  vaccine_name?: FieldEnvelope<string>;
+  status?: FieldEnvelope<string>;
+  expires_at?: FieldEnvelope<string>;
+  proof_status?: FieldEnvelope<string>;
+  verification_source?: FieldEnvelope<string>;
+  verified_at?: FieldEnvelope<string>;
+  metadata: ObjectMetadata;
+}
+
+export interface PickupAuthorization {
+  authorized_actor_id: string;
+  display_name?: FieldEnvelope<string>;
+  relationship?: FieldEnvelope<string>;
+  contact_channel?: FieldEnvelope<string>;
+  authorization_source?: FieldEnvelope<string>;
+  expires_at?: FieldEnvelope<string>;
+  identity_check_required?: FieldEnvelope<boolean>;
+  constraints?: FieldEnvelope<string[]>;
+  revocation_status?: FieldEnvelope<string>;
+  metadata: ObjectMetadata;
+}
+
+export interface EmergencyContact {
+  contact_actor_id: string;
+  display_name?: FieldEnvelope<string>;
+  role?: FieldEnvelope<string>;
+  preferred_contact_channel?: FieldEnvelope<string>;
+  contact_priority?: FieldEnvelope<number>;
+  service_window_applicability?: FieldEnvelope<string>;
+  restrictions?: FieldEnvelope<string[]>;
+  metadata: ObjectMetadata;
+}
+
+export interface CareFacilityContext {
+  pet_id: string;
+  purpose: Purpose;
+  facility_id: string;
+  service_id?: string;
+  service_type: "boarding";
+  service_window: ServiceWindow;
+  booking_context?: FacilityBookingContext;
+  care_instructions?: CareInstructions;
+  feeding_instructions?: FeedingInstructions;
+  vaccination_status?: VaccinationStatus[];
+  pickup_authorization?: PickupAuthorization[];
+  emergency_contacts?: EmergencyContact[];
+  metadata: ObjectMetadata;
+}
+
 export interface PermissionGrant {
   grant_id: string;
   subject_pet_id: string;
   grantor_actor_id: string;
   grantee_actor_id: string;
+  facility_id?: string;
+  service_id?: string;
+  service_type?: string;
+  service_window?: ServiceWindow;
   scopes: Scope[];
   purposes: Purpose[];
   expires_at?: string;
@@ -202,11 +301,32 @@ export interface CommerceContextRequest {
   grant_id?: string;
 }
 
+export interface CareFacilityContextRequest {
+  request_id: string;
+  requester_actor_id: string;
+  pet_id: string;
+  facility_id: string;
+  service_id: string;
+  service_type: "boarding";
+  service_window: ServiceWindow;
+  purpose: "boarding_preparation";
+  scopes: Scope[];
+  grant_id: string;
+}
+
 export interface CommerceContextResponse {
   request_id: string;
   status: "ok" | "partial" | "denied";
   authorization_decision: AuthorizationDecision;
   commerce_context: CommerceContext | null;
+  omissions: Omission[];
+}
+
+export interface CareFacilityContextResponse {
+  request_id: string;
+  status: "ok" | "partial" | "denied";
+  authorization_decision: AuthorizationDecision;
+  care_facility_context: CareFacilityContext | null;
   omissions: Omission[];
 }
 
@@ -227,6 +347,8 @@ export const schemaPaths = {
   core: "schemas/ccp-core.schema.json",
   commerceContextRequest: "schemas/commerce-context-request.schema.json",
   commerceContextResponse: "schemas/commerce-context-response.schema.json",
+  careFacilityContextRequest: "schemas/care-facility-context-request.schema.json",
+  careFacilityContextResponse: "schemas/care-facility-context-response.schema.json",
   permissionGrant: "schemas/permission-grant.schema.json"
 } as const;
 
@@ -253,6 +375,18 @@ export function createCommerceContextResponseValidator(
   return compileSchema<CommerceContextResponse>(ajv, schemaPaths.commerceContextResponse);
 }
 
+export function createCareFacilityContextRequestValidator(
+  ajv = createCcpAjv()
+): ValidateFunction<CareFacilityContextRequest> {
+  return compileSchema<CareFacilityContextRequest>(ajv, schemaPaths.careFacilityContextRequest);
+}
+
+export function createCareFacilityContextResponseValidator(
+  ajv = createCcpAjv()
+): ValidateFunction<CareFacilityContextResponse> {
+  return compileSchema<CareFacilityContextResponse>(ajv, schemaPaths.careFacilityContextResponse);
+}
+
 export function createPermissionGrantValidator(
   ajv = createCcpAjv()
 ): ValidateFunction<PermissionGrant> {
@@ -263,6 +397,8 @@ export function createCcpValidators(ajv = createCcpAjv()) {
   return {
     commerceContextRequest: createCommerceContextRequestValidator(ajv),
     commerceContextResponse: createCommerceContextResponseValidator(ajv),
+    careFacilityContextRequest: createCareFacilityContextRequestValidator(ajv),
+    careFacilityContextResponse: createCareFacilityContextResponseValidator(ajv),
     permissionGrant: createPermissionGrantValidator(ajv)
   };
 }

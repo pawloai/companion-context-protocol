@@ -88,6 +88,36 @@ const cases = [
     valid: true
   },
   {
+    name: "care facility permission grant draft example",
+    schema: "schemas/permission-grant.schema.json",
+    data: "docs/design/care-facility-draft-examples/boarding-preparation-permission-grant.json",
+    valid: true
+  },
+  {
+    name: "care facility context request draft example",
+    schema: "schemas/care-facility-context-request.schema.json",
+    data: "docs/design/care-facility-draft-examples/boarding-preparation-request.json",
+    valid: true
+  },
+  {
+    name: "care facility context partial response draft example",
+    schema: "schemas/care-facility-context-response.schema.json",
+    data: "docs/design/care-facility-draft-examples/boarding-preparation-partial-response.json",
+    valid: true
+  },
+  {
+    name: "care facility mismatch denied response draft fixture",
+    schema: "schemas/care-facility-context-response.schema.json",
+    data: "docs/design/care-facility-draft-examples/invalid/facility-mismatch-denied-response.json",
+    valid: true
+  },
+  {
+    name: "care facility expired service window denied response draft fixture",
+    schema: "schemas/care-facility-context-response.schema.json",
+    data: "docs/design/care-facility-draft-examples/invalid/expired-service-window-denied-response.json",
+    valid: true
+  },
+  {
     name: "expired permission grant fixture",
     schema: "schemas/permission-grant.schema.json",
     data: "tests/conformance/fixtures/valid/permission-grant-expired.json",
@@ -152,6 +182,42 @@ const cases = [
     schema: "schemas/commerce-context-response.schema.json",
     data: "tests/conformance/fixtures/invalid/denied-response-with-context.json",
     valid: false
+  },
+  {
+    name: "reject care facility denied response with context",
+    schema: "schemas/care-facility-context-response.schema.json",
+    data: "docs/design/care-facility-draft-examples/invalid/denied-response-with-context.json",
+    valid: false
+  },
+  {
+    name: "reject care facility field missing provenance",
+    schema: "schemas/care-facility-context-response.schema.json",
+    data: "docs/design/care-facility-draft-examples/invalid/care-field-missing-provenance.json",
+    valid: false
+  },
+  {
+    name: "reject care facility pickup identity document leak",
+    schema: "schemas/care-facility-context-response.schema.json",
+    data: "docs/design/care-facility-draft-examples/invalid/pickup-authorization-identity-document-leak.json",
+    valid: false
+  },
+  {
+    name: "reject care facility wellness timeline leak",
+    schema: "schemas/care-facility-context-response.schema.json",
+    data: "docs/design/care-facility-draft-examples/invalid/boarding-response-with-wellness-timeline.json",
+    valid: false
+  },
+  {
+    name: "reject care facility diagnosis history leak",
+    schema: "schemas/care-facility-context-response.schema.json",
+    data: "docs/design/care-facility-draft-examples/invalid/boarding-response-with-diagnosis-history.json",
+    valid: false
+  },
+  {
+    name: "reject care facility pickup payment authority leak",
+    schema: "schemas/care-facility-context-response.schema.json",
+    data: "docs/design/care-facility-draft-examples/invalid/pickup-authorization-payment-authority-leak.json",
+    valid: false
   }
 ];
 
@@ -208,6 +274,12 @@ const roundTripPairs = [
     name: "purchase history fixture",
     request: "tests/conformance/fixtures/valid/commerce-context-purchase-history-request.json",
     response: "tests/conformance/fixtures/valid/commerce-context-ok-purchase-history-response.json"
+  },
+  {
+    name: "care facility boarding preparation draft example",
+    request: "docs/design/care-facility-draft-examples/boarding-preparation-request.json",
+    response: "docs/design/care-facility-draft-examples/boarding-preparation-partial-response.json",
+    contextKey: "care_facility_context"
   }
 ];
 
@@ -226,10 +298,13 @@ for (const pair of roundTripPairs) {
     ["authorization_decision.grant_id", response.authorization_decision.grant_id, request.grant_id]
   ];
 
-  if (response.commerce_context !== null) {
+  const contextKey = pair.contextKey ?? "commerce_context";
+  const context = response[contextKey];
+
+  if (context !== null) {
     roundTripChecks.push(
-      ["commerce_context.pet_id", response.commerce_context?.pet_id, request.pet_id],
-      ["commerce_context.purpose", response.commerce_context?.purpose, request.purpose]
+      [`${contextKey}.pet_id`, context?.pet_id, request.pet_id],
+      [`${contextKey}.purpose`, context?.purpose, request.purpose]
     );
   }
 

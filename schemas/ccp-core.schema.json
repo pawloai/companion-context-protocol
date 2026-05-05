@@ -11,6 +11,7 @@
         "caregiver_visible",
         "staff_only",
         "vet_shareable",
+        "facility_shareable",
         "commerce_safe",
         "agent_summary_only",
         "restricted_sensitive"
@@ -25,14 +26,22 @@
         "pet.permission_grants.read",
         "pet.product_exclusions.read",
         "pet.preferences.read",
-        "pet.purchase_history.summary.read"
+        "pet.purchase_history.summary.read",
+        "pet.facility_booking_context.read",
+        "pet.care_instructions.read",
+        "pet.feeding_instructions.read",
+        "pet.vaccinations.status.read",
+        "pet.pickup_authorization.read",
+        "pet.emergency_contacts.read",
+        "pet.medications.administration.read"
       ]
     },
     "Purpose": {
       "type": "string",
       "enum": [
         "product_recommendation",
-        "product_filtering"
+        "product_filtering",
+        "boarding_preparation"
       ]
     },
     "OmissionReasonCode": {
@@ -44,6 +53,8 @@
         "visibility_restricted",
         "grant_expired",
         "grant_revoked",
+        "facility_mismatch",
+        "service_window_inactive",
         "source_stale",
         "not_available",
         "summary_only"
@@ -86,6 +97,28 @@
         {
           "contains": {
             "const": "commerce_safe"
+          }
+        },
+        {
+          "not": {
+            "contains": {
+              "enum": [
+                "staff_only",
+                "restricted_sensitive"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "FacilityVisibilitySet": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/VisibilitySet"
+        },
+        {
+          "contains": {
+            "const": "facility_shareable"
           }
         },
         {
@@ -237,6 +270,78 @@
           "properties": {
             "visibility": {
               "$ref": "#/$defs/CommerceVisibilitySet"
+            }
+          }
+        }
+      ]
+    },
+    "FacilityObjectMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "visibility",
+        "provenance"
+      ],
+      "properties": {
+        "visibility": {
+          "$ref": "#/$defs/FacilityVisibilitySet"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ContextProvenance"
+        }
+      }
+    },
+    "FacilityStringField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/StringField"
+        },
+        {
+          "properties": {
+            "visibility": {
+              "$ref": "#/$defs/FacilityVisibilitySet"
+            }
+          }
+        }
+      ]
+    },
+    "FacilityStringArrayField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/StringArrayField"
+        },
+        {
+          "properties": {
+            "visibility": {
+              "$ref": "#/$defs/FacilityVisibilitySet"
+            }
+          }
+        }
+      ]
+    },
+    "FacilityBooleanField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/BooleanField"
+        },
+        {
+          "properties": {
+            "visibility": {
+              "$ref": "#/$defs/FacilityVisibilitySet"
+            }
+          }
+        }
+      ]
+    },
+    "FacilityNumberField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/NumberField"
+        },
+        {
+          "properties": {
+            "visibility": {
+              "$ref": "#/$defs/FacilityVisibilitySet"
             }
           }
         }
@@ -880,6 +985,443 @@
         "metadata"
       ]
     },
+    "ServiceWindow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "starts_at",
+        "ends_at"
+      ],
+      "properties": {
+        "starts_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "ends_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "FacilityBookingContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metadata"
+      ],
+      "properties": {
+        "eligibility_status": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "missing_required_context": {
+          "$ref": "#/$defs/FacilityStringArrayField"
+        },
+        "service_restrictions": {
+          "$ref": "#/$defs/FacilityStringArrayField"
+        },
+        "required_owner_approvals": {
+          "$ref": "#/$defs/FacilityStringArrayField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/FacilityObjectMetadata"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "eligibility_status"
+          ]
+        },
+        {
+          "required": [
+            "missing_required_context"
+          ]
+        },
+        {
+          "required": [
+            "service_restrictions"
+          ]
+        },
+        {
+          "required": [
+            "required_owner_approvals"
+          ]
+        }
+      ]
+    },
+    "CareInstructions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metadata"
+      ],
+      "properties": {
+        "handling_summary": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "comfort_routines": {
+          "$ref": "#/$defs/FacilityStringArrayField"
+        },
+        "rest_preferences": {
+          "$ref": "#/$defs/FacilityStringArrayField"
+        },
+        "playgroup_constraints": {
+          "$ref": "#/$defs/FacilityStringArrayField"
+        },
+        "stress_triggers": {
+          "$ref": "#/$defs/FacilityStringArrayField"
+        },
+        "activity_restrictions": {
+          "$ref": "#/$defs/FacilityStringArrayField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/FacilityObjectMetadata"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "handling_summary"
+          ]
+        },
+        {
+          "required": [
+            "comfort_routines"
+          ]
+        },
+        {
+          "required": [
+            "rest_preferences"
+          ]
+        },
+        {
+          "required": [
+            "playgroup_constraints"
+          ]
+        },
+        {
+          "required": [
+            "stress_triggers"
+          ]
+        },
+        {
+          "required": [
+            "activity_restrictions"
+          ]
+        }
+      ]
+    },
+    "FeedingInstructions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metadata"
+      ],
+      "properties": {
+        "food_description": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "portion": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "schedule": {
+          "$ref": "#/$defs/FacilityStringArrayField"
+        },
+        "treat_rules": {
+          "$ref": "#/$defs/FacilityStringArrayField"
+        },
+        "allergy_notes": {
+          "$ref": "#/$defs/FacilityStringArrayField"
+        },
+        "sensitivity_notes": {
+          "$ref": "#/$defs/FacilityStringArrayField"
+        },
+        "owner_supplied_food": {
+          "$ref": "#/$defs/FacilityBooleanField"
+        },
+        "substitution_constraints": {
+          "$ref": "#/$defs/FacilityStringArrayField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/FacilityObjectMetadata"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "food_description"
+          ]
+        },
+        {
+          "required": [
+            "portion"
+          ]
+        },
+        {
+          "required": [
+            "schedule"
+          ]
+        },
+        {
+          "required": [
+            "treat_rules"
+          ]
+        },
+        {
+          "required": [
+            "allergy_notes"
+          ]
+        },
+        {
+          "required": [
+            "sensitivity_notes"
+          ]
+        },
+        {
+          "required": [
+            "owner_supplied_food"
+          ]
+        },
+        {
+          "required": [
+            "substitution_constraints"
+          ]
+        }
+      ]
+    },
+    "VaccinationStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metadata"
+      ],
+      "properties": {
+        "vaccine_name": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "status": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "expires_at": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "proof_status": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "verification_source": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "verified_at": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/FacilityObjectMetadata"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "vaccine_name"
+          ]
+        },
+        {
+          "required": [
+            "status"
+          ]
+        },
+        {
+          "required": [
+            "expires_at"
+          ]
+        },
+        {
+          "required": [
+            "proof_status"
+          ]
+        },
+        {
+          "required": [
+            "verification_source"
+          ]
+        },
+        {
+          "required": [
+            "verified_at"
+          ]
+        }
+      ]
+    },
+    "PickupAuthorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authorized_actor_id",
+        "metadata"
+      ],
+      "properties": {
+        "authorized_actor_id": {
+          "type": "string"
+        },
+        "display_name": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "relationship": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "contact_channel": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "authorization_source": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "expires_at": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "identity_check_required": {
+          "$ref": "#/$defs/FacilityBooleanField"
+        },
+        "constraints": {
+          "$ref": "#/$defs/FacilityStringArrayField"
+        },
+        "revocation_status": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/FacilityObjectMetadata"
+        }
+      }
+    },
+    "EmergencyContact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contact_actor_id",
+        "metadata"
+      ],
+      "properties": {
+        "contact_actor_id": {
+          "type": "string"
+        },
+        "display_name": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "role": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "preferred_contact_channel": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "contact_priority": {
+          "$ref": "#/$defs/FacilityNumberField"
+        },
+        "service_window_applicability": {
+          "$ref": "#/$defs/FacilityStringField"
+        },
+        "restrictions": {
+          "$ref": "#/$defs/FacilityStringArrayField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/FacilityObjectMetadata"
+        }
+      }
+    },
+    "CareFacilityContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pet_id",
+        "purpose",
+        "facility_id",
+        "service_type",
+        "service_window",
+        "metadata"
+      ],
+      "properties": {
+        "pet_id": {
+          "type": "string"
+        },
+        "purpose": {
+          "$ref": "#/$defs/Purpose"
+        },
+        "facility_id": {
+          "type": "string"
+        },
+        "service_id": {
+          "type": "string"
+        },
+        "service_type": {
+          "type": "string",
+          "enum": [
+            "boarding"
+          ]
+        },
+        "service_window": {
+          "$ref": "#/$defs/ServiceWindow"
+        },
+        "booking_context": {
+          "$ref": "#/$defs/FacilityBookingContext"
+        },
+        "care_instructions": {
+          "$ref": "#/$defs/CareInstructions"
+        },
+        "feeding_instructions": {
+          "$ref": "#/$defs/FeedingInstructions"
+        },
+        "vaccination_status": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/VaccinationStatus"
+          }
+        },
+        "pickup_authorization": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PickupAuthorization"
+          }
+        },
+        "emergency_contacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EmergencyContact"
+          }
+        },
+        "metadata": {
+          "$ref": "#/$defs/FacilityObjectMetadata"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "booking_context"
+          ]
+        },
+        {
+          "required": [
+            "care_instructions"
+          ]
+        },
+        {
+          "required": [
+            "feeding_instructions"
+          ]
+        },
+        {
+          "required": [
+            "vaccination_status"
+          ]
+        },
+        {
+          "required": [
+            "pickup_authorization"
+          ]
+        },
+        {
+          "required": [
+            "emergency_contacts"
+          ]
+        }
+      ]
+    },
     "CommerceContext": {
       "type": "object",
       "additionalProperties": false,
@@ -959,6 +1501,18 @@
         },
         "grantee_actor_id": {
           "type": "string"
+        },
+        "facility_id": {
+          "type": "string"
+        },
+        "service_id": {
+          "type": "string"
+        },
+        "service_type": {
+          "type": "string"
+        },
+        "service_window": {
+          "$ref": "#/$defs/ServiceWindow"
         },
         "scopes": {
           "type": "array",
@@ -1175,6 +1729,62 @@
         }
       }
     },
+    "CareFacilityContextRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "requester_actor_id",
+        "pet_id",
+        "facility_id",
+        "service_id",
+        "service_type",
+        "service_window",
+        "purpose",
+        "scopes",
+        "grant_id"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string"
+        },
+        "requester_actor_id": {
+          "type": "string"
+        },
+        "pet_id": {
+          "type": "string"
+        },
+        "facility_id": {
+          "type": "string"
+        },
+        "service_id": {
+          "type": "string"
+        },
+        "service_type": {
+          "type": "string",
+          "enum": [
+            "boarding"
+          ]
+        },
+        "service_window": {
+          "$ref": "#/$defs/ServiceWindow"
+        },
+        "purpose": {
+          "const": "boarding_preparation"
+        },
+        "scopes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/Scope"
+          }
+        },
+        "grant_id": {
+          "type": "string"
+        }
+      }
+    },
     "CommerceContextResponse": {
       "type": "object",
       "additionalProperties": false,
@@ -1303,6 +1913,144 @@
                 }
               },
               "commerce_context": {
+                "type": "null"
+              },
+              "omissions": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "CareFacilityContextResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "status",
+        "authorization_decision",
+        "care_facility_context",
+        "omissions"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "ok",
+            "partial",
+            "denied"
+          ]
+        },
+        "authorization_decision": {
+          "$ref": "#/$defs/AuthorizationDecision"
+        },
+        "care_facility_context": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CareFacilityContext"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "omissions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Omission"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "ok"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "authorization_decision": {
+                "properties": {
+                  "decision": {
+                    "const": "allowed"
+                  },
+                  "denied_scopes": {
+                    "maxItems": 0
+                  }
+                }
+              },
+              "care_facility_context": {
+                "$ref": "#/$defs/CareFacilityContext"
+              },
+              "omissions": {
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "partial"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "authorization_decision": {
+                "properties": {
+                  "decision": {
+                    "const": "partial"
+                  }
+                }
+              },
+              "care_facility_context": {
+                "$ref": "#/$defs/CareFacilityContext"
+              },
+              "omissions": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "denied"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "authorization_decision": {
+                "properties": {
+                  "decision": {
+                    "const": "denied"
+                  },
+                  "applied_scopes": {
+                    "maxItems": 0
+                  }
+                }
+              },
+              "care_facility_context": {
                 "type": "null"
               },
               "omissions": {

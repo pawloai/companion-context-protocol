@@ -74,6 +74,18 @@ const checks = [
     valid: validators.commerceContextResponse(
       readJson("tests/conformance/fixtures/valid/commerce-context-omission-coverage-response.json")
     )
+  },
+  {
+    name: "care facility request validator accepts draft example",
+    valid: validators.careFacilityContextRequest(
+      readJson("docs/design/care-facility-draft-examples/boarding-preparation-request.json")
+    )
+  },
+  {
+    name: "care facility response validator accepts draft example",
+    valid: validators.careFacilityContextResponse(
+      readJson("docs/design/care-facility-draft-examples/boarding-preparation-partial-response.json")
+    )
   }
 ];
 
@@ -122,6 +134,11 @@ const invalidFixtures = [
     name: "response validator rejects denied response with context",
     validator: validators.commerceContextResponse,
     data: "tests/conformance/fixtures/invalid/denied-response-with-context.json"
+  },
+  {
+    name: "care facility response validator rejects identity document leak",
+    validator: validators.careFacilityContextResponse,
+    data: "docs/design/care-facility-draft-examples/invalid/pickup-authorization-identity-document-leak.json"
   }
 ];
 
@@ -136,6 +153,8 @@ const schemaNames = [
   "ccp-core.schema.json",
   "commerce-context-request.schema.json",
   "commerce-context-response.schema.json",
+  "care-facility-context-request.schema.json",
+  "care-facility-context-response.schema.json",
   "permission-grant.schema.json"
 ];
 

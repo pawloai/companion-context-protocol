@@ -8,15 +8,18 @@ CCP defines how pet care, commerce, and agent systems can request only the pet c
 
 Status: Draft, pre-1.0
 
-This repository is ready for design-partner review, but it should not yet be treated as a stable standard. Draft versions may change incompatibly while the first profile, schema contract, and conformance tests are refined.
+This repository is ready for design-partner review, but it should not yet be treated as a stable standard. Draft versions may change incompatibly while the profile contracts and conformance tests are refined.
 
 The first profile is the Commerce Context Profile, focused on product recommendations and filtering without exposing unrelated staff notes, wellness timelines, diagnosis or treatment history, billing data, household data, or sensitive facility operations data.
+
+The draft also includes a first Care Facility Context schema slice for boarding preparation. It is intentionally narrower than the full care-facility design and excludes medication administration, writeback, payment authority, emergency override access, full wellness timelines, diagnosis history, treatment history, billing records, and identity document copies.
 
 ## What CCP Defines
 
 - Transport-neutral JSON object contracts.
 - Permission grants scoped to pets, purposes, and time windows.
 - Commerce-safe context bundles.
+- Care-facility boarding-preparation context bundles.
 - Visibility classes for returned facts and summaries.
 - Provenance metadata for returned context.
 - Authorization decisions for allowed, partial, and denied responses.
@@ -66,6 +69,8 @@ companion-context-protocol/
 
 - [Draft specification](SPEC.md)
 - [Core JSON Schema](schemas/ccp-core.schema.json)
+- [Care Facility Context request schema](schemas/care-facility-context-request.schema.json)
+- [Care Facility Context response schema](schemas/care-facility-context-response.schema.json)
 - [Commerce permission grant example](examples/permission-grant-commerce-context.json)
 - [Commerce context request example](examples/commerce-context-request.json)
 - [Commerce context partial response example](examples/commerce-context-response.json)
@@ -85,6 +90,7 @@ companion-context-protocol/
 - [Open-source adoption roadmap](docs/design/2026-05-04-ccp-open-source-adoption-roadmap.md)
 - [Care Facility Context Profile design draft](docs/design/2026-05-05-care-facility-context-profile.md)
 - [Care Facility first schema slice proposal](docs/design/2026-05-05-care-facility-first-schema-slice.md)
+- [Care Facility schema-backed draft examples](docs/design/care-facility-draft-examples)
 
 ## Getting Started
 
@@ -117,7 +123,7 @@ npm install
 npm test
 ```
 
-The test suite validates the current positive examples and core `$defs` fixtures, rejects negative fixtures for duplicate scopes, invalid grant lifecycle state, inconsistent response status, provenance gaps, and non-commerce-safe commerce context fields, checks example request/response consistency, verifies OpenAPI external examples, checks MCP tool sketches, scans tracked files for vendor-neutrality regressions, builds/tests the draft TypeScript package, and compiles/tests the draft Python package.
+The test suite validates the current positive examples, care-facility draft examples, and core `$defs` fixtures, rejects negative fixtures for duplicate scopes, invalid grant lifecycle state, inconsistent response status, provenance gaps, unsafe commerce context fields, and unsafe care-facility context fields, checks example request/response consistency, verifies OpenAPI external examples, checks MCP tool sketches, scans tracked files for vendor-neutrality regressions, builds/tests the draft TypeScript package, and compiles/tests the draft Python package.
 
 ## Design Principles
 

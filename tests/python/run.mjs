@@ -16,6 +16,8 @@ const schemaNames = [
   "ccp-core.schema.json",
   "commerce-context-request.schema.json",
   "commerce-context-response.schema.json",
+  "care-facility-context-request.schema.json",
+  "care-facility-context-response.schema.json",
   "permission-grant.schema.json"
 ];
 
@@ -34,6 +36,8 @@ expected_names = {
     "core",
     "commerce-context-request",
     "commerce-context-response",
+    "care-facility-context-request",
+    "care-facility-context-response",
     "permission-grant",
 }
 
@@ -48,6 +52,7 @@ core_schema = load_schema("core")
 assert core_schema["title"] == "Companion Context Protocol Core"
 assert core_schema["$defs"]["CommerceContextRequest"]
 assert load_schema("commerce-context-request")["$ref"] == "ccp-core.schema.json#/$defs/CommerceContextRequest"
+assert load_schema("care-facility-context-request")["$ref"] == "ccp-core.schema.json#/$defs/CareFacilityContextRequest"
 assert set(load_schemas()) == expected_names
 
 schema_module._repo_root = lambda: Path("/ccp-source-tree-not-present")

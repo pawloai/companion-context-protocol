@@ -10,9 +10,9 @@ Related first-slice proposal: `docs/design/2026-05-05-care-facility-first-schema
 
 ## Design Status
 
-This document scopes a possible future CCP profile. It does not add normative scopes, purposes, visibility classes, schemas, examples, adapters, or conformance requirements.
+This document scopes the broader Care Facility Context Profile. A narrower boarding-preparation schema slice now exists, but the broader profile areas in this document remain design material.
 
-The current normative draft still only defines the Commerce Context Profile. Any Care Facility Context Profile would need a separate schema proposal, positive and negative examples, conformance fixtures, and adapter sketches before implementers should depend on it.
+Only the first boarding-preparation slice has schema and conformance coverage. Medication administration, writeback, emergency override access, payment authority, and in-home care still require separate schema proposals, examples, conformance fixtures, and adapter sketches before implementers should depend on them.
 
 ## Purpose
 

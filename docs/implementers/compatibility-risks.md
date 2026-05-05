@@ -20,10 +20,10 @@ The conformance runner enforces today's invariants. The following surfaces are t
 
 These enums are expected to grow as new profiles land. Implementers should treat unknown values as forward-compatible signals rather than errors when reading, and should never hard-code the full set in production code:
 
-- `VisibilityClass` — currently 7 classes. New profiles (vet export, care facility, etc.) may add classes, and precedence rules may extend.
-- `Scope` — currently 7 commerce-safe scopes. Future profiles will add wellness, vet export, facility booking, pickup authorization, medication, and payment-authority scopes.
-- `Purpose` — currently `product_recommendation` and `product_filtering`. Other profiles will add their own purposes.
-- `OmissionReasonCode` — currently 9 reasons. Future profiles may add reason codes for profile-specific omissions.
+- `VisibilityClass` — currently 8 classes. New profiles (vet export, medication administration, etc.) may add classes, and precedence rules may extend.
+- `Scope` — currently includes commerce-safe scopes plus a first care-facility boarding-preparation slice. Future profiles will add wellness, vet export, facility writeback, medication administration, and payment-authority scopes.
+- `Purpose` — currently `product_recommendation`, `product_filtering`, and `boarding_preparation`. Other profiles will add their own purposes.
+- `OmissionReasonCode` — currently 11 reasons. Future profiles may add reason codes for profile-specific omissions.
 
 ### Field envelope
 
@@ -58,9 +58,15 @@ The current invariant set (`ok` / `partial` / `denied` consistency, denied requi
 
 Every field in a returned `commerce_context` must include `commerce_safe` and must not include `staff_only` or `restricted_sensitive`. This is load-bearing for the Commerce Context Profile and will not be relaxed. Other profiles will define their own equivalent rules.
 
+### Facility-shareable rule
+
+Every field in a returned `care_facility_context` must include `facility_shareable` and must not include `staff_only` or `restricted_sensitive`. The first Care Facility Context slice is limited to boarding preparation and must preserve facility, service-window, purpose, scope, provenance, and omission boundaries.
+
 ## Profile Boundary
 
 The Commerce Context Profile's exclusions (staff notes, full wellness timelines, diagnosis or treatment history, billing data, household data, sensitive facility operations data, raw `agent_summary_only` observations) are intentional. Broadening them requires a new profile with its own scopes, purpose rules, visibility behavior, and conformance fixtures. Implementers should not expect these exclusions to soften within Commerce Context.
+
+The first Care Facility Context slice's exclusions (medication administration, facility observation writeback, full wellness timelines, diagnosis or treatment history, billing data, payment authority, identity document copies, unrelated household data, and staff-only records) are intentional. Broadening them requires additional scopes, purpose rules, visibility behavior, and conformance fixtures.
 
 ## Adapter Compatibility
 

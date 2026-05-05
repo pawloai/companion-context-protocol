@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://companioncontext.org/schemas/care-facility-context-request.schema.json",
+  "title": "CCP Care Facility Context Request",
+  "$ref": "ccp-core.schema.json#/$defs/CareFacilityContextRequest"
+}

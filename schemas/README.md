@@ -9,6 +9,8 @@ Current draft schemas:
 - `ccp-core.schema.json`: shared definitions for core CCP objects.
 - `commerce-context-request.schema.json`: request wrapper for Commerce Context Profile requests.
 - `commerce-context-response.schema.json`: response wrapper for Commerce Context Profile responses.
+- `care-facility-context-request.schema.json`: request wrapper for the first Care Facility Context Profile slice.
+- `care-facility-context-response.schema.json`: response wrapper for the first Care Facility Context Profile slice.
 - `permission-grant.schema.json`: wrapper for permission grant examples.
 
 Schema `$id` values are stable identifiers for the draft schema documents. They are not required to be dereferenceable URLs for local validation.
@@ -18,6 +20,7 @@ Initial core objects:
 - `PetProfile`
 - `DietProfile`
 - `CommerceContext`
+- `CareFacilityContext`
 - `PermissionGrant`
 - `ContextProvenance`
 

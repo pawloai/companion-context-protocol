@@ -13,6 +13,8 @@ SchemaName = Literal[
     "core",
     "commerce-context-request",
     "commerce-context-response",
+    "care-facility-context-request",
+    "care-facility-context-response",
     "permission-grant",
 ]
 
@@ -20,6 +22,8 @@ _SCHEMA_FILENAMES: dict[SchemaName, str] = {
     "core": "ccp-core.schema.json",
     "commerce-context-request": "commerce-context-request.schema.json",
     "commerce-context-response": "commerce-context-response.schema.json",
+    "care-facility-context-request": "care-facility-context-request.schema.json",
+    "care-facility-context-response": "care-facility-context-response.schema.json",
     "permission-grant": "permission-grant.schema.json",
 }
 

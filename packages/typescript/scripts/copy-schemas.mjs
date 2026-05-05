@@ -9,6 +9,8 @@ const schemaNames = [
   "ccp-core.schema.json",
   "commerce-context-request.schema.json",
   "commerce-context-response.schema.json",
+  "care-facility-context-request.schema.json",
+  "care-facility-context-response.schema.json",
   "permission-grant.schema.json"
 ];
 
