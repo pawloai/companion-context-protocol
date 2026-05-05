@@ -92,6 +92,7 @@ companion-context-protocol/
 - [Public launch checklist](docs/launch/public-launch-checklist.md)
 - [Announcement copy](docs/launch/announcement.md)
 - [Design-partner outreach notes](docs/launch/design-partner-outreach.md)
+- [Care Facility design-partner review packet](docs/launch/care-facility-design-partner-review.md)
 - [Initial issue labels](docs/launch/issue-labels.md)
 - [Draft TypeScript package](packages/typescript)
 - [Draft Python package](packages/python)

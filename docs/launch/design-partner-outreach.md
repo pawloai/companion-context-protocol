@@ -2,7 +2,9 @@
 
 Status: Draft
 
-The goal of design-partner outreach is to test whether the Commerce Context Profile is useful, understandable, and implementable. Do not pitch CCP as a finished standard. Ask for concrete review of one narrow workflow.
+The goal of design-partner outreach is to test whether the current CCP profiles are useful, understandable, and implementable. Do not pitch CCP as a finished standard. Ask for concrete review of one narrow workflow.
+
+Use this document for Commerce Context outreach. Use `docs/launch/care-facility-design-partner-review.md` for the first Care Facility boarding-preparation review.
 
 ## Target Review Question
 
@@ -63,6 +65,7 @@ Follow-up link package:
 - `examples/care-facility-boarding-preparation-response.json`
 - `openapi/care-facility-context.openapi.json`
 - `mcp/care-facility-context.tools.json`
+- `docs/launch/care-facility-design-partner-review.md`
 
 ## Review Session Agenda
 

@@ -284,6 +284,7 @@ Public artifacts:
 - `examples/care-facility-boarding-preparation-request.json`
 - `examples/care-facility-boarding-preparation-response.json`
 - `docs/implementers/care-facility-context-server.md`
+- `docs/launch/care-facility-design-partner-review.md`
 
 Valid denied response examples:
 
@@ -319,4 +320,4 @@ Facility mismatch and expired service-window cases are valid denied response exa
 
 ## Recommended Next Step
 
-Prepare a design-partner review packet for the first boarding-preparation slice that points reviewers to the schema, examples, adapter sketches, implementer guide, and the specific open decisions that still need feedback.
+Run 3-5 design-partner reviews for the first boarding-preparation slice, then triage feedback into accepted first-slice changes, deferred care-facility work, broader design material, new profiles, or non-goals.
