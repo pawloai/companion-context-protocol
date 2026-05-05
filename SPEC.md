@@ -301,11 +301,11 @@ Initial precedence rules:
 3. `agent_summary_only` may be summarized but raw source observations should be omitted.
 4. `commerce_safe` may be returned for commerce purposes only when the requested scope and grant also allow it.
 5. `owner_visible`, `caregiver_visible`, and `vet_shareable` do not imply commerce access.
-6. `commerce_safe` must not be combined with `staff_only` or `restricted_sensitive` on the same returned field.
+6. `commerce_safe` must not be combined with `staff_only`, `restricted_sensitive`, `facility_shareable`, `care_network_visible`, `contact_shareable`, or `action_authorization_visible` on the same returned field. Profile-bound classes are mutually exclusive on a given field; cross-profile reuse requires a separate authorized response in the other profile.
 7. `facility_shareable` may be returned for care-facility purposes only when the requested scope, purpose, grant, facility, and service window also allow it.
-8. `facility_shareable` must not be combined with `staff_only` or `restricted_sensitive` on the same returned field.
+8. `facility_shareable` must not be combined with `staff_only`, `restricted_sensitive`, `commerce_safe`, `care_network_visible`, `contact_shareable`, or `action_authorization_visible` on the same returned field.
 9. `care_network_visible`, `contact_shareable`, and `action_authorization_visible` may be returned for Care Network lookup only when the requested actor, scope, purpose, grant, and freshness checks allow that field.
-10. `care_network_visible`, `contact_shareable`, and `action_authorization_visible` must not be combined with `staff_only` or `restricted_sensitive` on the same returned field.
+10. `care_network_visible`, `contact_shareable`, and `action_authorization_visible` must not be combined with `staff_only`, `restricted_sensitive`, `commerce_safe`, or `facility_shareable` on the same returned field.
 11. `contact_shareable` does not imply action authority, and `action_authorization_visible` does not imply access to contact channels.
 
 ## Scope Registry
@@ -352,12 +352,12 @@ Initial commerce purposes:
 - `product_recommendation`
 - `product_filtering`
 
-Initial care-facility purpose:
+Initial care-facility purposes:
 
 - `boarding_preparation`
 - `pickup_verification`
 
-Initial care-network purpose:
+Initial care-network purposes:
 
 - `care_network_lookup`
 
@@ -373,6 +373,8 @@ Initial omission reason codes:
 - `visibility_restricted`
 - `grant_expired`
 - `grant_revoked`
+- `facility_mismatch`
+- `service_window_inactive`
 - `source_stale`
 - `not_available`
 - `summary_only`

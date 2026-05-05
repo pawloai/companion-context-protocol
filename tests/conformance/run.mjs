@@ -323,6 +323,12 @@ const cases = [
     valid: false
   },
   {
+    name: "reject care facility pickup verification partial response with authorized status",
+    schema: "schemas/care-facility-pickup-verification-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-pickup-verification-partial-with-authorized-status.json",
+    valid: false
+  },
+  {
     name: "care network lookup request example",
     schema: "schemas/care-network-lookup-request.schema.json",
     data: "examples/care-network-lookup-request.json",
@@ -380,6 +386,12 @@ const cases = [
     name: "reject care network lookup unrelated contact list",
     schema: "schemas/care-network-lookup-response.schema.json",
     data: "tests/conformance/fixtures/invalid/care-network-lookup-unrelated-contact-list.json",
+    valid: false
+  },
+  {
+    name: "reject care network lookup cross-profile visibility",
+    schema: "schemas/care-network-lookup-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-network-lookup-cross-profile-visibility.json",
     valid: false
   }
 ];
@@ -531,6 +543,7 @@ console.log("ok - request/response round trip consistency");
 const careFacilityRequest = readJson("examples/care-facility-boarding-preparation-request.json");
 const careFacilityGrant = readJson("examples/permission-grant-care-facility-boarding-preparation.json");
 const grantRequestChecks = [
+  ["grant_id", careFacilityGrant.grant_id, careFacilityRequest.grant_id],
   ["subject_pet_id", careFacilityGrant.subject_pet_id, careFacilityRequest.pet_id],
   ["grantee_actor_id", careFacilityGrant.grantee_actor_id, careFacilityRequest.requester_actor_id],
   ["facility_id", careFacilityGrant.facility_id, careFacilityRequest.facility_id],

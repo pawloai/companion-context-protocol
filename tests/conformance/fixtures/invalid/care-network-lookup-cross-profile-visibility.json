@@ -1,0 +1,59 @@
+{
+  "request_id": "req-care-network-lookup-cross-profile-visibility",
+  "status": "ok",
+  "authorization_decision": {
+    "decision": "allowed",
+    "evaluated_at": "2026-05-10T15:05:00Z",
+    "requester_actor_id": "actor-sitter-001",
+    "pet_id": "pet-001",
+    "purpose": "care_network_lookup",
+    "grant_id": "grant-care-network-lookup-001",
+    "applied_scopes": [
+      "pet.care_network.actor_refs.read"
+    ],
+    "denied_scopes": [],
+    "reasons": [
+      "active grant permits care-network lookup for this actor"
+    ]
+  },
+  "care_network_context": {
+    "pet_id": "pet-001",
+    "purpose": "care_network_lookup",
+    "subject_actor": {
+      "actor_id": "actor-owner-001",
+      "actor_type": {
+        "value": "owner",
+        "visibility": [
+          "care_network_visible",
+          "commerce_safe"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor-owner-001",
+          "recorded_at": "2026-04-20T10:00:00Z"
+        }
+      },
+      "metadata": {
+        "visibility": [
+          "care_network_visible"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor-owner-001",
+          "recorded_at": "2026-04-20T10:00:00Z"
+        }
+      }
+    },
+    "metadata": {
+      "visibility": [
+        "care_network_visible"
+      ],
+      "provenance": {
+        "source_type": "owner_entered",
+        "source_actor_id": "actor-owner-001",
+        "recorded_at": "2026-04-20T10:00:00Z"
+      }
+    }
+  },
+  "omissions": []
+}

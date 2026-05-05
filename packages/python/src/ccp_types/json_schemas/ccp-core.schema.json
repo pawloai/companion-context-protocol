@@ -321,6 +321,9 @@
         },
         {
           "properties": {
+            "value": {
+              "$ref": "#/$defs/SensitiveKeywordPattern"
+            },
             "visibility": {
               "$ref": "#/$defs/FacilityVisibilitySet"
             }
