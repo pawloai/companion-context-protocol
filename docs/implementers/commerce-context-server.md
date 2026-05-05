@@ -156,7 +156,7 @@ Common omission reasons:
 
 Omissions belong in the response envelope. Nested context objects should not carry their own `omissions` array.
 
-Omission details should be useful but not revealing. Do not disclose restricted source content in omission text. The Commerce Context response schema does not apply the `SensitiveKeywordPattern` overlay to `reasons` or omission `detail` strings, because legitimate Commerce Context omission text references excluded categories by name (for example, "Staff-only notes are not commerce-safe."). This is a known schema-enforcement gap: the implementer is the load-bearing control. A category label that explains *why* a field was withheld is fine; an actual record value smuggled alongside the label is not. Concretely:
+Omission details should be useful but not revealing. Do not disclose restricted source content in omission text. The Commerce Context response schema does not apply the `SensitiveKeywordPattern` overlay to `reasons` or omission `detail` strings, because legitimate Commerce Context omission text references excluded categories by name (for example, "Staff-only notes are not commerce-safe."). This is an intentional design asymmetry, not a gap to be closed: applying the overlay uniformly would reject legitimate category-naming text. The implementer is the load-bearing control. A category label that explains *why* a field was withheld is fine; an actual record value smuggled alongside the label is not. Concretely:
 
 - Acceptable: `"Staff-only notes are not commerce-safe."`
 - Acceptable: `"Wellness timelines are outside the Commerce Context Profile."`
