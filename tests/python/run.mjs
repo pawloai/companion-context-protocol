@@ -28,7 +28,9 @@ from pathlib import Path
 import ccp_types.schemas as schema_module
 from ccp_types import CCP_VERSION, load_schema, load_schemas, schema_path, schema_paths
 
-expected_names = set(json.loads(os.environ["CCP_EXPECTED_SCHEMA_NAMES"]))
+expected_names_raw = os.environ.get("CCP_EXPECTED_SCHEMA_NAMES")
+assert expected_names_raw, "CCP_EXPECTED_SCHEMA_NAMES env var must be set by tests/python/run.mjs"
+expected_names = set(json.loads(expected_names_raw))
 
 assert CCP_VERSION == "0.1.0-draft"
 paths = schema_paths()

@@ -11,8 +11,9 @@ export const schemaFilenames = [
   "permission-grant.schema.json"
 ];
 
-// The "core" alias mirrors `SchemaName` in
-// packages/python/src/ccp_types/schemas.py — keep these in sync.
+// The "core" alias must match the "core" key in `_SCHEMA_FILENAMES` /
+// `SchemaName` in packages/python/src/ccp_types/schemas.py. Every other
+// schema key is just the filename with `.schema.json` stripped.
 export function pythonSchemaKey(filename) {
   if (filename === "ccp-core.schema.json") return "core";
   return filename.replace(/\.schema\.json$/, "");
