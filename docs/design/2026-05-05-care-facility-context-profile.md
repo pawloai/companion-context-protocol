@@ -6,6 +6,8 @@ Status: Design draft, non-normative
 
 Related profile: Commerce Context Profile
 
+Related first-slice proposal: `docs/design/2026-05-05-care-facility-first-schema-slice.md`
+
 ## Design Status
 
 This document scopes a possible future CCP profile. It does not add normative scopes, purposes, visibility classes, schemas, examples, adapters, or conformance requirements.
@@ -437,6 +439,8 @@ Include only when purpose, scope, grant, visibility, and provenance all allow it
 
 ### Boarding preparation partial response
 
+This broader profile example includes medication administration to show the long-term boarding use case. The current first-schema-slice proposal defers medication administration and starts with care instructions, feeding instructions, vaccination status, pickup authorization, and emergency contacts.
+
 1. Owner grants `pet.facility_booking_context.read`, `pet.feeding_instructions.read`, `pet.medications.administration.read`, `pet.vaccinations.status.read`, and `pet.pickup_authorization.read` to a boarding facility for a stay window.
 2. Facility requests `purpose: boarding_preparation`.
 3. Server evaluates facility, grant, pet, purpose, scopes, service window, freshness, visibility, and provenance.
@@ -481,6 +485,8 @@ Defer from the first schema slice unless design partners identify it as a blocke
 - Full sitter or in-home care workflows.
 
 Medication is operationally important, but it raises stronger safety and liability questions. It should be designed carefully rather than squeezed into the first pass.
+
+The current first-slice proposal is tracked separately in `docs/design/2026-05-05-care-facility-first-schema-slice.md`.
 
 ## Conformance Expectations
 

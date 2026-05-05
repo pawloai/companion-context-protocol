@@ -84,6 +84,7 @@ companion-context-protocol/
 - [Draft Python package](packages/python)
 - [Open-source adoption roadmap](docs/design/2026-05-04-ccp-open-source-adoption-roadmap.md)
 - [Care Facility Context Profile design draft](docs/design/2026-05-05-care-facility-context-profile.md)
+- [Care Facility first schema slice proposal](docs/design/2026-05-05-care-facility-first-schema-slice.md)
 
 ## Getting Started
 
