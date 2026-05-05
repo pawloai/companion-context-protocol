@@ -75,6 +75,11 @@ companion-context-protocol/
 - [Commerce context request example](examples/commerce-context-request.json)
 - [Commerce context partial response example](examples/commerce-context-response.json)
 - [Commerce context denied response example](examples/commerce-context-denied-response.json)
+- [Care Facility permission grant example](examples/permission-grant-care-facility-boarding-preparation.json)
+- [Care Facility context request example](examples/care-facility-boarding-preparation-request.json)
+- [Care Facility context partial response example](examples/care-facility-boarding-preparation-response.json)
+- [Care Facility facility-mismatch denied response example](examples/care-facility-facility-mismatch-denied-response.json)
+- [Care Facility expired service-window denied response example](examples/care-facility-expired-service-window-denied-response.json)
 - [Draft changelog](CHANGELOG.md)
 - [Maintainer and contact path](MAINTAINERS.md)
 - [Commerce Context OpenAPI adapter](openapi/commerce-context.openapi.json)
@@ -90,7 +95,6 @@ companion-context-protocol/
 - [Open-source adoption roadmap](docs/design/2026-05-04-ccp-open-source-adoption-roadmap.md)
 - [Care Facility Context Profile design draft](docs/design/2026-05-05-care-facility-context-profile.md)
 - [Care Facility first schema slice proposal](docs/design/2026-05-05-care-facility-first-schema-slice.md)
-- [Care Facility schema-backed draft examples](docs/design/care-facility-draft-examples)
 
 ## Getting Started
 
@@ -98,7 +102,7 @@ Start with the draft specification, then validate the current contract before bu
 
 1. Read [SPEC.md](SPEC.md) for the normative protocol concepts, including grants, scopes, purposes, visibility classes, provenance, authorization decisions, and omissions.
 2. Review the canonical schemas in [schemas/](schemas/). JSON Schema is the source of truth for this draft.
-3. Compare the example flow in [examples/](examples/): permission grant, commerce context request, partial response, and denied response.
+3. Compare the example flows in [examples/](examples/): permission grants, context requests, partial responses, and denied responses.
 4. Run the validation suite from a clean checkout:
 
    ```sh
@@ -123,7 +127,7 @@ npm install
 npm test
 ```
 
-The test suite validates the current positive examples, care-facility draft examples, and core `$defs` fixtures, rejects negative fixtures for duplicate scopes, invalid grant lifecycle state, inconsistent response status, provenance gaps, unsafe commerce context fields, and unsafe care-facility context fields, checks example request/response consistency, verifies OpenAPI external examples, checks MCP tool sketches, scans tracked files for vendor-neutrality regressions, builds/tests the draft TypeScript package, and compiles/tests the draft Python package.
+The test suite validates the current positive examples and core `$defs` fixtures, rejects negative fixtures for duplicate scopes, invalid grant lifecycle state, inconsistent response status, provenance gaps, unsafe commerce context fields, and unsafe care-facility context fields, checks example request/response consistency, verifies OpenAPI external examples, checks MCP tool sketches, scans tracked files for vendor-neutrality regressions, builds/tests the draft TypeScript package, and compiles/tests the draft Python package.
 
 ## Design Principles
 

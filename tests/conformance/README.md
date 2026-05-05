@@ -12,6 +12,7 @@ The current test suite verifies:
 - Purpose-bound requests do not receive unrelated context.
 - Tracked files do not contain vendor-specific protocol or package metadata.
 - Commerce context fields include `commerce_safe` visibility and do not include `staff_only` or `restricted_sensitive`.
+- Care facility context fields include `facility_shareable` visibility and do not include `staff_only` or `restricted_sensitive`.
 - Response `status`, `authorization_decision.decision`, `commerce_context`, and omissions are internally consistent.
 - Grant lifecycle fields are internally consistent.
 - Example request/response pairs preserve request id, requester, pet, purpose, and grant identity.
@@ -42,6 +43,12 @@ Current invalid fixtures:
 - `fixtures/invalid/commerce-field-conflicting-visibility.json`
 - `fixtures/invalid/generated-provenance-missing-derived-from.json`
 - `fixtures/invalid/denied-response-with-context.json`
+- `fixtures/invalid/care-facility-denied-response-with-context.json`
+- `fixtures/invalid/care-facility-field-missing-provenance.json`
+- `fixtures/invalid/care-facility-pickup-authorization-identity-document-leak.json`
+- `fixtures/invalid/care-facility-boarding-response-with-wellness-timeline.json`
+- `fixtures/invalid/care-facility-boarding-response-with-diagnosis-history.json`
+- `fixtures/invalid/care-facility-pickup-authorization-payment-authority-leak.json`
 
 Current valid fixtures:
 
@@ -75,4 +82,10 @@ npx --yes --package ajv-cli@5.0.0 --package ajv-formats@2.1.1 ajv validate \
   -s schemas/commerce-context-response.schema.json \
   -r schemas/ccp-core.schema.json \
   -d examples/commerce-context-denied-response.json
+
+npx --yes --package ajv-cli@5.0.0 --package ajv-formats@2.1.1 ajv validate \
+  --spec=draft2020 --strict=false -c ajv-formats \
+  -s schemas/care-facility-context-response.schema.json \
+  -r schemas/ccp-core.schema.json \
+  -d examples/care-facility-boarding-preparation-response.json
 ```

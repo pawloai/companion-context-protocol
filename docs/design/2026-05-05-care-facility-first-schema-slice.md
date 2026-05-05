@@ -251,7 +251,7 @@ Emergency contacts should be limited to the boarding service window and should n
 
 ## Visibility Approach
 
-The draft examples use `facility_shareable` as the candidate allow-oriented visibility class for returned care-facility fields.
+The public examples use `facility_shareable` as the candidate allow-oriented visibility class for returned care-facility fields.
 
 The schema slice uses `facility_shareable` with explicit precedence rules. It can still be renamed before a stable release if design-partner feedback shows a clearer term.
 
@@ -266,9 +266,9 @@ Existing visibility classes still matter:
 
 For the first slice, the conservative option is to require every returned field in `care_facility_context` to include the profile-specific allow class. `facility_shareable` should not override `restricted_sensitive` or `staff_only`.
 
-## Positive Example To Draft Next
+## Public Positive Examples
 
-Draft one positive partial response:
+The first public positive examples cover one boarding-preparation flow:
 
 1. Owner grants boarding-preparation scopes to a facility for one pet and one stay window.
 2. Facility requests boarding preparation context.
@@ -276,30 +276,31 @@ Draft one positive partial response:
 4. Server omits medication administration because it is outside the first slice.
 5. Server omits full wellness timeline and diagnosis history because they are restricted and purpose-inappropriate.
 
-This example should become the anchor for schema and conformance work.
+This flow is now the anchor for schema and conformance work.
 
-Draft artifacts:
+Public artifacts:
 
-- `docs/design/care-facility-draft-examples/boarding-preparation-permission-grant.json`
-- `docs/design/care-facility-draft-examples/boarding-preparation-request.json`
-- `docs/design/care-facility-draft-examples/boarding-preparation-partial-response.json`
+- `examples/permission-grant-care-facility-boarding-preparation.json`
+- `examples/care-facility-boarding-preparation-request.json`
+- `examples/care-facility-boarding-preparation-response.json`
 
-These examples are intentionally outside `examples/` because they are schema-backed design examples, not final public canonical examples.
+Valid denied response examples:
 
-## Negative Fixtures To Draft Next
+- `examples/care-facility-facility-mismatch-denied-response.json`
+- `examples/care-facility-expired-service-window-denied-response.json`
+
+## Negative Fixtures
 
 Initial negative fixtures:
 
-- Facility mismatch returns denied: `docs/design/care-facility-draft-examples/invalid/facility-mismatch-denied-response.json`
-- Expired service window returns denied: `docs/design/care-facility-draft-examples/invalid/expired-service-window-denied-response.json`
-- Denied response includes non-null `care_facility_context`: `docs/design/care-facility-draft-examples/invalid/denied-response-with-context.json`
-- Returned care-facility field is missing provenance: `docs/design/care-facility-draft-examples/invalid/care-field-missing-provenance.json`
-- Returned pickup authorization includes identity document data: `docs/design/care-facility-draft-examples/invalid/pickup-authorization-identity-document-leak.json`
-- Boarding preparation response includes full wellness timeline: `docs/design/care-facility-draft-examples/invalid/boarding-response-with-wellness-timeline.json`
-- Boarding preparation response includes diagnosis history: `docs/design/care-facility-draft-examples/invalid/boarding-response-with-diagnosis-history.json`
-- Pickup authorization implies billing or payment authority: `docs/design/care-facility-draft-examples/invalid/pickup-authorization-payment-authority-leak.json`
+- Denied response includes non-null `care_facility_context`: `tests/conformance/fixtures/invalid/care-facility-denied-response-with-context.json`
+- Returned care-facility field is missing provenance: `tests/conformance/fixtures/invalid/care-facility-field-missing-provenance.json`
+- Returned pickup authorization includes identity document data: `tests/conformance/fixtures/invalid/care-facility-pickup-authorization-identity-document-leak.json`
+- Boarding preparation response includes full wellness timeline: `tests/conformance/fixtures/invalid/care-facility-boarding-response-with-wellness-timeline.json`
+- Boarding preparation response includes diagnosis history: `tests/conformance/fixtures/invalid/care-facility-boarding-response-with-diagnosis-history.json`
+- Pickup authorization implies billing or payment authority: `tests/conformance/fixtures/invalid/care-facility-pickup-authorization-payment-authority-leak.json`
 
-These fixtures are design drafts only. They should move into `tests/conformance/fixtures/invalid/` only after Care Facility schemas exist.
+Facility mismatch and expired service-window cases are valid denied response examples because they preserve the `denied` envelope rules.
 
 ## Open Decisions Before Schema Work
 
@@ -311,4 +312,4 @@ These fixtures are design drafts only. They should move into `tests/conformance/
 
 ## Recommended Next Step
 
-Review the schema-backed examples with design partners, then decide whether to promote them into public canonical examples under `examples/` and add OpenAPI or MCP adapter sketches for the Care Facility Context Profile.
+Add OpenAPI or MCP adapter sketches for the Care Facility Context Profile, using the public examples as external examples.

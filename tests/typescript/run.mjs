@@ -76,15 +76,15 @@ const checks = [
     )
   },
   {
-    name: "care facility request validator accepts draft example",
+    name: "care facility request validator accepts example",
     valid: validators.careFacilityContextRequest(
-      readJson("docs/design/care-facility-draft-examples/boarding-preparation-request.json")
+      readJson("examples/care-facility-boarding-preparation-request.json")
     )
   },
   {
-    name: "care facility response validator accepts draft example",
+    name: "care facility response validator accepts example",
     valid: validators.careFacilityContextResponse(
-      readJson("docs/design/care-facility-draft-examples/boarding-preparation-partial-response.json")
+      readJson("examples/care-facility-boarding-preparation-response.json")
     )
   }
 ];
@@ -138,7 +138,7 @@ const invalidFixtures = [
   {
     name: "care facility response validator rejects identity document leak",
     validator: validators.careFacilityContextResponse,
-    data: "docs/design/care-facility-draft-examples/invalid/pickup-authorization-identity-document-leak.json"
+    data: "tests/conformance/fixtures/invalid/care-facility-pickup-authorization-identity-document-leak.json"
   }
 ];
 

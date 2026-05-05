@@ -1,15 +1,15 @@
-# Care Facility Schema-Backed Draft Examples
+# Care Facility Example Promotion Note
 
-Status: Schema-backed design draft
+Status: Promoted
 
-These JSON examples sketch the first Care Facility Context Profile schema slice. They are validated by the current schema and conformance suite, but they remain in `docs/design/` until the profile is ready to be promoted into public canonical examples under `examples/`.
+The schema-backed boarding-preparation examples were promoted to public canonical examples under `examples/`.
 
-These files use care-facility scopes, `purpose: boarding_preparation`, and the `facility_shareable` visibility class so the schema slice can be reviewed against concrete payloads.
+Current public examples:
 
-Draft boarding preparation flow:
+- `examples/permission-grant-care-facility-boarding-preparation.json`
+- `examples/care-facility-boarding-preparation-request.json`
+- `examples/care-facility-boarding-preparation-response.json`
+- `examples/care-facility-facility-mismatch-denied-response.json`
+- `examples/care-facility-expired-service-window-denied-response.json`
 
-- `boarding-preparation-permission-grant.json`
-- `boarding-preparation-request.json`
-- `boarding-preparation-partial-response.json`
-
-Draft invalid fixtures live in `invalid/`. They are executed by the current conformance suite where they represent schema-level invalid responses. Facility-mismatch and expired-service-window denied responses are valid denied response examples because they preserve the `denied` envelope rules.
+Schema-invalid care-facility fixtures now live under `tests/conformance/fixtures/invalid/`.

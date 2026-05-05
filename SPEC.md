@@ -400,7 +400,7 @@ Example flow:
 6. Returned context fields include `facility_shareable` visibility and provenance.
 7. Restricted or unrelated fields are omitted with machine-readable reasons.
 
-See `docs/design/care-facility-draft-examples/boarding-preparation-permission-grant.json`, `docs/design/care-facility-draft-examples/boarding-preparation-request.json`, and `docs/design/care-facility-draft-examples/boarding-preparation-partial-response.json`.
+See `examples/permission-grant-care-facility-boarding-preparation.json`, `examples/care-facility-boarding-preparation-request.json`, `examples/care-facility-boarding-preparation-response.json`, `examples/care-facility-facility-mismatch-denied-response.json`, and `examples/care-facility-expired-service-window-denied-response.json`.
 
 ## Conformance Requirements
 

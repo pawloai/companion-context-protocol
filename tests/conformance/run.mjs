@@ -88,33 +88,33 @@ const cases = [
     valid: true
   },
   {
-    name: "care facility permission grant draft example",
+    name: "care facility permission grant example",
     schema: "schemas/permission-grant.schema.json",
-    data: "docs/design/care-facility-draft-examples/boarding-preparation-permission-grant.json",
+    data: "examples/permission-grant-care-facility-boarding-preparation.json",
     valid: true
   },
   {
-    name: "care facility context request draft example",
+    name: "care facility context request example",
     schema: "schemas/care-facility-context-request.schema.json",
-    data: "docs/design/care-facility-draft-examples/boarding-preparation-request.json",
+    data: "examples/care-facility-boarding-preparation-request.json",
     valid: true
   },
   {
-    name: "care facility context partial response draft example",
+    name: "care facility context partial response example",
     schema: "schemas/care-facility-context-response.schema.json",
-    data: "docs/design/care-facility-draft-examples/boarding-preparation-partial-response.json",
+    data: "examples/care-facility-boarding-preparation-response.json",
     valid: true
   },
   {
-    name: "care facility mismatch denied response draft fixture",
+    name: "care facility mismatch denied response example",
     schema: "schemas/care-facility-context-response.schema.json",
-    data: "docs/design/care-facility-draft-examples/invalid/facility-mismatch-denied-response.json",
+    data: "examples/care-facility-facility-mismatch-denied-response.json",
     valid: true
   },
   {
-    name: "care facility expired service window denied response draft fixture",
+    name: "care facility expired service window denied response example",
     schema: "schemas/care-facility-context-response.schema.json",
-    data: "docs/design/care-facility-draft-examples/invalid/expired-service-window-denied-response.json",
+    data: "examples/care-facility-expired-service-window-denied-response.json",
     valid: true
   },
   {
@@ -186,37 +186,37 @@ const cases = [
   {
     name: "reject care facility denied response with context",
     schema: "schemas/care-facility-context-response.schema.json",
-    data: "docs/design/care-facility-draft-examples/invalid/denied-response-with-context.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-denied-response-with-context.json",
     valid: false
   },
   {
     name: "reject care facility field missing provenance",
     schema: "schemas/care-facility-context-response.schema.json",
-    data: "docs/design/care-facility-draft-examples/invalid/care-field-missing-provenance.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-field-missing-provenance.json",
     valid: false
   },
   {
     name: "reject care facility pickup identity document leak",
     schema: "schemas/care-facility-context-response.schema.json",
-    data: "docs/design/care-facility-draft-examples/invalid/pickup-authorization-identity-document-leak.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-pickup-authorization-identity-document-leak.json",
     valid: false
   },
   {
     name: "reject care facility wellness timeline leak",
     schema: "schemas/care-facility-context-response.schema.json",
-    data: "docs/design/care-facility-draft-examples/invalid/boarding-response-with-wellness-timeline.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-boarding-response-with-wellness-timeline.json",
     valid: false
   },
   {
     name: "reject care facility diagnosis history leak",
     schema: "schemas/care-facility-context-response.schema.json",
-    data: "docs/design/care-facility-draft-examples/invalid/boarding-response-with-diagnosis-history.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-boarding-response-with-diagnosis-history.json",
     valid: false
   },
   {
     name: "reject care facility pickup payment authority leak",
     schema: "schemas/care-facility-context-response.schema.json",
-    data: "docs/design/care-facility-draft-examples/invalid/pickup-authorization-payment-authority-leak.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-pickup-authorization-payment-authority-leak.json",
     valid: false
   }
 ];
@@ -276,9 +276,9 @@ const roundTripPairs = [
     response: "tests/conformance/fixtures/valid/commerce-context-ok-purchase-history-response.json"
   },
   {
-    name: "care facility boarding preparation draft example",
-    request: "docs/design/care-facility-draft-examples/boarding-preparation-request.json",
-    response: "docs/design/care-facility-draft-examples/boarding-preparation-partial-response.json",
+    name: "care facility boarding preparation example",
+    request: "examples/care-facility-boarding-preparation-request.json",
+    response: "examples/care-facility-boarding-preparation-response.json",
     contextKey: "care_facility_context"
   }
 ];
