@@ -312,4 +312,4 @@ Facility mismatch and expired service-window cases are valid denied response exa
 
 ## Recommended Next Step
 
-Add OpenAPI or MCP adapter sketches for the Care Facility Context Profile, using the public examples as external examples.
+Draft a care-facility implementer guide that explains server-side evaluation for facility identity, service-window boundaries, `facility_shareable` visibility, valid denied responses, and purpose-inappropriate omissions.

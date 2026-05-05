@@ -1,0 +1,321 @@
+{
+  "openapi": "3.1.0",
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "info": {
+    "title": "Companion Context Protocol Care Facility Context HTTP Adapter",
+    "version": "0.1.0-draft",
+    "summary": "Illustrative OpenAPI surface for the CCP Care Facility Context Profile.",
+    "description": "This OpenAPI document is an adapter sketch. JSON Schema remains the canonical CCP contract. HTTP implementations are CCP-compatible only when they preserve the same authorization, minimization, provenance, visibility, service-window, facility-boundary, and omission semantics defined by SPEC.md.",
+    "license": {
+      "name": "Apache-2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "contact": {
+      "name": "Companion Context Protocol maintainers; see MAINTAINERS.md until a public source URL is assigned"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://example.com/ccp/v0",
+      "description": "Illustrative server URL. Implementations should publish their own base URL."
+    }
+  ],
+  "tags": [
+    {
+      "name": "Care Facility Context",
+      "description": "Boarding-preparation companion-animal context requests."
+    },
+    {
+      "name": "Permission Grants",
+      "description": "Optional grant lookup surfaces. Grant management semantics remain implementation-specific in this draft."
+    }
+  ],
+  "paths": {
+    "/care-facility-context": {
+      "post": {
+        "tags": [
+          "Care Facility Context"
+        ],
+        "operationId": "requestCareFacilityContext",
+        "summary": "Request boarding-preparation context for one pet",
+        "description": "Evaluates requester identity, pet identity, facility identity, service window, requested scopes, declared purpose, active grant, visibility classes, and freshness. Protocol-level denials return a CCP response envelope with `status: denied`; malformed requests and transport authentication failures use ordinary HTTP errors.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/CCPVersion"
+          },
+          {
+            "$ref": "#/components/parameters/CCPProfile"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "../schemas/ccp-core.schema.json#/$defs/CareFacilityContextRequest"
+              },
+              "examples": {
+                "care_facility_context_request": {
+                  "summary": "Care facility boarding-preparation request",
+                  "externalValue": "../examples/care-facility-boarding-preparation-request.json"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "CCP authorization result. The body may be `ok`, `partial`, or `denied` according to the canonical response schema.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../schemas/ccp-core.schema.json#/$defs/CareFacilityContextResponse"
+                },
+                "examples": {
+                  "partial_response": {
+                    "summary": "Partial care facility context response",
+                    "externalValue": "../examples/care-facility-boarding-preparation-response.json"
+                  },
+                  "facility_mismatch_denied_response": {
+                    "summary": "Denied response for facility mismatch",
+                    "externalValue": "../examples/care-facility-facility-mismatch-denied-response.json"
+                  },
+                  "expired_service_window_denied_response": {
+                    "summary": "Denied response for expired service window",
+                    "externalValue": "../examples/care-facility-expired-service-window-denied-response.json"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "415": {
+            "$ref": "#/components/responses/UnsupportedMediaType"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          },
+          "502": {
+            "$ref": "#/components/responses/BadGateway"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        },
+        "x-ccp-profile": "care-facility-context",
+        "x-ccp-version": "0.1.0-draft",
+        "x-ccp-canonical-request-schema": "../schemas/care-facility-context-request.schema.json",
+        "x-ccp-canonical-response-schema": "../schemas/care-facility-context-response.schema.json"
+      }
+    },
+    "/permission-grants/{grant_id}": {
+      "get": {
+        "tags": [
+          "Permission Grants"
+        ],
+        "operationId": "getPermissionGrant",
+        "summary": "Fetch a permission grant by id",
+        "description": "Optional HTTP adapter surface for retrieving a grant visible to the authenticated requester. Implementations must not expose grants unless requester authorization allows it. This operation requires `pet.permission_grants.read`.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/CCPVersion"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          },
+          {
+            "name": "grant_id",
+            "in": "path",
+            "required": true,
+            "description": "Permission grant identifier.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Permission grant visible to the requester.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../schemas/ccp-core.schema.json#/$defs/PermissionGrant"
+                },
+                "examples": {
+                  "care_facility_permission_grant": {
+                    "summary": "Care facility permission grant",
+                    "externalValue": "../examples/permission-grant-care-facility-boarding-preparation.json"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          },
+          "502": {
+            "$ref": "#/components/responses/BadGateway"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        },
+        "x-ccp-version": "0.1.0-draft",
+        "x-ccp-required-scope": "pet.permission_grants.read",
+        "x-ccp-canonical-response-schema": "../schemas/permission-grant.schema.json"
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Illustrative transport authentication. CCP does not define an authentication mechanism."
+      }
+    },
+    "parameters": {
+      "CCPVersion": {
+        "name": "CCP-Version",
+        "in": "header",
+        "required": false,
+        "description": "Requested CCP draft version. Implementations should document supported versions.",
+        "schema": {
+          "type": "string",
+          "example": "0.1.0-draft"
+        }
+      },
+      "CCPProfile": {
+        "name": "CCP-Profile",
+        "in": "header",
+        "required": false,
+        "description": "Requested CCP profile.",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "care-facility-context"
+          ]
+        }
+      },
+      "RequestId": {
+        "name": "X-Request-Id",
+        "in": "header",
+        "required": false,
+        "description": "Transport-level request correlation identifier.",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "schemas": {
+      "ProblemDetails": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "type": {
+            "type": "string",
+            "format": "uri-reference"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 599
+          },
+          "detail": {
+            "type": "string"
+          },
+          "instance": {
+            "type": "string",
+            "format": "uri-reference"
+          }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Malformed HTTP request or request body that cannot be parsed or validated."
+      },
+      "Unauthorized": {
+        "description": "Missing or invalid transport authentication."
+      },
+      "Forbidden": {
+        "description": "Transport-authenticated requester is not allowed to use this HTTP surface."
+      },
+      "NotFound": {
+        "description": "Resource not found or not visible to the requester."
+      },
+      "UnsupportedMediaType": {
+        "description": "Request media type is not supported. Use `application/json`."
+      },
+      "RateLimited": {
+        "description": "Request was rate limited by the HTTP implementation."
+      },
+      "InternalServerError": {
+        "description": "Unexpected implementation error. The response is transport-level and does not replace CCP authorization decisions.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
+      },
+      "BadGateway": {
+        "description": "An upstream dependency returned an invalid response before a CCP decision could be produced.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
+      },
+      "ServiceUnavailable": {
+        "description": "The implementation or an upstream dependency is temporarily unavailable before a CCP decision could be produced.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
+      }
+    }
+  }
+}

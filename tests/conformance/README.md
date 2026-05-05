@@ -17,9 +17,9 @@ The current test suite verifies:
 - Grant lifecycle fields are internally consistent.
 - Example request/response pairs preserve request id, requester, pet, purpose, and grant identity.
 - A valid purchase-history summary response is accepted.
-- The OpenAPI Commerce Context adapter parses as a valid API description.
-- The OpenAPI adapter's external examples resolve to existing files.
-- The MCP Commerce Context tool sketches resolve to canonical schema definitions and examples.
+- The OpenAPI adapter sketches parse as valid API descriptions.
+- The OpenAPI adapter external examples resolve to existing files.
+- The MCP tool sketches resolve to canonical schema definitions and examples.
 - The draft TypeScript package builds, ships schema snapshots, and its validators accept and reject the expected fixtures.
 - The draft Python package compiles, ships schema snapshots, and its schema helpers resolve canonical schemas.
 
@@ -30,7 +30,7 @@ npm install
 npm test
 ```
 
-The runner validates vendor neutrality, validates the public examples, confirms that invalid fixtures are rejected, validates `openapi/commerce-context.openapi.json`, checks `mcp/commerce-context.tools.json`, builds/tests `packages/typescript`, and compiles/tests `packages/python`.
+The runner validates vendor neutrality, validates the public examples, confirms that invalid fixtures are rejected, validates the OpenAPI adapter sketches, checks the MCP tool sketches, builds/tests `packages/typescript`, and compiles/tests `packages/python`.
 
 Current invalid fixtures:
 

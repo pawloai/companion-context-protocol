@@ -59,6 +59,10 @@ Follow-up link package:
 - `examples/commerce-context-response.json`
 - `openapi/commerce-context.openapi.json`
 - `mcp/commerce-context.tools.json`
+- `examples/care-facility-boarding-preparation-request.json`
+- `examples/care-facility-boarding-preparation-response.json`
+- `openapi/care-facility-context.openapi.json`
+- `mcp/care-facility-context.tools.json`
 
 ## Review Session Agenda
 

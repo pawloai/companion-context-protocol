@@ -84,6 +84,8 @@ companion-context-protocol/
 - [Maintainer and contact path](MAINTAINERS.md)
 - [Commerce Context OpenAPI adapter](openapi/commerce-context.openapi.json)
 - [Commerce Context MCP tool sketches](mcp/commerce-context.tools.json)
+- [Care Facility Context OpenAPI adapter](openapi/care-facility-context.openapi.json)
+- [Care Facility Context MCP tool sketches](mcp/care-facility-context.tools.json)
 - [Commerce Context server implementer guide](docs/implementers/commerce-context-server.md)
 - [Known compatibility risks](docs/implementers/compatibility-risks.md)
 - [Public launch checklist](docs/launch/public-launch-checklist.md)
@@ -112,7 +114,7 @@ Start with the draft specification, then validate the current contract before bu
 
 If you are implementing a Commerce Context server, use [docs/implementers/commerce-context-server.md](docs/implementers/commerce-context-server.md) as the implementation guide. Validate incoming `CommerceContextRequest` objects, authenticate the requester outside the CCP payload, evaluate grants, scopes, purposes, visibility, freshness, and provenance, then validate outgoing `CommerceContextResponse` objects before returning them.
 
-If you are integrating over HTTP, start with [openapi/commerce-context.openapi.json](openapi/commerce-context.openapi.json). If you are integrating with agents or assistant clients, start with [mcp/commerce-context.tools.json](mcp/commerce-context.tools.json). These are adapter sketches; compatibility is based on preserving the canonical CCP semantics, not on copying a specific transport shape.
+If you are integrating over HTTP, start with [openapi/](openapi/) for Commerce Context and Care Facility Context adapter sketches. If you are integrating with agents or assistant clients, start with [mcp/](mcp/) for the matching tool sketches. Compatibility is based on preserving the canonical CCP semantics, not on copying a specific transport shape.
 
 If you are using helper packages, see [packages/typescript](packages/typescript) for TypeScript types and AJV validator helpers, and [packages/python](packages/python) for Python schema-loading helpers. The canonical schemas still win if package helpers and schemas disagree.
 
@@ -142,7 +144,7 @@ The test suite validates the current positive examples and core `$defs` fixtures
 
 ## Contributing
 
-This project is early. The most useful contributions are concrete reviews of the Commerce Context Profile:
+This project is early. The most useful contributions are concrete reviews of the Commerce Context Profile and the first Care Facility boarding-preparation slice:
 
 - Is the context bundle useful for product filtering or recommendations?
 - Are the scope and purpose boundaries clear?

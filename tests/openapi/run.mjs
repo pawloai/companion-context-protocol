@@ -4,13 +4,26 @@ import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 
-const openApiPath = fileURLToPath(
-  new URL("../../openapi/commerce-context.openapi.json", import.meta.url)
-);
-const openApiDir = path.dirname(openApiPath);
-const openApi = JSON.parse(fs.readFileSync(openApiPath, "utf8"));
+const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
+const openApiDir = path.join(repoRoot, "openapi");
 
 const errors = [];
+const adapterFiles = [
+  {
+    file: "commerce-context.openapi.json",
+    profile: "commerce-context",
+    requestPath: "/commerce-context",
+    requestSchema: "../schemas/commerce-context-request.schema.json",
+    responseSchema: "../schemas/commerce-context-response.schema.json"
+  },
+  {
+    file: "care-facility-context.openapi.json",
+    profile: "care-facility-context",
+    requestPath: "/care-facility-context",
+    requestSchema: "../schemas/care-facility-context-request.schema.json",
+    responseSchema: "../schemas/care-facility-context-response.schema.json"
+  }
+];
 
 const visit = (node, pointer = "$") => {
   if (!node || typeof node !== "object") {
@@ -29,15 +42,38 @@ const visit = (node, pointer = "$") => {
   }
 };
 
-await SwaggerParser.validate(openApiPath);
+for (const adapterFile of adapterFiles) {
+  const openApiPath = path.join(openApiDir, adapterFile.file);
+  const openApi = JSON.parse(fs.readFileSync(openApiPath, "utf8"));
 
-visit(openApi);
+  await SwaggerParser.validate(openApiPath);
 
-if (
-  openApi.paths?.["/permission-grants/{grant_id}"]?.get?.["x-ccp-required-scope"] !==
-  "pet.permission_grants.read"
-) {
-  errors.push("GET /permission-grants/{grant_id} must declare pet.permission_grants.read");
+  visit(openApi, adapterFile.file);
+
+  const requestOperation = openApi.paths?.[adapterFile.requestPath]?.post;
+
+  if (!requestOperation) {
+    errors.push(`${adapterFile.file} must define POST ${adapterFile.requestPath}`);
+  }
+
+  if (requestOperation?.["x-ccp-profile"] !== adapterFile.profile) {
+    errors.push(`${adapterFile.file} POST ${adapterFile.requestPath} must declare ${adapterFile.profile}`);
+  }
+
+  if (requestOperation?.["x-ccp-canonical-request-schema"] !== adapterFile.requestSchema) {
+    errors.push(`${adapterFile.file} POST ${adapterFile.requestPath} has wrong canonical request schema`);
+  }
+
+  if (requestOperation?.["x-ccp-canonical-response-schema"] !== adapterFile.responseSchema) {
+    errors.push(`${adapterFile.file} POST ${adapterFile.requestPath} has wrong canonical response schema`);
+  }
+
+  if (
+    openApi.paths?.["/permission-grants/{grant_id}"]?.get?.["x-ccp-required-scope"] !==
+    "pet.permission_grants.read"
+  ) {
+    errors.push(`${adapterFile.file} GET /permission-grants/{grant_id} must declare pet.permission_grants.read`);
+  }
 }
 
 if (errors.length > 0) {
@@ -47,4 +83,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log("ok - OpenAPI commerce context adapter");
+console.log("ok - OpenAPI adapter sketches");

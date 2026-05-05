@@ -402,6 +402,10 @@ Example flow:
 
 See `examples/permission-grant-care-facility-boarding-preparation.json`, `examples/care-facility-boarding-preparation-request.json`, `examples/care-facility-boarding-preparation-response.json`, `examples/care-facility-facility-mismatch-denied-response.json`, and `examples/care-facility-expired-service-window-denied-response.json`.
 
+The illustrative HTTP adapter for this flow is `openapi/care-facility-context.openapi.json`.
+
+The illustrative MCP adapter for this flow is `mcp/care-facility-context.tools.json`.
+
 ## Conformance Requirements
 
 A CCP Commerce Context Profile implementation should:

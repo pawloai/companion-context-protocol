@@ -6,7 +6,7 @@ Working name: Companion Context Protocol
 
 Acronym: CCP
 
-Status note: This roadmap has partially been implemented. The repository now includes the draft spec, canonical schemas, vendor-neutral Commerce Context examples, conformance runner, positive and negative fixtures, public-facing README/security/conduct/governance docs, an OpenAPI Commerce Context adapter, draft MCP Commerce Context tool sketches, a Commerce Context server implementer guide, a draft TypeScript helper package with exported types and AJV validators, a draft Python helper package with schema-loading helpers, launch materials, and the first `v0.1.0-draft` tag. Generated model work and design-partner feedback remain future work.
+Status note: This roadmap has partially been implemented. The repository now includes the draft spec, canonical schemas, vendor-neutral Commerce Context examples, a first Care Facility boarding-preparation schema slice with public examples, conformance runner, positive and negative fixtures, public-facing README/security/conduct/governance docs, OpenAPI adapter sketches for Commerce and Care Facility Context, draft MCP tool sketches for Commerce and Care Facility Context, a Commerce Context server implementer guide, a draft TypeScript helper package with exported types and AJV validators, a draft Python helper package with schema-loading helpers, launch materials, and the first `v0.1.0-draft` tag. Generated model work and design-partner feedback remain future work.
 
 ## Goal
 
@@ -250,10 +250,11 @@ Completed surfaces:
 - Draft normative spec.
 - Canonical JSON Schemas.
 - Positive Commerce Context examples.
+- First Care Facility boarding-preparation schema slice and public examples.
 - Negative conformance fixtures.
 - Conformance runner wired into `npm test`.
-- OpenAPI Commerce Context adapter.
-- MCP Commerce Context tool sketches.
+- OpenAPI Commerce and Care Facility Context adapters.
+- MCP Commerce and Care Facility Context tool sketches.
 - Commerce Context server implementer guide.
 - Draft TypeScript helper package with exported types and AJV validators.
 - Draft Python helper package with schema-loading helpers.

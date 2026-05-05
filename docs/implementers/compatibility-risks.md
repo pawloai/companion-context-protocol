@@ -74,7 +74,7 @@ Adapter sketches are illustrative. They preserve canonical CCP semantics but the
 
 ### OpenAPI
 
-- `POST /commerce-context` and the optional `GET /permission-grants/{grant_id}` are recommended path conventions, not required. Implementers may host CCP behind any HTTP path.
+- `POST /commerce-context`, `POST /care-facility-context`, and the optional `GET /permission-grants/{grant_id}` are recommended path conventions, not required. Implementers may host CCP behind any HTTP path.
 - `x-ccp-*` extensions (`x-ccp-version`, `x-ccp-profile`, `x-ccp-required-scope`, `x-ccp-canonical-request-schema`, `x-ccp-canonical-response-schema`) are illustrative metadata. They are not required for compatibility.
 - `CCP-Version`, `CCP-Profile`, and `X-Request-Id` headers are optional today. They may become required in a stable line if version negotiation matures.
 - The `bearerAuth` scheme is illustrative. CCP does not define authentication.
@@ -82,7 +82,7 @@ Adapter sketches are illustrative. They preserve canonical CCP semantics but the
 
 ### MCP
 
-- Tool names `ccp_commerce_context_request` and `ccp_permission_grant_get` are recommended snake_case names. The conformance runner enforces both today.
+- Tool names `ccp_commerce_context_request`, `ccp_care_facility_context_request`, and `ccp_permission_grant_get` are recommended snake_case names. The conformance runner enforces the relevant request tool plus grant lookup tool in each adapter sketch today.
 - Tool input/output schemas reference canonical `$defs` via `../schemas/ccp-core.schema.json#/$defs/...`. The path prefix is enforced today.
 - `annotations.readOnlyHint`, `idempotentHint`, and similar are illustrative MCP metadata, not normative.
 

@@ -12,7 +12,7 @@ Related first-slice proposal: `docs/design/2026-05-05-care-facility-first-schema
 
 This document scopes the broader Care Facility Context Profile. A narrower boarding-preparation schema slice now exists, but the broader profile areas in this document remain design material.
 
-Only the first boarding-preparation slice has schema and conformance coverage. Medication administration, writeback, emergency override access, payment authority, and in-home care still require separate schema proposals, examples, conformance fixtures, and adapter sketches before implementers should depend on them.
+Only the first boarding-preparation slice has schema, conformance, public examples, and adapter sketch coverage. Medication administration, writeback, emergency override access, payment authority, and in-home care still require separate schema proposals, examples, conformance fixtures, and adapter sketches before implementers should depend on them.
 
 ## Purpose
 
