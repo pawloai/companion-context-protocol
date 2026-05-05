@@ -93,6 +93,7 @@ companion-context-protocol/
 - [Announcement copy](docs/launch/announcement.md)
 - [Design-partner outreach notes](docs/launch/design-partner-outreach.md)
 - [Care Facility design-partner review packet](docs/launch/care-facility-design-partner-review.md)
+- [Care Facility feedback triage log](docs/launch/care-facility-feedback-triage.md)
 - [Initial issue labels](docs/launch/issue-labels.md)
 - [Draft TypeScript package](packages/typescript)
 - [Draft Python package](packages/python)

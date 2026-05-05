@@ -241,6 +241,7 @@ Design-partner review is successful when:
 
 After 3-5 reviews:
 
+- Record synthetic review summaries and decision candidates in `docs/launch/care-facility-feedback-triage.md`.
 - Update `SPEC.md` and schemas for accepted first-slice changes.
 - Add or update examples and conformance fixtures for accepted behavior changes.
 - Record deferred items in the care-facility design notes or roadmap.
