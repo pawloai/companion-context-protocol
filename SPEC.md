@@ -55,7 +55,7 @@ MCP is one adapter for CCP. It is not the protocol itself.
 
 ## Terminology
 
-Actor: A person, organization, system, agent, or service requesting or acting on context.
+Actor: A person, organization, system, agent, or service requesting or acting on context. This draft uses a broad actor term, but implementers should distinguish owner, caregiver, facility, merchant, agent client, and service-integration trust postures in policy decisions.
 
 Pet: The companion animal that context describes.
 
@@ -65,7 +65,7 @@ Caregiver: An actor delegated by an owner or facility to perform specific care-r
 
 Requester: The actor or client asking for context.
 
-Grant: A permission record authorizing a requester to access specific context for a specific pet, purpose, and time window.
+Grant: A permission record authorizing a requester to access specific context for a specific pet, purpose, and time window. Grant issuance, storage, presentation, signature format, revocation propagation, and proof-of-possession are not standardized in this draft.
 
 Purpose: The task or reason for the request, such as `product_recommendation`.
 
@@ -77,9 +77,9 @@ Omission: A machine-readable explanation that context exists or was requested bu
 
 ## Current Profiles
 
-The first profile is the Commerce Context Profile.
+The first schema-backed profile is the Commerce Context Profile.
 
-Profile order is a draft artifact, not a claim about market priority or ecosystem consensus. Commerce Context was selected as a narrow, lower-risk schema slice, but design-partner feedback may show that a facility-truth or care-facility workflow should be validated first.
+Profile order is a draft artifact, not a claim about market priority or ecosystem consensus. Commerce Context was selected as a narrow, lower-risk schema slice, but design-partner feedback may show that a Facility Truth or care-facility workflow should be validated first.
 
 This profile lets authorized clients request commerce-safe pet context for product recommendations and filtering while excluding unrelated sensitive context.
 
@@ -195,6 +195,8 @@ Expected fields include:
 ### `PermissionGrant`
 
 A scoped authorization record.
+
+`PermissionGrant` defines the interoperable authorization record shape, not the full grant transport system. Possession of a `grant_id` is not sufficient authority. A compatible server must verify current grant state against trusted authorization data and fail closed when issuer authority, requester identity, subject pet, purpose, scopes, facility boundary, service window, expiration, or revocation state cannot be verified.
 
 Expected fields include:
 

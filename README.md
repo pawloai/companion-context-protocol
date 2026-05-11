@@ -2,7 +2,7 @@
 
 Companion Context Protocol (CCP) is a draft open specification for permissioned companion-animal context exchange.
 
-CCP defines how pet care, commerce, and agent systems can request only the pet context needed for a specific task, with consent, purpose limits, provenance, visibility classes, and machine-readable omissions.
+CCP defines how pet care, commerce, and agent systems can request only the companion context needed for a specific task, with consent, purpose limits, provenance, visibility classes, freshness, and machine-readable omissions.
 
 ## Status
 
@@ -12,11 +12,11 @@ This repository is ready to ask design partners for review, but it should not ye
 
 CCP is currently a protocol proposal with canonical schemas and validation tests. It is not yet endorsed by practice-management vendors, care-facility software vendors, veterinary bodies, insurers, registries, shelters, or other pet-data holders. A compatible implementation claim means "matches this draft and test suite," not "participates in an adopted industry standard."
 
-The first profile is the Commerce Context Profile, focused on product recommendations and filtering without exposing unrelated staff notes, wellness timelines, diagnosis or treatment history, billing data, household data, or sensitive facility operations data.
+The first schema-backed profile is the Commerce Context Profile, focused on product recommendations and filtering without exposing unrelated staff notes, wellness timelines, diagnosis or treatment history, billing data, household data, or sensitive facility operations data. That schema order is not a claim that Commerce is the best public adoption wedge.
 
 The draft also includes Care Facility Context schema slices for boarding preparation and pickup verification, plus a first Care Network lookup slice for one pet and one subject actor. They are intentionally narrower than the full care-facility and care-network designs and exclude medication administration, writeback, payment authority, emergency override access, full wellness timelines, diagnosis history, treatment history, billing records, household exports, and identity document copies.
 
-Ecosystem feedback has also identified a Facility Truth Profile as an important design candidate for agent-facing accuracy: facility hours, services, eligibility constraints, certifications, service areas, and freshness/provenance for public operational facts. That profile is design material only until it has schemas, examples, adapters, tests, and design-partner review.
+Current feedback suggests the clearest public design-partner review path may be Facility Truth: provenance-backed facility hours, services, eligibility constraints, certifications, service areas, booking links, and freshness for public operational facts that agents often answer incorrectly. Facility Truth is still design material only until it has schemas, examples, adapters, tests, and design-partner review.
 
 ## What CCP Defines
 
@@ -116,6 +116,7 @@ companion-context-protocol/
 - [Commerce Context server implementer guide](docs/implementers/commerce-context-server.md)
 - [Care Facility Context server implementer guide](docs/implementers/care-facility-context-server.md)
 - [Known compatibility risks](docs/implementers/compatibility-risks.md)
+- [Draft threat model](THREAT_MODEL.md)
 - [Public launch checklist](docs/launch/public-launch-checklist.md)
 - [Announcement copy](docs/launch/announcement.md)
 - [Design-partner outreach notes](docs/launch/design-partner-outreach.md)
@@ -154,11 +155,11 @@ If you are implementing the first Care Network lookup slice, validate incoming `
 
 If you are integrating over HTTP, start with [openapi/](openapi/) for Commerce Context, Care Facility Context, Pickup Verification, and Care Network Lookup adapter sketches. If you are integrating with agents or assistant clients, start with [mcp/](mcp/) for the matching tool sketches. Compatibility is based on preserving the canonical CCP semantics, not on copying a specific transport shape.
 
-If you are using helper packages, see [packages/typescript](packages/typescript) for TypeScript types and AJV validator helpers, and [packages/python](packages/python) for Python schema-loading helpers. The canonical schemas still win if package helpers and schemas disagree.
+If you are using helper packages, see [packages/typescript](packages/typescript) for draft TypeScript types and Node-focused AJV validator helpers, and [packages/python](packages/python) for Python schema-loading helpers. These are convenience packages, not production SDKs or normative artifacts. The canonical schemas still win if package helpers and schemas disagree.
 
 Before depending on this draft, read [docs/implementers/compatibility-risks.md](docs/implementers/compatibility-risks.md). CCP is pre-1.0, and draft versions may change incompatibly as the profile and conformance tests are refined.
 
-If you are evaluating whether CCP is credible as a protocol, also read [docs/design/prior-art-and-ecosystem-map.md](docs/design/prior-art-and-ecosystem-map.md). It records adjacent standards, ecosystem holders, and review gaps that must be addressed before CCP should be positioned as more than a draft proposal.
+If you are evaluating whether CCP is credible as a protocol, also read [docs/design/prior-art-and-ecosystem-map.md](docs/design/prior-art-and-ecosystem-map.md) and [THREAT_MODEL.md](THREAT_MODEL.md). They record adjacent standards, ecosystem holders, review gaps, and privacy/security assumptions that must be addressed before CCP should be positioned as more than a draft proposal.
 
 ## Validate The Draft
 
@@ -184,11 +185,11 @@ The test suite validates the current positive examples and core `$defs` fixtures
 
 ## Contributing
 
-This project is early. The most useful contributions are concrete reviews of the Commerce Context Profile, the first Care Facility boarding-preparation slice, pickup verification, and the first Care Network lookup slice:
+This project is early. The most useful contributions are concrete reviews of the Facility Truth design candidate, Commerce Context Profile, the first Care Facility boarding-preparation slice, pickup verification, and the first Care Network lookup slice:
 
+- Would a Facility Truth Profile for hours, services, certifications, accepted pets, booking links, freshness, and provenance better match your immediate interoperability problem?
 - Is the context bundle useful for product filtering or recommendations?
 - Is the boarding-preparation bundle useful for facility intake and stay planning?
-- Would a Facility Truth Profile for hours, services, certifications, accepted pets, and freshness better match your immediate interoperability problem?
 - Is the Care Network lookup useful without becoming a broad household or contact export?
 - Are the scope and purpose boundaries clear?
 - Are facility identity and service-window boundaries clear enough for implementation?

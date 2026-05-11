@@ -54,6 +54,8 @@ The current invariant set (`ok` / `partial` / `denied` consistency, denied requi
 
 `status: active` is incompatible with `revoked_at`; expired grants must carry `expires_at`; revoked grants must carry `revoked_at`. These constraints will not be loosened. Future drafts may add states (e.g., `pending`, `suspended`) for multi-party consent.
 
+The current `PermissionGrant` schema defines record shape only. It does not standardize issuance, storage, token format, signing, proof-of-possession, introspection, or revocation propagation. Implementers should treat `grant_id` as a lookup key into trusted authorization state, not as a bearer secret, and should expect this area to change before `1.0`.
+
 ### Commerce-safe rule
 
 Every field in a returned `commerce_context` must include `commerce_safe` and must not include `staff_only` or `restricted_sensitive`. This is load-bearing for the Commerce Context Profile and will not be relaxed. Other profiles will define their own equivalent rules.
@@ -75,6 +77,12 @@ The boarding-preparation Care Facility Context slice's exclusions (medication ad
 The Care Facility Pickup Verification slice's exclusions (feeding instructions, medication administration, billing, payment authority, household context, identity-document copies and numbers, broader care history, wellness timeline, diagnosis history, treatment history, vaccination records unless separately requested, unrelated emergency contacts, unrelated Care Network contacts, staff-only notes, internal facility notes from other providers, raw behavioral incident records, and free-text denial details that reveal restricted source content) are intentional. The slice answers only whether release to the requested actor is allowed for the requested pickup context.
 
 The Care Network Lookup slice's exclusions (household data, staff-only records, sensitive provenance references, unrelated contacts outside the requested subject actor, billing, payment authority, medical or treatment context, and free-text denial details that reveal restricted source content) are intentional. The slice answers only whether the requested subject actor's relationship, contact channels, action authorizations, or revocation status are visible for the declared purpose.
+
+Facility Truth remains a design candidate, not a schema-backed profile. If it becomes the first public review wedge, it should still land as a small separate profile with its own schemas, examples, omissions, freshness rules, adapters, and tests rather than widening existing pet-specific profiles.
+
+### Cross-profile inference
+
+The current conformance rules prevent many single-response leaks, but they do not fully prevent inference across multiple authorized profile calls. A requester with access to more than one profile may compare omissions, partial responses, timestamps, or summaries to infer restricted context. Implementers should treat combined profile access as a policy decision and apply rate limits, logging, minimization, and abuse review outside schema validation. Future drafts may add stricter cross-profile guidance.
 
 ## Adapter Compatibility
 
@@ -114,7 +122,7 @@ The packages in `packages/typescript/` and `packages/python/` are draft helpers,
 
 - The schema `$id` `https://companioncontext.org/schemas/ccp-core.schema.json` is reserved but does not currently serve the schema document. Do not fetch schemas by `$id`. Vendor the schemas instead (the TypeScript and Python packages do this).
 - The example server URL (`https://example.com/ccp/v0`) and any `example://` provenance URIs in fixtures are illustrative only.
-- The public source repository URL is not yet published (see `MAINTAINERS.md`). Do not embed a repository URL in package metadata until that URL resolves for unauthenticated users.
+- The public source repository is the repository containing this file. Do not move package metadata, release tags, or public references to personal forks.
 
 ## Security And Privacy Surfaces
 
@@ -122,6 +130,7 @@ These are not "compatibility risks" in the schema sense, but they affect what an
 
 - The "no real data" rule applies to every example, fixture, issue, PR, screenshot, and design note. Future drafts will not relax it.
 - `authorization_decision.reasons` and omission `detail` strings must not contain restricted source content. This is load-bearing. The pickup-verification and care-network-lookup response schemas enforce this with a `SensitiveKeywordPattern` overlay; the commerce-context and care-facility-boarding-preparation response schemas leave the constraint to the implementer because their omission detail strings legitimately reference excluded categories by name (for example, "Diagnosis history is not needed for boarding preparation"). Implementers of either older slice MUST still avoid embedding restricted source content in those strings even though the schema does not currently reject it.
+- See `THREAT_MODEL.md` for current assumptions about actor trust, grant transport gaps, and cross-profile inference risks.
 - Security-relevant clarifications may be made without preserving compatibility with earlier draft examples (`SECURITY.md`).
 
 ## How To Insulate An Implementation

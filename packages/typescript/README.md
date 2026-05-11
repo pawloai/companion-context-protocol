@@ -6,6 +6,8 @@ Status: Draft helper package, pre-1.0
 
 This package is intentionally small. It provides hand-written TypeScript types for the current schema-backed CCP slices plus AJV validator helpers that load packaged copies of the canonical JSON Schemas.
 
+The validator helpers use Node file-system access to load packaged schemas. Treat this as a Node-focused implementer helper, not a browser-ready SDK.
+
 ## Current Exports
 
 - `CommerceContextRequest`

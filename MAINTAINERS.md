@@ -37,4 +37,6 @@ Until a dedicated maintainer email is published, use GitHub issues for non-sensi
 
 ## Public Source URL
 
-The public source repository URL is not assigned yet. Do not publish package or adapter metadata with a repository URL until that URL resolves for unauthenticated users.
+The public source repository is the repository containing this file.
+
+Do not move public references, package metadata, release tags, or PR defaults to personal forks.
