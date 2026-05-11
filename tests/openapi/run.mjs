@@ -38,6 +38,14 @@ const adapterFiles = [
     requestSchema: "../schemas/care-network-lookup-request.schema.json",
     responseSchema: "../schemas/care-network-lookup-response.schema.json",
     grantLookup: false
+  },
+  {
+    file: "facility-truth.openapi.json",
+    profile: "facility-truth",
+    requestPath: "/facility-truth",
+    requestSchema: "../schemas/facility-truth-request.schema.json",
+    responseSchema: "../schemas/facility-truth-response.schema.json",
+    grantLookup: false
   }
 ];
 

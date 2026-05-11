@@ -35,6 +35,14 @@ const adapterFiles = [
     requestSchema: "../schemas/care-network-lookup-request.schema.json",
     responseSchema: "../schemas/care-network-lookup-response.schema.json",
     grantLookup: false
+  },
+  {
+    path: "mcp/facility-truth.tools.json",
+    profile: "facility-truth",
+    requiredTool: "ccp_facility_truth_request",
+    requestSchema: "../schemas/facility-truth-request.schema.json",
+    responseSchema: "../schemas/facility-truth-response.schema.json",
+    grantLookup: false
   }
 ];
 

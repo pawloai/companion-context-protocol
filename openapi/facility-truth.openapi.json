@@ -1,0 +1,237 @@
+{
+  "openapi": "3.1.0",
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "info": {
+    "title": "Companion Context Protocol Facility Truth HTTP Adapter",
+    "version": "0.1.0-draft",
+    "summary": "Illustrative OpenAPI surface for CCP Facility Truth.",
+    "description": "This OpenAPI document is an adapter sketch. JSON Schema remains the canonical CCP contract. HTTP implementations are CCP-compatible only when they preserve the same authorization, minimization, provenance, visibility, subject-boundary, freshness, and omission semantics defined by SPEC.md. Facility Truth v1 covers public-fact scopes only and does not require a PermissionGrant.",
+    "license": {
+      "name": "Apache-2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "contact": {
+      "name": "Companion Context Protocol maintainers; see MAINTAINERS.md"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://example.com/ccp/v0",
+      "description": "Illustrative server URL. Implementations should publish their own base URL."
+    }
+  ],
+  "tags": [
+    {
+      "name": "Facility Truth",
+      "description": "Purpose-bound lookup for one facility's public, agent-grounding facts."
+    }
+  ],
+  "paths": {
+    "/facility-truth": {
+      "post": {
+        "tags": [
+          "Facility Truth"
+        ],
+        "operationId": "requestFacilityTruth",
+        "summary": "Look up one facility's public-fact truth record",
+        "description": "Evaluates requester identity, facility identity, requested scopes, declared purpose, visibility classes, and freshness. Public-fact scopes do not require a PermissionGrant in v1. Protocol-level denials return a CCP response envelope with `status: denied`; malformed requests and transport authentication failures use ordinary HTTP errors.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/CCPVersion"
+          },
+          {
+            "$ref": "#/components/parameters/CCPProfile"
+          },
+          {
+            "$ref": "#/components/parameters/RequestId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "../schemas/ccp-core.schema.json#/$defs/FacilityTruthRequest"
+              },
+              "examples": {
+                "facility_truth_request": {
+                  "summary": "Facility Truth lookup request",
+                  "externalValue": "../examples/facility-truth-request.json"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "CCP authorization result. The body may be `ok`, `partial`, or `denied` according to the canonical Facility Truth response schema.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../schemas/ccp-core.schema.json#/$defs/FacilityTruthResponse"
+                },
+                "examples": {
+                  "ok_response": {
+                    "summary": "Facility Truth allowed response",
+                    "externalValue": "../examples/facility-truth-response.json"
+                  },
+                  "partial_response": {
+                    "summary": "Partial response with one scope unverified",
+                    "externalValue": "../examples/facility-truth-partial-response.json"
+                  },
+                  "denied_response": {
+                    "summary": "Denied Facility Truth response",
+                    "externalValue": "../examples/facility-truth-denied-response.json"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "415": {
+            "$ref": "#/components/responses/UnsupportedMediaType"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          },
+          "502": {
+            "$ref": "#/components/responses/BadGateway"
+          },
+          "503": {
+            "$ref": "#/components/responses/ServiceUnavailable"
+          }
+        },
+        "x-ccp-profile": "facility-truth",
+        "x-ccp-version": "0.1.0-draft",
+        "x-ccp-canonical-request-schema": "../schemas/facility-truth-request.schema.json",
+        "x-ccp-canonical-response-schema": "../schemas/facility-truth-response.schema.json"
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Illustrative transport authentication. CCP does not define an authentication mechanism."
+      }
+    },
+    "schemas": {
+      "ProblemDetails": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "type": {
+            "type": "string",
+            "format": "uri-reference"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 599
+          },
+          "detail": {
+            "type": "string"
+          },
+          "instance": {
+            "type": "string",
+            "format": "uri-reference"
+          }
+        }
+      }
+    },
+    "parameters": {
+      "CCPVersion": {
+        "name": "CCP-Version",
+        "in": "header",
+        "required": false,
+        "description": "Requested CCP draft version. Implementations should document supported versions.",
+        "schema": {
+          "type": "string",
+          "example": "0.1.0-draft"
+        }
+      },
+      "CCPProfile": {
+        "name": "CCP-Profile",
+        "in": "header",
+        "required": false,
+        "description": "Requested CCP profile.",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "facility-truth"
+          ]
+        }
+      },
+      "RequestId": {
+        "name": "X-Request-Id",
+        "in": "header",
+        "required": false,
+        "description": "Transport-level request correlation identifier.",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Malformed HTTP request or request body that cannot be parsed or validated."
+      },
+      "Unauthorized": {
+        "description": "Missing or invalid transport authentication."
+      },
+      "UnsupportedMediaType": {
+        "description": "Request media type is not supported. Use `application/json`."
+      },
+      "RateLimited": {
+        "description": "Request was rate limited by the HTTP implementation."
+      },
+      "InternalServerError": {
+        "description": "Unexpected implementation error. The response is transport-level and does not replace CCP authorization decisions.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
+      },
+      "BadGateway": {
+        "description": "An upstream dependency returned an invalid response before a CCP decision could be produced.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
+      },
+      "ServiceUnavailable": {
+        "description": "The implementation or an upstream dependency is temporarily unavailable before a CCP decision could be produced.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/ProblemDetails"
+            }
+          }
+        }
+      }
+    }
+  }
+}

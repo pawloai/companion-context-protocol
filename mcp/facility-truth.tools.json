@@ -1,0 +1,35 @@
+{
+  "adapter": "mcp",
+  "status": "draft",
+  "ccp_version": "0.1.0-draft",
+  "profile": "facility-truth",
+  "description": "Illustrative MCP tool sketch for CCP Facility Truth. JSON Schema remains the canonical CCP contract. Facility Truth v1 covers public-fact scopes only and does not require a PermissionGrant.",
+  "canonical_contract": "../schemas/ccp-core.schema.json",
+  "tools": [
+    {
+      "name": "ccp_facility_truth_request",
+      "title": "Request CCP Facility Truth",
+      "description": "Look up one facility's public-fact truth record (profile, hours, services, contact methods, service area, acceptance criteria, booking links, policy summaries). The server evaluates requester identity, facility identity, scopes, purpose, visibility classes, and freshness. Public-fact scopes do not require a PermissionGrant in v1. Protocol-level denials return a CCP response envelope with status `denied`.",
+      "inputSchema": {
+        "$ref": "../schemas/ccp-core.schema.json#/$defs/FacilityTruthRequest"
+      },
+      "outputSchema": {
+        "$ref": "../schemas/ccp-core.schema.json#/$defs/FacilityTruthResponse"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      },
+      "x-ccp-canonical-request-schema": "../schemas/facility-truth-request.schema.json",
+      "x-ccp-canonical-response-schema": "../schemas/facility-truth-response.schema.json",
+      "examples": {
+        "input": "../examples/facility-truth-request.json",
+        "ok_output": "../examples/facility-truth-response.json",
+        "partial_output": "../examples/facility-truth-partial-response.json",
+        "denied_output": "../examples/facility-truth-denied-response.json"
+      }
+    }
+  ]
+}
