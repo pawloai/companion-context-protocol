@@ -120,7 +120,7 @@ The packages in `packages/typescript/` and `packages/python/` are draft helpers,
 
 ## URL And Identifier Surfaces
 
-- The schema `$id` `https://companioncontext.org/schemas/ccp-core.schema.json` is reserved but does not currently serve the schema document. Do not fetch schemas by `$id`. Vendor the schemas instead (the TypeScript and Python packages do this).
+- The canonical schemas are published at their `$id` URLs under `https://companioncontext.org/schemas/`. The published URLs are stable identifiers for the current draft; implementers may fetch them, but vendoring is strongly recommended for build-time validation, offline determinism, and reproducible releases (the TypeScript and Python packages do this). The published copy may move ahead of any vendored snapshot before `1.0`, so treat snapshot drift as expected and gate upgrades on a re-run of the conformance suite.
 - The example server URL (`https://example.com/ccp/v0`) and any `example://` provenance URIs in fixtures are illustrative only.
 - The public source repository is the repository containing this file. Do not move package metadata, release tags, or public references to personal forks.
 
