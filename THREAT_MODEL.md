@@ -84,7 +84,9 @@ Current mitigations are:
 - Treat cross-profile access as a policy decision, not a schema-only decision.
 - Log authorization decisions with enough metadata for abuse review.
 
-Future drafts should define stronger guidance for rate limits, query correlation, per-request minimization, and profile-combination policy.
+These mitigations are necessary but not sufficient. `SPEC.md` Conformance Requirements now state normatively that servers MUST NOT rely on per-profile narrowness alone, and that servers granting multi-profile (or repeat single-profile) access for the same requester SHOULD apply per-requester rate limits across profiles, correlation-aware authorization logging, and per-request minimization. The canonical schemas cannot detect cross-call correlation; only the authorization layer can.
+
+Stronger guidance — a standard correlation identifier, a rate-limit envelope, machine-checkable minimization, and profile-combination policy — is a `0.2` agenda item tracked in GitHub issue #7. The unresolved sub-decisions and the candidate primitives under evaluation (standard optional `correlation_token`, per-requester rate-limit headers, server-internal join, hybrid) are catalogued in `docs/implementers/compatibility-risks.md` §Decisions Needed Before 1.0 §Cross-profile inference controls. A worked synthetic attack-and-defense example lives in `docs/implementers/cross-profile-inference.md`. None of the candidate primitives are endorsed in `0.1.0-draft`.
 
 ## Facility Truth Risks
 

@@ -58,7 +58,11 @@ The following requirements live in `SPEC.md` Conformance Requirements but operat
 ### Cross-enum and cross-profile boundaries
 
 - [ ] `CareNetworkActorType` values (e.g., `"owner"`, `"caregiver"` as relationship types) are never used to infer a global `ActorType` trust posture.
-- [ ] A single requester with grants across multiple profiles does not bypass per-profile exclusions through cross-profile inference. Implementers should apply rate limits, abuse review, and minimization outside schema validation. See `compatibility-risks.md` "Cross-profile inference."
+- [ ] Server does not rely on per-profile narrowness alone to prevent cross-profile inference. A requester holding grants for more than one profile, or making repeated calls within a single profile, can correlate omissions, partial responses, freshness timestamps, and summaries across calls to reconstruct restricted context that no single response would have disclosed. This is a `SHOULD` in `SPEC.md` Conformance Requirements; the canonical schemas cannot detect cross-call correlation.
+- [ ] Server applies per-requester rate limits across all authorized profiles for the same authenticated principal (not just per-profile rate limits).
+- [ ] Server emits correlation-aware authorization logs carrying enough metadata (authenticated principal, request ID, deployment-internal session, declared purpose, granted scopes, omission codes) for retrospective abuse review across profile boundaries.
+- [ ] Server applies per-request minimization: returns only the fields the declared purpose needs, even when the granted scopes would allow more.
+- [ ] Server treats cross-profile access for the same requester as a higher-scrutiny authorization decision rather than the union of independent per-profile decisions. See `compatibility-risks.md` §Decisions Needed Before 1.0 §Cross-profile inference controls and the worked example in `cross-profile-inference.md`.
 
 ### Vendor neutrality
 
