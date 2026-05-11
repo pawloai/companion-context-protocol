@@ -70,6 +70,8 @@ Future drafts should add more explicit actor typing or delegation semantics if d
 
 Until this is specified, compatible servers should treat grant identifiers as lookup keys into trusted authorization state, not bearer secrets, and should fail closed when grant status, issuer authority, subject pet, requester, purpose, scope, facility boundary, or service window cannot be verified.
 
+The unresolved sub-decisions (issuance, storage, possession, revocation propagation) and the candidate primitives under evaluation are catalogued in `docs/implementers/compatibility-risks.md` §Decisions Needed Before 1.0. The decision is tracked in GitHub issue #6. Facility Truth v1 does not require a `PermissionGrant`, so this decision does not gate Facility Truth adoption, but it must resolve before Commerce Context, Care Facility Context, or Care Network Lookup can interoperate across organizations.
+
 ## Cross-Profile Inference
 
 Visibility precedence rules prevent many single-response leaks, but they do not fully prevent inference across multiple authorized calls. For example, a requester with separate commerce and care-facility grants could compare omissions, partial responses, timestamps, or summaries to infer restricted context.

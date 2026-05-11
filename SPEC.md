@@ -244,6 +244,8 @@ A scoped authorization record.
 
 `PermissionGrant` defines the interoperable authorization record shape, not the full grant transport system. Possession of a `grant_id` is not sufficient authority. A compatible server must verify current grant state against trusted authorization data and fail closed when issuer authority, requester identity, subject pet, purpose, scopes, facility boundary, service window, expiration, or revocation state cannot be verified.
 
+Grant issuance, storage, transport, proof-of-possession, and revocation propagation are not specified in this draft. They are not omissions of detail; they are unresolved design questions that this draft has not committed to a primitive for. See `docs/implementers/compatibility-risks.md` §Decisions Needed Before 1.0 for the open sub-decisions and the candidate primitives (JWT with `cnf`, OAuth 2.0 with token introspection, UCAN, hybrid) under evaluation, and `THREAT_MODEL.md` §Grant Risks for the interoperability and freshness risks that follow from leaving the choice unmade.
+
 Expected fields include:
 
 - `grant_id`

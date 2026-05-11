@@ -12,6 +12,30 @@ The canonical contract is JSON Schema. When in doubt, validate against the schem
 - Draft tags use the `vX.Y.Z-draft` form (currently `v0.1.0-draft`). Tags without `-draft` will signal the first stable line.
 - Breaking changes within the draft line are listed in `CHANGELOG.md`. Implementers should diff their pinned draft against the current draft when upgrading.
 
+## Decisions Needed Before 1.0
+
+Some surfaces in `0.1.0-draft` are not "likely to change additively" or "likely to tighten" — they are unresolved design questions where the protocol intentionally has not committed to a primitive. They are distinct from the additive enum and shape-evolution surfaces below: those describe directions a stable shape will move, while these describe holes the stable line cannot ship with. Implementers building against the draft will each invent their own answer, and that is where interoperability will silently break.
+
+### PermissionGrant transport, proof, and revocation propagation
+
+The canonical schema defines record shape only. An implementer reading `0.1.0-draft` end-to-end does not learn how grants move between systems. Four sub-decisions remain open:
+
+- **Issuance** — who is entitled to issue a grant for which subject, with what authentication, and in what serialized format. `SPEC.md` Conformance Requirements require servers to verify `grantor_actor_type` against the authenticated identity of the issuer at issuance time, but the verification itself is unserialized; the grant carries no field recording how it was performed.
+- **Storage** — whether the grant lives issuer-side, requester-side, both, or behind a third-party introspection endpoint, and how a consumer resolves a presented `grant_id` to current grant state.
+- **Possession** — how a requester proves it is the intended grantee of a presented grant. Today the schema carries `grantee_actor_id` and `grantee_actor_type` but no proof-of-possession field; `grant_id` is treated as a lookup key, not a bearer secret.
+- **Revocation propagation** — how revocation reaches consumers that may have observed or cached a prior `allowed` decision, and what freshness window a consumer must honor before re-checking grant state.
+
+Candidate primitives are under evaluation. None are endorsed in `0.1.0-draft`:
+
+- **Signed JWT with `cnf` (RFC 7800)** — minimal moving parts and established tooling; fits the existing "`grant_id` is a lookup key, not a bearer secret" stance; does not by itself answer revocation freshness.
+- **OAuth 2.0 with token introspection (RFC 7662)** — provides revocation freshness and a third-party introspection endpoint shape, but drags in substantial OAuth surface area (authorization endpoint, client registration, token formats) that CCP does not otherwise need.
+- **UCAN** — fits the multi-party delegation shape (caregiver delegating pickup, owner delegating to a merchant) but the ecosystem is small and the tooling story for non-Web3 deployments is thin.
+- **Hybrid (JWT + `cnf` + introspection)** — JWT with `cnf` for transport and proof-of-possession, an OAuth-style introspection endpoint for revocation freshness. Covers both gaps but is the largest surface to specify and adopt.
+
+Until a primitive is selected, compatible servers MUST treat `grant_id` as a lookup key into trusted authorization state, MUST fail closed when issuer authority, requester identity, subject pet, purpose, scopes, facility boundary, service window, expiration, or revocation state cannot be verified, and SHOULD assume that cross-organization grant portability depends on out-of-band trust between issuer and consumer. A future draft may add a `grantor_verification_method` (or equivalent) once proof-of-possession lands. Facility Truth v1 does not require a `PermissionGrant`, so this decision does not gate Facility Truth adoption, but it must resolve before Commerce Context, Care Facility Context (boarding-preparation and pickup-verification), or Care Network Lookup can interoperate across organizations.
+
+Tracked in GitHub issue #6.
+
 ## Schema Surfaces Likely To Change
 
 The conformance runner enforces today's invariants. The following surfaces are the most likely to expand or tighten before `1.0`:
@@ -58,7 +82,7 @@ The current invariant set (`ok` / `partial` / `denied` consistency, denied requi
 
 `status: active` is incompatible with `revoked_at`; expired grants must carry `expires_at`; revoked grants must carry `revoked_at`. These constraints will not be loosened. Future drafts may add states (e.g., `pending`, `suspended`) for multi-party consent.
 
-The current `PermissionGrant` schema defines record shape only. It does not standardize issuance, storage, token format, signing, proof-of-possession, introspection, or revocation propagation. Implementers should treat `grant_id` as a lookup key into trusted authorization state, not as a bearer secret, and should expect this area to change before `1.0`. The grant carries `grantor_actor_type` and `grantee_actor_type` but no field for recording how the issuer's authentication was verified — the verification MUST happen per `SPEC.md` Conformance Requirements but is currently unserialized. A future draft may add a `grantor_verification_method` (or equivalent) once proof-of-possession lands; cross-system grant portability before that field exists relies on out-of-band trust between issuer and consumer.
+Grant transport, proof-of-possession, and revocation propagation are intentionally not standardized in `0.1.0-draft`. They are covered separately under `## Decisions Needed Before 1.0` above, because they are an unresolved design question rather than a forward-compatible shape evolution.
 
 ### Commerce-safe rule
 
