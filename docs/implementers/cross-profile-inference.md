@@ -6,6 +6,8 @@ This document carries the worked attack-and-defense example referenced from `SPE
 
 All identifiers, scenarios, omission codes, and freshness timestamps below are synthetic. Implementers MUST NOT copy real data into worked examples.
 
+**The scenario in one sentence:** a synthetic adversary holding a Commerce Context grant and a Care Facility boarding-preparation grant for the same pet correlates two individually legitimate responses to reconstruct an allergy/sensitivity behavioral signature, without ever requesting a diagnosis, treatment, or wellness scope.
+
 ## Why This Matters
 
 The visibility-precedence rules in `SPEC.md` §Visibility Precedence (rules 6, 8, 10, 12) prevent many single-response leaks. They do not prevent a requester holding grants for more than one profile — or repeating calls within a single profile — from correlating omissions, partial responses, freshness timestamps, and summaries across calls to reconstruct restricted context that no single response would have disclosed.
@@ -14,14 +16,12 @@ A privacy-first protocol that documents this only in abstract terms invites impl
 
 ## Setting
 
-A synthetic adversary is an `agent_client` operating on behalf of a third-party meal-planner integration. The integration holds two grants for the same synthetic pet (`pet_xyz_synthetic`):
+A synthetic adversary is an `agent_client` operating on behalf of a third-party meal-planner integration. The adversary's goal is to determine whether the pet is being treated for an allergy-related condition, without ever requesting a diagnosis scope. The integration holds two grants for the same synthetic pet (`pet_xyz_synthetic`):
 
 - A commerce grant authorizing `pet.profile.read`, `pet.diet.read`, `pet.commerce_context.read`, and `pet.purchase_history.summary.read` for `product_recommendation`.
 - A care-facility boarding-preparation grant authorizing `pet.feeding_instructions.read`, `pet.care_instructions.read`, and `pet.facility_booking_context.read` for `boarding_preparation`, scoped to a single facility (`facility_alpha_synthetic`) and a single service window.
 
 Neither grant authorizes diagnosis, treatment, wellness, billing, household, or staff-only records. The schemas reject any returned field carrying `staff_only` or `restricted_sensitive`. The pickup-verification, care-network-lookup, and facility-truth response schemas additionally filter omission `detail` strings through `SensitiveKeywordPattern`.
-
-The adversary's goal is to determine whether the pet is being treated for an allergy-related condition, without ever requesting a diagnosis scope.
 
 ## The Attack
 
@@ -48,10 +48,11 @@ commerce_context.diet_profile.product_exclusions.value: ["standard_kibble_lines"
 commerce_context.purchase_history_summary.preferred_categories.value: ["hypoallergenic_food", "joint_support_supplements"]
 omissions:
   - field: commerce_context.diet_profile.owner_notes_summary
-    reason: scope_missing
+    reason: summary_only
+    visibility_class: agent_summary_only
 ```
 
-Nothing in this response is illegitimate. Every field carries `commerce_safe` and provenance with a `verified_at` from the synthetic facility's source system. The adversary has learned only that the pet has named allergies and sensitivities, has standard kibble excluded, and shows commerce preferences for hypoallergenic food and joint-support supplements — each of which is independently useful for a meal-planner integration.
+Nothing in this response is illegitimate. Every field carries `commerce_safe` and provenance with a `verified_at` from the synthetic facility's source system. The `owner_notes_summary` omission illustrates the `summary_only` code: the scope `pet.diet.read` is granted and `owner_notes_summary` exists, but its visibility class `agent_summary_only` instructs the server to withhold the raw notes from an `agent_client` (a summarization-capable integration would receive a generated summary instead). The adversary has learned only that the pet has named allergies and sensitivities, has standard kibble excluded, and shows commerce preferences for hypoallergenic food and joint-support supplements — each of which is independently useful for a meal-planner integration. The very presence of the `summary_only` omission is itself a low-bandwidth signal that the pet has owner notes deep enough to merit a summary, before any text has been disclosed.
 
 ### Call 2: Care Facility Boarding Preparation Request
 
@@ -77,10 +78,12 @@ care_facility_context.care_instructions.handling_summary.value: "Use a slow-feed
 care_facility_context.service_window.start: "2026-05-12T08:00:00Z"
 care_facility_context.service_window.end:   "2026-05-12T20:00:00Z"
 omissions:
+  - field: care_facility_context.medication_administration
+    reason: scope_missing
+    required_scope: pet.medications.administration.read
   - field: care_facility_context.vaccination_status
     reason: scope_missing
-  - field: care_facility_context.emergency_contacts
-    reason: scope_missing
+    required_scope: pet.vaccinations.status.read
 ```
 
 Again, nothing in this response is illegitimate. Every field carries `facility_shareable` and `verified_at`. The omission `detail` strings do not contain restricted source content.
@@ -92,7 +95,7 @@ By correlating the two responses, the adversary now knows:
 - The pet has a named protein allergy, two named sensitivities, standard kibble lines excluded, and commerce-side preference signals for `hypoallergenic_food` and `joint_support_supplements`.
 - The pet is fed **four** times per day on a fixed schedule (unusually frequent), with **owner-supplied food and no substitution permitted** (not the facility's stock), under sensitivity notes that **monitor for stomach upset within 30 minutes of feeding**, with a **noticeably short** 12-hour boarding service window.
 
-None of these facts is restricted. Combined, they are a plausible behavioral signature for an allergy- or sensitivity-related condition under active dietary management. A separate request for a wellness, diagnosis, or treatment scope would have been denied (no such scope exists in `0.1.0-draft` for these profiles); the adversary did not need it.
+None of these facts is restricted. Combined, they are a plausible behavioral signature for an allergy- or sensitivity-related condition under active dietary management. A separate request for a `diagnosis`, `treatment`, or wellness scope would have been denied — no such scope is defined in `0.1.0-draft` for these profiles. (`pet.medications.administration.read` exists in the `Scope` enum but is not part of either grant in this scenario, would have been rejected as out-of-scope here, and on its own would not reveal a diagnosis.) The adversary did not need any of them.
 
 This is a single-pet, single-adversary, two-call attack. The real risk surface is larger:
 
@@ -108,8 +111,10 @@ No single mitigation defeats this. The defenses below are layered — each one c
 
 Return only the fields the declared purpose needs, even when the granted scopes would allow more.
 
-- The commerce response in Call 1 does not need to enumerate specific allergens by name to make a product recommendation if the catalog already supports filtering on a coarse `hypoallergenic` flag. A minimization-aware server would return `commerce_context.diet_profile.product_exclusions` alone and omit `commerce_context.diet_profile.allergies` and `commerce_context.diet_profile.sensitivities` with `reason: not_applicable` and a generic `detail` string that does not reveal which proteins were on the avoidance list.
-- The boarding-preparation response in Call 2 does not need both the per-day schedule timestamps and the free-text `sensitivity_notes` entries to fulfill the purpose. A minimization-aware server might return the schedule and `owner_supplied_food: true` alone, and omit the free-text `sensitivity_notes` entirely with `reason: not_applicable`.
+- The commerce response in Call 1 does not need to enumerate specific allergens by name to make a product recommendation if the catalog already supports filtering on a coarse `hypoallergenic` flag. A minimization-aware server would return `commerce_context.diet_profile.product_exclusions` alone and omit `commerce_context.diet_profile.allergies` and `commerce_context.diet_profile.sensitivities` with `reason: not_requested` and a generic `detail` string that does not reveal which proteins were on the avoidance list.
+- The boarding-preparation response in Call 2 does not need both the per-day schedule timestamps and the free-text `sensitivity_notes` entries to fulfill the purpose. A minimization-aware server might return the schedule and `owner_supplied_food: true` alone, and omit the free-text `sensitivity_notes` entirely with `reason: not_requested`.
+
+Use `not_requested` — not `scope_missing` and not `not_applicable` — to signal that the scope was granted and the field is applicable, but the server withheld the field by minimization policy. `scope_missing` should be reserved for fields the grant literally does not authorize; using it here would falsely imply the requester needs a broader grant to serve the declared purpose, which undermines the minimization design. `not_applicable` should be reserved for fields that do not apply to the subject at all (e.g., a facility with no service area to report); using it for allergies that *do* exist would be semantically false and could suppress hypoallergenic filtering downstream. `0.1.0-draft` does not define a dedicated minimization omission code; a future draft may introduce one when per-request minimization is tightened from `SHOULD` into a machine-checkable obligation.
 
 Schema validation cannot detect over-disclosure of granted but unneeded fields. The visibility check only knows the field's class; it does not know whether the declared purpose actually requires that field today.
 
