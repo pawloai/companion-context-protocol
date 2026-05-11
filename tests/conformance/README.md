@@ -14,6 +14,9 @@ The current test suite verifies:
 - Commerce context fields include `commerce_safe` visibility and do not include `staff_only` or `restricted_sensitive`.
 - Care facility context fields include `facility_shareable` visibility and do not include `staff_only` or `restricted_sensitive`.
 - Care Network lookup fields include care-network visibility classes and do not include `staff_only` or `restricted_sensitive`.
+- Facility Truth fields include `facility_public` and do not include `staff_only`, `restricted_sensitive`, `commerce_safe`, `facility_shareable`, `care_network_visible`, `contact_shareable`, or `action_authorization_visible`.
+- Facility Truth field provenance carries `verified_at` (the freshness rule).
+- Facility Truth responses do not contain `pet_id` anywhere (the subject-boundary scan).
 - Response `status`, `authorization_decision.decision`, `commerce_context`, and omissions are internally consistent.
 - Grant lifecycle fields are internally consistent.
 - Example request/response pairs preserve request id, requester, pet, purpose, and grant identity.
@@ -71,6 +74,14 @@ Current invalid fixtures:
 - `fixtures/invalid/care-network-lookup-sensitive-provenance-ref.json`
 - `fixtures/invalid/care-network-lookup-staff-only-visibility.json`
 - `fixtures/invalid/care-network-lookup-unrelated-contact-list.json`
+- `fixtures/invalid/facility-truth-broad-scope-request.json`
+- `fixtures/invalid/facility-truth-cross-profile-visibility.json`
+- `fixtures/invalid/facility-truth-denied-response-with-context.json`
+- `fixtures/invalid/facility-truth-field-missing-verified-at.json`
+- `fixtures/invalid/facility-truth-missing-facility-public.json`
+- `fixtures/invalid/facility-truth-pet-id-leak.json`
+- `fixtures/invalid/facility-truth-sensitive-provenance-ref.json`
+- `fixtures/invalid/facility-truth-staff-only-visibility.json`
 
 Current valid fixtures:
 

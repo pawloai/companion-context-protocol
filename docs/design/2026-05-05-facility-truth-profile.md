@@ -2,7 +2,7 @@
 
 Date: 2026-05-05
 
-Status: Design draft, non-normative
+Status: Superseded by v1 schema-backed profile — see the Facility Truth Profile section in `SPEC.md` and the implementer guide at `docs/implementers/facility-truth-server.md`. The v1 schema-backed profile in `schemas/facility-truth-request.schema.json` and `schemas/facility-truth-response.schema.json` is the normative source. The body of this draft is retained as historical design context.
 
 ## Design Status
 

@@ -15,6 +15,8 @@ Current draft schemas:
 - `care-facility-pickup-verification-response.schema.json`: response wrapper for the Care Facility Pickup Verification slice.
 - `care-network-lookup-request.schema.json`: request wrapper for the first Care Network lookup slice.
 - `care-network-lookup-response.schema.json`: response wrapper for the first Care Network lookup slice.
+- `facility-truth-request.schema.json`: request wrapper for the v1 Facility Truth Profile.
+- `facility-truth-response.schema.json`: response wrapper for the v1 Facility Truth Profile.
 - `permission-grant.schema.json`: wrapper for permission grant examples.
 
 Schema `$id` values are stable identifiers for the draft schema documents. They are not required to be dereferenceable URLs for local validation.
@@ -27,6 +29,7 @@ Initial core objects:
 - `CareFacilityContext`
 - `PickupVerificationContext`
 - `CareNetworkContext`
+- `FacilityTruthContext`
 - `PermissionGrant`
 - `ContextProvenance`
 

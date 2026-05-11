@@ -7,7 +7,7 @@ The goal of design-partner outreach is to test whether the current CCP profiles 
 This document is the **Commerce Context outreach packet**. Commerce is a parallel valid profile but is not the lead adoption wedge — for most ecosystem outreach, prefer one of:
 
 - `docs/launch/care-facility-design-partner-review.md` — first Care Facility boarding-preparation review (recommended default starting point for facility, practice-management, and care-operator reviewers).
-- `docs/design/2026-05-05-facility-truth-profile.md` — when the reviewer is focused on facility hours, services, policies, booking, listing accuracy, or agent answer grounding. The design proposes that a public-facts subset could be served without a `PermissionGrant`, which is what makes Facility Truth the strongest design candidate ahead of expanding Commerce.
+- `docs/implementers/facility-truth-server.md` (alongside the historical design draft `docs/design/2026-05-05-facility-truth-profile.md`) — when the reviewer is focused on facility hours, services, policies, booking, listing accuracy, or agent answer grounding. Facility Truth v1 is now a schema-backed profile; v1 covers public-fact scopes only and does not require a `PermissionGrant`, so a single facility can publish accurate, agent-grounding facts unilaterally.
 
 Use this packet only when the reviewer is specifically a commerce or product-recommendation operator and the conversation is bounded to that profile; or when a Care Facility / Facility Truth reviewer has explicitly asked to also see the Commerce slice. The structural reasons Commerce is not the lead — incumbent merchant signup flows already capture pet profiles, the consent path runs through the merchant, and the merchant is typically the system of record so there is no neutral grant custodian — are worth flagging up front in any Commerce conversation.
 
@@ -37,7 +37,7 @@ Secondary questions:
 - Are the privacy and safety exclusions credible?
 - What field is missing that would block implementation?
 - What field feels too sensitive for commerce use?
-- Would a Facility Truth Profile (hours, services, eligibility, certifications, booking links, freshness) be a more urgent first review target for your work? Most reviewers should expect the answer to be yes.
+- Would the v1 Facility Truth profile (hours, services, eligibility summary, contact methods, booking links, freshness) be a more urgent first review target for your work than Commerce? For most reviewers the answer should still be yes, and Facility Truth is now a schema-backed profile rather than a design candidate.
 - Which prior art, system class, data holder, or workflow does the draft fail to account for?
 - Can your team validate compatibility with the provided tests?
 

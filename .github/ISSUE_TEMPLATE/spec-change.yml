@@ -30,6 +30,9 @@ body:
       options:
         - Commerce Context Profile
         - Care Facility Context Profile
+        - Care Facility Pickup Verification
+        - Care Network Lookup
+        - Facility Truth Profile
         - Core schema
         - Scope registry
         - Purpose registry

@@ -12,6 +12,7 @@ Companion Context Protocol (CCP) is a draft open specification for permissioned 
 - [Threat model](./THREAT_MODEL.md)
 - [README](./README.md)
 - [Server implementer guide](./docs/implementers/commerce-context-server.md)
+- [Facility Truth server implementer guide](./docs/implementers/facility-truth-server.md)
 - [Compatibility risks](./docs/implementers/compatibility-risks.md)
 
 ## Canonical schemas
@@ -25,6 +26,8 @@ Companion Context Protocol (CCP) is a draft open specification for permissioned 
 - [`care-facility-pickup-verification-response.schema.json`](./schemas/care-facility-pickup-verification-response.schema.json)
 - [`care-network-lookup-request.schema.json`](./schemas/care-network-lookup-request.schema.json)
 - [`care-network-lookup-response.schema.json`](./schemas/care-network-lookup-response.schema.json)
+- [`facility-truth-request.schema.json`](./schemas/facility-truth-request.schema.json)
+- [`facility-truth-response.schema.json`](./schemas/facility-truth-response.schema.json)
 - [`permission-grant.schema.json`](./schemas/permission-grant.schema.json)
 
 Schema `$id` values resolve to these URLs, but implementers are still encouraged to vendor schemas for build-time validation and offline determinism. See [Compatibility risks](./docs/implementers/compatibility-risks.md) for the current list of surfaces likely to change before `1.0`.

@@ -12,12 +12,12 @@ The repository can be made public to gather feedback now, but broad positioning 
 
 - Prior-art and ecosystem gaps have been acknowledged in public docs.
 - 2-3 design partners have reviewed the first Care Facility boarding-preparation slice.
-- 2-3 design partners have reviewed whether Facility Truth should be promoted from design draft to a schema-backed profile.
+- 2-3 design partners have reviewed the v1 schema-backed Facility Truth profile.
 - At least one partner has confirmed that the request and response shape is implementable.
 - Open questions from partner review are triaged into accepted changes, deferred work, or explicit non-goals.
 - The announcement copy is reviewed for vendor-neutral positioning.
 
-Commerce Context partner review is welcome but is not a gating condition; the Care Facility flows are the operationally-grounded lead and Facility Truth is the strongest forward direction.
+Commerce Context partner review is welcome but is not a gating condition; the Care Facility flows are the operationally-grounded lead and Facility Truth has graduated to a schema-backed v1 profile. Partner-only Facility Truth scopes (certifications, insurance statements, capacity status, staff credentials) are the next forward direction.
 
 ## Repository Readiness
 
@@ -53,7 +53,7 @@ Commerce Context partner review is welcome but is not a gating condition; the Ca
 - [x] Response status consistency is enforced by schema.
 - [x] Permission grant lifecycle constraints are enforced by schema.
 - [ ] Design partners have reviewed the first Care Facility boarding-preparation slice.
-- [ ] Facility Truth has completed discovery review or has been promoted to a schema-backed profile.
+- [x] Facility Truth has been promoted to a schema-backed profile (v1, public-fact scopes only). Partner review of the v1 profile is the open follow-on.
 - [ ] Design partners have reviewed the Commerce Context Profile (non-blocking; Commerce is not the lead wedge).
 - [ ] Feedback has been triaged into v0.1.0-draft updates or later milestones.
 - [x] Known compatibility risks are documented.
@@ -99,7 +99,7 @@ Expected result:
 - [x] Design-partner call for feedback.
 - [x] Care Facility design-partner review packet and triage log.
 - [x] Prior-art and ecosystem map.
-- [x] Facility Truth design draft.
+- [x] Facility Truth v1 schema-backed profile (schemas, examples, OpenAPI and MCP adapters, implementer guide, conformance fixtures).
 - [x] Maintainer contact path.
 - [x] Initial issue labels.
 - [x] First 3-5 target partner categories.

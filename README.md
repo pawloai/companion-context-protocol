@@ -16,7 +16,7 @@ The operationally-grounded review targets are the Care Facility Context schema s
 
 The draft also ships the Commerce Context Profile — commerce-safe pet context for product recommendations and filtering, with the same exclusions for staff notes, wellness timelines, diagnosis or treatment history, billing data, household data, and sensitive facility operations data. Commerce is a valid profile, but it is not the lead adoption wedge: merchants already collect pet profiles at signup and infer preferences from order history, the consent path runs through the merchant rather than a third-party protocol, and the merchant tends to be the system of record — so the `PermissionGrant` model's "neutral custodian distinct from the requester" assumption is least true here. Treat Commerce as a parallel narrow slice, not the canonical worked example.
 
-Facility Truth is a design candidate for a future profile covering provenance-backed facility hours, services, eligibility, certifications, service areas, booking links, and freshness for public operational facts that agents often answer incorrectly. Because facility facts can be public-by-nature, the design proposes that a public-facts subset could be served without a `PermissionGrant` — sidestepping grant-transport prerequisites that gate the pet-specific profiles. Combined with a present, measurable agent-accuracy problem, that makes Facility Truth the strongest design candidate ahead of expanding Commerce. Promotion from design draft to schema-backed profile is tracked separately.
+Facility Truth is a schema-backed profile in this draft. v1 covers public-fact scopes only — profile summary, hours, services, contact methods, service area, acceptance criteria summary, booking links, and policy summaries — and does not require a `PermissionGrant`, because public-fact context can be published unilaterally by the facility. Every returned field's provenance MUST carry `verified_at`; unverified or stale facts are omitted with `not_verified` or `source_stale` rather than guessed. Higher-scrutiny scopes (certifications, insurance statements, capacity status, staff credentials) are deferred to a future partner-only Facility Truth slice with its own grant shape and `facility_partner_visible` visibility class.
 
 ## What CCP Defines
 
@@ -99,6 +99,12 @@ companion-context-protocol/
 - [Care Network Lookup allowed response example](examples/care-network-lookup-response.json)
 - [Care Network Lookup contact-withheld partial response example](examples/care-network-lookup-contact-withheld-response.json)
 - [Care Network Lookup denied response example](examples/care-network-lookup-denied-response.json)
+- [Facility Truth request schema](schemas/facility-truth-request.schema.json)
+- [Facility Truth response schema](schemas/facility-truth-response.schema.json)
+- [Facility Truth request example](examples/facility-truth-request.json)
+- [Facility Truth allowed response example](examples/facility-truth-response.json)
+- [Facility Truth partial response example](examples/facility-truth-partial-response.json)
+- [Facility Truth denied response example](examples/facility-truth-denied-response.json)
 - [Commerce permission grant example](examples/permission-grant-commerce-context.json)
 - [Commerce context request example](examples/commerce-context-request.json)
 - [Commerce context partial response example](examples/commerce-context-response.json)
@@ -111,9 +117,12 @@ companion-context-protocol/
 - [Care Facility Pickup Verification MCP tool sketches](mcp/care-facility-pickup-verification.tools.json)
 - [Care Network Lookup OpenAPI adapter](openapi/care-network-lookup.openapi.json)
 - [Care Network Lookup MCP tool sketch](mcp/care-network-lookup.tools.json)
+- [Facility Truth OpenAPI adapter](openapi/facility-truth.openapi.json)
+- [Facility Truth MCP tool sketch](mcp/facility-truth.tools.json)
 - [Commerce Context OpenAPI adapter](openapi/commerce-context.openapi.json)
 - [Commerce Context MCP tool sketches](mcp/commerce-context.tools.json)
 - [Care Facility Context server implementer guide](docs/implementers/care-facility-context-server.md)
+- [Facility Truth server implementer guide](docs/implementers/facility-truth-server.md)
 - [Commerce Context server implementer guide](docs/implementers/commerce-context-server.md)
 - [Known compatibility risks](docs/implementers/compatibility-risks.md)
 - [Draft threat model](THREAT_MODEL.md)
@@ -185,12 +194,14 @@ The test suite validates the current positive examples and core `$defs` fixtures
 
 ## Contributing
 
-This project is early. The most useful contributions are concrete reviews of the Care Facility boarding-preparation slice, pickup verification, the first Care Network lookup slice, and a future Facility Truth Profile, particularly from teams operating or building pet-care facility software, facility-directory systems, or agent tooling grounded in local-business data. Commerce Context review is welcome but is not the priority adoption wedge:
+This project is early. The most useful contributions are concrete reviews of the Care Facility boarding-preparation slice, pickup verification, the first Care Network lookup slice, and the v1 Facility Truth Profile, particularly from teams operating or building pet-care facility software, facility-directory systems, or agent tooling grounded in local-business data. Commerce Context review is welcome but is not the priority adoption wedge:
 
 - Is the boarding-preparation bundle useful for facility intake and stay planning?
 - Is the pickup-verification slice safe and complete for facility release workflows?
 - Is the Care Network lookup useful without becoming a broad household or contact export?
-- Would a Facility Truth Profile for hours, services, certifications, accepted pets, booking links, freshness, and provenance solve a more urgent agent-accuracy problem than pet-specific context for your AI agent or directory product?
+- Does the v1 Facility Truth scope set cover your facility-truth needs? Are the eight public-fact scopes (profile, hours, services, contact methods, service area, acceptance criteria, booking links, policy summaries) the right cut for an agent grounding on your facility?
+- Is the `verified_at` freshness contract realistic against your facility's source-of-truth update cadence?
+- Should higher-scrutiny scopes (certifications, insurance statements, capacity status, staff credentials) land as a partner-only Facility Truth slice with its own grant shape, or via a different mechanism?
 - Are facility identity and service-window boundaries clear enough for implementation?
 - Are the scope and purpose boundaries clear?
 - Are privacy and safety expectations enforceable?

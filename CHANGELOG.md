@@ -20,6 +20,19 @@ This project is pre-1.0. Draft versions may change incompatibly while schemas, p
 - Hand-written TypeScript types updated to expose `ActorType` and the new required fields on requests, grants, decisions, and `PickupActor`.
 - Implementer guides (commerce, care facility, pickup verification, care network lookup) updated with the new actor-type binding rules and authorization-decision echo field.
 - New `docs/implementers/conformance-checklist.md` separating the machine-checked surface (`npm test`) from the transport-layer and runtime requirements implementers MUST self-attest.
+- Facility Truth Profile promoted from design draft to schema-backed profile (`facility_truth_lookup`). v1 ships public-fact scopes only and does not require a `PermissionGrant`.
+- `FacilityTruthRequest`, `FacilityTruthResponse`, `FacilityTruthContext`, and the supporting `FacilityHours`, `FacilityService`, `FacilityContactMethod`, `FacilityBookingMethod`, `FacilityServiceArea`, `FacilityAcceptanceCriteria`, `FacilityPolicySummary`, `FacilityProfileSummary`, and `FacilityTruth*` field-envelope `$defs` in `ccp-core.schema.json`, plus wrapper schemas `schemas/facility-truth-request.schema.json` and `schemas/facility-truth-response.schema.json`.
+- Eight new `Scope` enum entries (`facility.profile.read`, `facility.hours.read`, `facility.services.read`, `facility.contact_methods.read`, `facility.service_area.read`, `facility.acceptance_criteria.read`, `facility.booking_links.read`, `facility.policies.summary.read`).
+- New `Purpose` enum entry (`facility_truth_lookup`).
+- New `VisibilityClass` enum entry (`facility_public`) with the "facility-public rule" (every Facility Truth field MUST include `facility_public` and MUST NOT include any other class).
+- New `OmissionReasonCode` enum entries (`not_verified`, `not_applicable`).
+- New `FacilityTruthContextProvenance` `$def` requiring `verified_at` on every Facility Truth field's provenance.
+- Four positive Facility Truth examples (`examples/facility-truth-request.json`, `examples/facility-truth-response.json`, `examples/facility-truth-partial-response.json`, `examples/facility-truth-denied-response.json`) and eight invalid fixtures (cross-profile visibility, missing `facility_public`, staff-only visibility, denied response with context, missing `verified_at`, broad-scope request, `pet_id` leak, sensitive provenance ref).
+- New OpenAPI adapter `openapi/facility-truth.openapi.json` (POST `/facility-truth`, no grant lookup) and MCP adapter `mcp/facility-truth.tools.json` (single `ccp_facility_truth_request` tool, no grant lookup).
+- New `docs/implementers/facility-truth-server.md` implementer guide.
+- Conformance runner extended with Facility Truth cases, a `subjectKey: "facility_id"` round-trip pair, and a subject-boundary scan that rejects any `pet_id` anywhere in a Facility Truth response.
+- TypeScript package: hand-written Facility Truth types and AJV validator factories (`createFacilityTruthRequestValidator`, `createFacilityTruthResponseValidator`, and corresponding entries on `createCcpValidators()`).
+- Python package: `facility-truth-request` and `facility-truth-response` keys added to `SchemaName` and `_SCHEMA_FILENAMES`.
 
 ### Changed
 
@@ -30,6 +43,9 @@ This project is pre-1.0. Draft versions may change incompatibly while schemas, p
 
 - Adding required actor-type fields is a breaking change against any implementation pinned to the pre-`Unreleased` `v0.1.0-draft` schemas. Implementers must add the new fields to outgoing requests, grants, and authorization decisions before upgrading.
 - Pre-existing schema invariants (envelope shape, status/decision/context/omissions consistency, commerce-safe rule, grant lifecycle) are unchanged.
+- New Facility Truth `Scope`, `Purpose`, `VisibilityClass`, and `OmissionReasonCode` enum members are additive. Pre-existing implementations that hard-coded the closed enum sets will not recognize the new values; implementers should treat unknown enum values as forward-compatible signals when reading.
+- Facility Truth v1 does NOT require a `PermissionGrant`. Implementers should not assume the v1 no-grant semantics generalize to deferred partner-only Facility Truth scopes (certifications, insurance statements, capacity status, staff credentials), which will introduce a `facility_partner_visible` class and a partner-only grant shape (likely an additive `subject_facility_id` on `PermissionGrant`).
+- `pet_id` was removed from the base `AuthorizationDecision` `required` array to accommodate Facility Truth (which uses `facility_id` instead). Each pet-bound profile's response wrapper now re-requires `pet_id` via its own `allOf` overlay; the per-profile contract is unchanged. Implementers validating against the bare `AuthorizationDecision` `$def` (rather than against a profile response wrapper) will see this as a loosening — validate against profile response wrappers, not the bare `$def`.
 
 ## v0.1.0-draft - 2026-05-04
 

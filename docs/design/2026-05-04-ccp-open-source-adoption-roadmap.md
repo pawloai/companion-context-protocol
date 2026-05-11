@@ -6,7 +6,7 @@ Working name: Companion Context Protocol
 
 Acronym: CCP
 
-Status note: This roadmap has partially been implemented. The repository now includes the draft spec, canonical schemas, schema-backed Care Facility boarding-preparation and pickup-verification slices, a schema-backed first Care Network lookup slice, a Commerce Context Profile with vendor-neutral examples, positive and negative conformance fixtures, public-facing README/security/conduct/governance docs, OpenAPI adapter sketches for Care Facility Context, Care Facility Pickup Verification, Care Network Lookup, and Commerce Context, draft MCP tool sketches for the same surfaces, Care Facility and Commerce server implementer guides, a draft TypeScript helper package with exported types and AJV validators, a draft Python helper package with schema-loading helpers, launch materials, Care Facility design-partner review and triage docs, Care Network design material, a prior-art and ecosystem map, a Facility Truth design draft, and the first `v0.1.0-draft` tag. Generated model work, design-partner feedback, Facility Truth schema work (now the strongest forward direction; see "Facility Truth — Strongest Forward Wedge" below), and broader Care Network management work remain future work.
+Status note: This roadmap has partially been implemented. The repository now includes the draft spec, canonical schemas, schema-backed Care Facility boarding-preparation and pickup-verification slices, a schema-backed first Care Network lookup slice, a v1 schema-backed Facility Truth Profile (public-fact scopes, no `PermissionGrant` required), a Commerce Context Profile with vendor-neutral examples, positive and negative conformance fixtures, public-facing README/security/conduct/governance docs, OpenAPI adapter sketches for Care Facility Context, Care Facility Pickup Verification, Care Network Lookup, Facility Truth, and Commerce Context, draft MCP tool sketches for the same surfaces, Care Facility, Facility Truth, and Commerce server implementer guides, a draft TypeScript helper package with exported types and AJV validators, a draft Python helper package with schema-loading helpers, launch materials, Care Facility design-partner review and triage docs, Care Network design material, a prior-art and ecosystem map, the original Facility Truth design draft (now superseded by the v1 schema-backed profile), and the first `v0.1.0-draft` tag. Generated model work, design-partner feedback, partner-only Facility Truth scopes (certifications, insurance statements, capacity status, staff credentials), and broader Care Network management work remain future work.
 
 ## Goal
 
@@ -32,7 +32,7 @@ Avoid making CCP look like a single-vendor export format or a one-author standar
 
 ## Existing Schema-Backed Wedges
 
-The draft ships four narrow schema-backed slices. They are not equally well-positioned as adoption wedges.
+The draft ships five narrow schema-backed slices. They are not equally well-positioned as adoption wedges.
 
 ### Care Facility flows — operationally-grounded wedge
 
@@ -50,29 +50,22 @@ Commerce was selected as a narrow, lower-risk schema slice early in the draft. I
 
 Do not describe Commerce as the lead wedge in public materials. Treat it as a parallel narrow slice that design partners may review, with the explicit framing that "no, the merchant account already covers this" is a useful answer.
 
-## Facility Truth — Strongest Forward Wedge
+## Facility Truth — Shipped In v1
 
-If the motivating problem is agents giving wrong facility hours, outdated services, unsupported pet types, stale booking links, or invented certifications, a Facility Truth Profile is a more direct review target than pet-specific commerce context. It is the strongest design candidate ahead of expanding Commerce, for several structural reasons:
+Facility Truth has been promoted from design draft to a schema-backed profile in this draft. Its v1 scope, structural fit, and adoption rationale are recorded retroactively here for context. The forward direction now lives under "Next: Partner-Only Facility Truth" below.
 
-- The data is public-by-nature. The design proposes that a public-facts subset could be served without a `PermissionGrant`, which would remove the grant transport, possession, and revocation prerequisites that gate the pet-specific profiles. Partner-only facts would still use explicit visibility classes.
-- The agent-facing pain is present and measurable: every assistant grounded in stale crawl data hallucinates hours, services, eligibility, and certifications.
-- It has a standalone value proposition. A facility can publish accurate operational facts with provenance and benefit immediately — no counterparty needs to implement CCP first. Every other profile needs at least two implementing parties.
-- The visibility model already fits. Distinguishing public from partner-only facts using existing precedence rules (`staff_only` and `restricted_sensitive` take precedence) is a small extension, not a redesign.
+The motivating problem — agents giving wrong facility hours, outdated services, unsupported pet types, stale booking links, or invented certifications — is addressed by the v1 public-fact scope set: `facility.profile.read`, `facility.hours.read`, `facility.services.read`, `facility.contact_methods.read`, `facility.service_area.read`, `facility.acceptance_criteria.read`, `facility.booking_links.read`, `facility.policies.summary.read`. v1 does not require a `PermissionGrant`. Every returned field's provenance MUST carry `verified_at`, and stale or unverified facts are omitted with `source_stale` or `not_verified` rather than guessed.
 
-Facility Truth should cover facility facts rather than private pet context:
+Facility Truth ships with its own schemas (`schemas/facility-truth-request.schema.json`, `schemas/facility-truth-response.schema.json`), positive and invalid fixtures, OpenAPI adapter (`openapi/facility-truth.openapi.json`), MCP adapter (`mcp/facility-truth.tools.json`), implementer guide (`docs/implementers/facility-truth-server.md`), and conformance coverage including a subject-boundary scan that rejects any `pet_id` anywhere in a Facility Truth response. The design rationale was:
 
-- Hours and exception hours.
-- Services currently offered.
-- Accepted pet types, size classes, or eligibility constraints.
-- Service areas.
-- Contact and booking methods.
-- Certification or policy summaries.
-- Freshness, provenance, and verification metadata.
-- Machine-readable omissions for stale, unavailable, restricted, or unverified facts.
+- The data is public-by-nature. Public-fact scopes are served without a `PermissionGrant`, which removes the grant transport, possession, and revocation prerequisites that gate the pet-specific profiles. Partner-only facts will use explicit visibility classes in a future slice.
+- The agent-facing pain is present and measurable.
+- Facility Truth has a standalone value proposition. A single facility can publish accurate operational facts with provenance unilaterally — no counterparty needs to implement CCP first.
+- The visibility model already fits. `facility_public` joins the existing precedence rules; the deny-class rules (`staff_only`, `restricted_sensitive`) are unchanged.
 
-Facility Truth should remain separate from Care Facility Context. The former describes a facility; the latter describes one pet's context for a facility workflow.
+Facility Truth remains separate from Care Facility Context. The former describes a facility; the latter describes one pet's context for a facility workflow.
 
-Recommended next action: promote `docs/design/2026-05-05-facility-truth-profile.md` from design draft to a schema-backed profile with its own schemas, examples, adapters, implementer guide, and conformance fixtures, on the same footing as the Care Facility and Commerce profiles.
+Recommended next action: gather design-partner review of the v1 profile, then scope partner-only Facility Truth scopes (`facility.certifications.read`, `facility.insurance_statements.read`, `facility.capacity_status.read`, `facility.staff_credentials.summary.read`) for v2. The partner-only slice will introduce `facility_partner_visible`, a partner-only grant shape (likely an additive `subject_facility_id` on `PermissionGrant`), and its own conformance fixtures.
 
 ## Transport-Neutral Design
 
@@ -204,9 +197,9 @@ For Care Facility design partners, use `docs/launch/care-facility-design-partner
 
 > Would your team implement this boarding-preparation slice for a facility system if it existed?
 
-For Facility Truth discovery, use `docs/design/2026-05-05-facility-truth-profile.md` and ask:
+For Facility Truth v1 partner review, use `docs/implementers/facility-truth-server.md` and ask:
 
-> Would facility hours, services, acceptance criteria, contact methods, booking links, certifications, freshness, and provenance solve a more urgent agent-accuracy problem than pet-specific context? Should Facility Truth be promoted from design draft to a schema-backed profile ahead of expanding Commerce?
+> Does the v1 Facility Truth schema fit your facility's data? Are the eight public-fact scopes (profile, hours, services, contact methods, service area, acceptance criteria, booking links, policy summaries) the right cut for an agent grounding on your facility? Is the `verified_at` freshness contract realistic against your source-of-truth update cadence? Should certifications, insurance statements, capacity status, or staff credentials land in a partner-only Facility Truth slice with a grant shape, or via a different mechanism?
 
 For Commerce-specific reviewers, use `docs/launch/design-partner-outreach.md` and ask:
 
@@ -352,7 +345,7 @@ See:
 - `docs/launch/public-launch-checklist.md`
 - `docs/launch/design-partner-outreach.md`
 
-The repo can be shared privately with design partners now. Broad public launch should wait until the public launch checklist is materially complete, 2-3 design partners have reviewed the first Care Facility boarding-preparation slice, and 2-3 design partners have completed Facility Truth discovery review. Commerce Context partner review is welcome but is not a gating condition for broad launch.
+The repo can be shared privately with design partners now. Broad public launch should wait until the public launch checklist is materially complete, 2-3 design partners have reviewed the first Care Facility boarding-preparation slice, and 2-3 design partners have reviewed the v1 schema-backed Facility Truth profile. Commerce Context partner review is welcome but is not a gating condition for broad launch.
 
 ## Near-Term Execution Plan
 
@@ -382,7 +375,7 @@ Current status:
 - Next: identify 3-5 Care Facility design partners for boarding-preparation review.
 - Next: identify 2-3 Care Facility design partners for pickup-verification review.
 - Next: identify 2-3 Care Network design partners for one-subject lookup review.
-- Next: run Facility Truth discovery review against `docs/design/2026-05-05-facility-truth-profile.md` and decide whether to promote it to a schema-backed profile alongside the Care Facility flows. Treat this as higher priority than further Commerce review.
+- Next: run Facility Truth v1 partner review against `docs/implementers/facility-truth-server.md` and `examples/facility-truth-*.json`, then scope partner-only Facility Truth scopes (`facility.certifications.read`, `facility.insurance_statements.read`, `facility.capacity_status.read`, `facility.staff_credentials.summary.read`) for v2.
 - Next: review whether the first Care Network lookup slice should expand into management writes, remain read-only, or stay as shared primitives embedded in purpose-specific profiles.
 - Next: identify 2-3 commerce-specific design partners for Commerce Context review, recognizing that "no, merchant signup already covers this" is a useful answer and that Commerce is no longer positioned as the lead.
 - Next: complete remaining public launch checklist items after partner review.

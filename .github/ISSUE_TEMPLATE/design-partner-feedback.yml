@@ -23,7 +23,10 @@ body:
       options:
         - Commerce Context Profile
         - Care Facility boarding-preparation slice
-        - Both
+        - Care Facility pickup-verification slice
+        - Care Network Lookup slice
+        - Facility Truth Profile
+        - Multiple
         - Not sure
     validations:
       required: true
@@ -70,6 +73,13 @@ body:
     attributes:
       label: Care Facility open-decision feedback
       description: If reviewing Care Facility, comment on facility_shareable, grant_id, service_id, emergency contacts, and vaccination status values.
+    validations:
+      required: false
+  - type: textarea
+    id: facility_truth_open_decisions
+    attributes:
+      label: Facility Truth open-decision feedback
+      description: If reviewing Facility Truth, comment on the facility-public visibility rule, the verified_at freshness requirement, the eight-scope public-fact set, the no-grant semantics for v1, and which deferred partner-only scopes (certifications, insurance statements, capacity status, staff credentials) you would need next.
     validations:
       required: false
   - type: textarea

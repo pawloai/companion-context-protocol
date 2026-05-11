@@ -2,7 +2,7 @@
 
 End-to-end request and response examples live here.
 
-The current examples demonstrate the Care Facility boarding-preparation and pickup-verification slices, the first Care Network lookup slice, and the Commerce Context Profile. The Care Facility and Care Network flows are the operationally-grounded review targets; the Commerce flow is a parallel valid example but is not the canonical worked example.
+The current examples demonstrate the Care Facility boarding-preparation and pickup-verification slices, the first Care Network lookup slice, the v1 Facility Truth Profile, and the Commerce Context Profile. The Care Facility and Care Network flows are the operationally-grounded review targets; Facility Truth is the no-grant public-fact wedge; the Commerce flow is a parallel valid example but is not the canonical worked example.
 
 Care Facility Context flow:
 
@@ -19,6 +19,14 @@ Care Network Lookup flow:
 3. Server returns only the actor, relationship, allowed contact channel, action authorization, or revocation subset allowed by the grant.
 4. Contact channels and action authority are evaluated separately.
 5. Denied responses return no care-network context.
+
+Facility Truth flow:
+
+1. Requester asks about one `facility_id` for `purpose: facility_truth_lookup` with a non-empty subset of the eight public-fact scopes. v1 needs no `PermissionGrant`.
+2. Server returns an authorization decision carrying `facility_id` (rather than `pet_id`).
+3. Server returns minimized facility-truth context with `facility_public` visibility and provenance carrying `verified_at` on every field.
+4. Stale or unverified fields are omitted with `source_stale` or `not_verified` rather than guessed.
+5. Denied responses return no facility-truth context.
 
 Commerce Context flow:
 
@@ -46,6 +54,10 @@ Current examples:
 - `care-network-lookup-response.json`
 - `care-network-lookup-contact-withheld-response.json`
 - `care-network-lookup-denied-response.json`
+- `facility-truth-request.json`
+- `facility-truth-response.json`
+- `facility-truth-partial-response.json`
+- `facility-truth-denied-response.json`
 - `permission-grant-commerce-context.json`
 - `commerce-context-request.json`
 - `commerce-context-response.json`: partial response with returned context and omissions.
