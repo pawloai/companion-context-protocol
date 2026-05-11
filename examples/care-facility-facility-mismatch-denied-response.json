@@ -5,6 +5,7 @@
     "decision": "denied",
     "evaluated_at": "2026-05-05T17:00:00Z",
     "requester_actor_id": "actor_boarding_facility_app_002",
+    "requester_actor_type": "facility",
     "pet_id": "pet_luna_001",
     "purpose": "boarding_preparation",
     "grant_id": "grant_owner_to_boarding_facility_001",

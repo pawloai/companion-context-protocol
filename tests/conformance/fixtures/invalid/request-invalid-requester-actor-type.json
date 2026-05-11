@@ -1,0 +1,11 @@
+{
+  "request_id": "req_invalid_actor_type_value_001",
+  "requester_actor_id": "actor_example_recommendation_agent",
+  "requester_actor_type": "household_member",
+  "pet_id": "pet_luna_001",
+  "purpose": "product_recommendation",
+  "scopes": [
+    "pet.commerce_context.read"
+  ],
+  "grant_id": "grant_owner_to_example_001"
+}

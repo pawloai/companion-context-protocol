@@ -5,6 +5,7 @@
     "decision": "partial",
     "evaluated_at": "2026-05-04T16:45:00Z",
     "requester_actor_id": "actor_example_recommendation_agent",
+    "requester_actor_type": "agent_client",
     "pet_id": "pet_synthetic_001",
     "purpose": "product_recommendation",
     "grant_id": "grant_synthetic_partial_001",

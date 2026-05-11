@@ -37,7 +37,7 @@ Canonical schemas:
 Implementations should evaluate requests in this order:
 
 1. Parse the transport request.
-2. Authenticate the requester through the transport or host environment.
+2. Authenticate the requester through the transport or host environment. Reject the request when the transport provides no authenticated principal. Verify that the asserted `requester_actor_type` matches the principal's trust posture; reject mismatches and reject `requester_actor_type: "vet"` until a vet-export profile is defined.
 3. Validate the request body against `CareNetworkLookupRequest`.
 4. Resolve the requested pet.
 5. Resolve the active grant. The care-network-lookup slice requires `grant_id`.
@@ -66,6 +66,7 @@ A request may carry any non-empty subset of these. Each granted scope is evaluat
 A server should authorize each returned field using:
 
 - Authenticated requester actor.
+- Asserted `requester_actor_type` bound to the authenticated principal.
 - Requested pet.
 - Requested subject actor.
 - Declared purpose (`care_network_lookup`).
@@ -137,6 +138,7 @@ Populate:
 - `decision`: `allowed`, `partial`, or `denied`.
 - `evaluated_at`: timestamp of evaluation.
 - `requester_actor_id`: authenticated requester.
+- `requester_actor_type`: echoed from the request, MUST equal the request value.
 - `pet_id`: requested pet.
 - `purpose`: `care_network_lookup`.
 - `grant_id`: grant used.
@@ -269,6 +271,8 @@ Both adapters preserve the canonical request, response, authorization decision, 
 
 - Validate incoming request bodies against canonical schemas.
 - Authenticate requester identity outside the CCP payload.
+- Bind the asserted `requester_actor_type` to the authenticated principal; reject mismatches, unauthenticated requests, and `requester_actor_type: "vet"` until a vet-export profile lands.
+- For systems that issue grants, verify `grantor_actor_type` against the authenticated grant issuer at issuance time.
 - Check requester, pet, subject actor, purpose, grant, scopes, expiry, revocation, visibility, and freshness.
 - Evaluate each requested scope independently; do not collapse `actor_refs.read`, `relationships.read`, `contact_channels.read`, `action_authorizations.read`, and `revocation_status.read` into a single yes/no decision.
 - Honor `allowed_purposes` on contact channels and `service_window`/`expires_at` on action authorizations.

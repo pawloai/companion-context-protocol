@@ -1,21 +1,14 @@
 {
-  "grant_id": "grant_owner_to_example_001",
+  "grant_id": "grant_invalid_missing_grantor_type",
   "subject_pet_id": "pet_luna_001",
   "grantor_actor_id": "actor_owner_001",
-  "grantor_actor_type": "owner",
   "grantee_actor_id": "actor_example_recommendation_agent",
   "grantee_actor_type": "agent_client",
   "scopes": [
-    "pet.profile.read",
-    "pet.diet.read",
-    "pet.commerce_context.read",
-    "pet.permission_grants.read",
-    "pet.product_exclusions.read",
-    "pet.preferences.read"
+    "pet.commerce_context.read"
   ],
   "purposes": [
-    "product_recommendation",
-    "product_filtering"
+    "product_recommendation"
   ],
   "expires_at": "2026-06-04T16:30:00Z",
   "status": "active",
