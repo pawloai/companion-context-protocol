@@ -55,7 +55,9 @@ MCP is one adapter for CCP. It is not the protocol itself.
 
 ## Terminology
 
-Actor: A person, organization, system, agent, or service requesting or acting on context. This draft uses a broad actor term, but implementers should distinguish owner, caregiver, facility, merchant, agent client, and service-integration trust postures in policy decisions.
+Actor: A person, organization, system, agent, or service requesting or acting on context.
+
+Actor type: A discrete trust posture for an actor in policy evaluation. The draft defines seven values: `owner`, `caregiver`, `facility`, `merchant`, `agent_client`, `service_integration`, and `vet`. Requests, grants, and authorization decisions all carry actor types so that scope evaluation, omission rules, and audit records can distinguish, for example, an agent acting on behalf of an owner from a merchant requesting context directly. Actor type is policy metadata — it does not by itself grant access. Future drafts may extend this enum as new profiles (e.g., vet export) land.
 
 Pet: The companion animal that context describes.
 
@@ -65,7 +67,7 @@ Caregiver: An actor delegated by an owner or facility to perform specific care-r
 
 Requester: The actor or client asking for context.
 
-Grant: A permission record authorizing a requester to access specific context for a specific pet, purpose, and time window. Grant issuance, storage, presentation, signature format, revocation propagation, and proof-of-possession are not standardized in this draft.
+Grant: A permission record authorizing a requester to access specific context for a specific pet, purpose, and time window. Grants carry the actor type of both the grantor and the grantee. Grant issuance, storage, presentation, signature format, revocation propagation, and proof-of-possession are not standardized in this draft.
 
 Purpose: The task or reason for the request, such as `product_recommendation`.
 
@@ -203,13 +205,17 @@ Expected fields include:
 - `grant_id`
 - `subject_pet_id`
 - `grantor_actor_id`
+- `grantor_actor_type`
 - `grantee_actor_id`
+- `grantee_actor_type`
 - `scopes`
 - `purposes`
 - `expires_at`
 - `status`
 - `created_at`
 - `revoked_at`
+
+`grantor_actor_type` and `grantee_actor_type` are required. They use the `ActorType` enum and let policy distinguish, for example, an owner-to-merchant grant from an owner-to-agent-client grant when evaluating scopes or audit-logging access.
 
 ### `ContextProvenance`
 
@@ -485,6 +491,11 @@ The illustrative MCP adapter for this flow is `mcp/care-network-lookup.tools.jso
 Implementation guidance for this flow is `docs/implementers/care-network-lookup-server.md`.
 
 ## Conformance Requirements
+
+Every profile implementation MUST also:
+
+- Require `requester_actor_type` on every request and echo it on the response's `authorization_decision`. The echo MUST equal the request value; servers MUST NOT silently coerce or substitute.
+- Require `grantor_actor_type` and `grantee_actor_type` on every grant. The `grantee_actor_type` MUST match the `requester_actor_type` of any request that references the grant.
 
 A CCP Commerce Context Profile implementation should:
 

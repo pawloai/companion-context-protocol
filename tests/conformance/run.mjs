@@ -149,6 +149,24 @@ const cases = [
     valid: false
   },
   {
+    name: "reject request missing requester_actor_type",
+    schema: "schemas/commerce-context-request.schema.json",
+    data: "tests/conformance/fixtures/invalid/request-missing-requester-actor-type.json",
+    valid: false
+  },
+  {
+    name: "reject request with invalid requester_actor_type",
+    schema: "schemas/commerce-context-request.schema.json",
+    data: "tests/conformance/fixtures/invalid/request-invalid-requester-actor-type.json",
+    valid: false
+  },
+  {
+    name: "reject grant missing grantor_actor_type",
+    schema: "schemas/permission-grant.schema.json",
+    data: "tests/conformance/fixtures/invalid/grant-missing-grantor-actor-type.json",
+    valid: false
+  },
+  {
     name: "reject active grant with revoked timestamp",
     schema: "schemas/permission-grant.schema.json",
     data: "tests/conformance/fixtures/invalid/active-grant-with-revoked-at.json",
@@ -492,6 +510,11 @@ for (const pair of roundTripPairs) {
       response.authorization_decision.requester_actor_id,
       request.requester_actor_id
     ],
+    [
+      "authorization_decision.requester_actor_type",
+      response.authorization_decision.requester_actor_type,
+      request.requester_actor_type
+    ],
     ["authorization_decision.pet_id", response.authorization_decision.pet_id, request.pet_id],
     ["authorization_decision.purpose", response.authorization_decision.purpose, request.purpose],
     ["authorization_decision.grant_id", response.authorization_decision.grant_id, request.grant_id]
@@ -601,6 +624,7 @@ failed ||= reportGrantRequestMismatches({
     ["grant_id", careFacilityGrant.grant_id, careFacilityRequest.grant_id],
     ["subject_pet_id", careFacilityGrant.subject_pet_id, careFacilityRequest.pet_id],
     ["grantee_actor_id", careFacilityGrant.grantee_actor_id, careFacilityRequest.requester_actor_id],
+    ["grantee_actor_type", careFacilityGrant.grantee_actor_type, careFacilityRequest.requester_actor_type],
     ["facility_id", careFacilityGrant.facility_id, careFacilityRequest.facility_id],
     ["service_id", careFacilityGrant.service_id, careFacilityRequest.service_id],
     ["service_type", careFacilityGrant.service_type, careFacilityRequest.service_type],
@@ -622,6 +646,7 @@ failed ||= reportGrantRequestMismatches({
     ["grant_id", pickupVerificationGrant.grant_id, pickupVerificationRequest.grant_id],
     ["subject_pet_id", pickupVerificationGrant.subject_pet_id, pickupVerificationRequest.pet_id],
     ["grantee_actor_id", pickupVerificationGrant.grantee_actor_id, pickupVerificationRequest.requester_actor_id],
+    ["grantee_actor_type", pickupVerificationGrant.grantee_actor_type, pickupVerificationRequest.requester_actor_type],
     ["facility_id", pickupVerificationGrant.facility_id, pickupVerificationRequest.facility_id],
     ["service_id", pickupVerificationGrant.service_id, pickupVerificationRequest.service_id],
     ["service_type", pickupVerificationGrant.service_type, pickupVerificationRequest.service_type],
@@ -643,6 +668,7 @@ failed ||= reportGrantRequestMismatches({
     ["grant_id", careNetworkLookupGrant.grant_id, careNetworkLookupRequest.grant_id],
     ["subject_pet_id", careNetworkLookupGrant.subject_pet_id, careNetworkLookupRequest.pet_id],
     ["grantee_actor_id", careNetworkLookupGrant.grantee_actor_id, careNetworkLookupRequest.requester_actor_id],
+    ["grantee_actor_type", careNetworkLookupGrant.grantee_actor_type, careNetworkLookupRequest.requester_actor_type],
     ["service_id", careNetworkLookupGrant.service_id, careNetworkLookupRequest.service_id],
     ["service_window", careNetworkLookupGrant.service_window, careNetworkLookupRequest.service_window]
   ]

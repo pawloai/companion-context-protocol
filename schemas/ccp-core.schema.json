@@ -70,6 +70,18 @@
         "summary_only"
       ]
     },
+    "ActorType": {
+      "type": "string",
+      "enum": [
+        "owner",
+        "caregiver",
+        "facility",
+        "merchant",
+        "agent_client",
+        "service_integration",
+        "vet"
+      ]
+    },
     "SensitiveKeywordPattern": {
       "not": {
         "pattern": "[Bb][Ii][Ll][Ll][Ii][Nn][Gg]|[Pp][Aa][Yy][Mm][Ee][Nn][Tt]|[Hh][Oo][Uu][Ss][Ee][Hh][Oo][Ll][Dd]|[Mm][Ee][Dd][Ii][Cc][Aa][Ll]|[Dd][Ii][Aa][Gg][Nn][Oo][Ss][Ii][Ss]|[Tt][Rr][Ee][Aa][Tt][Mm][Ee][Nn][Tt]|[Ss][Tt][Aa][Ff][Ff][- _][Oo][Nn][Ll][Yy]|[Ss][Tt][Aa][Ff][Ff][- _][Nn][Oo][Tt][Ee]|[Rr][Ee][Ll][Aa][Tt][Ii][Oo][Nn][Ss][Hh][Ii][Pp][- _][Dd][Ii][Ss][Pp][Uu][Tt][Ee]|[Cc][Uu][Ss][Tt][Oo][Dd][Yy]|[Ii][Dd][Ee][Nn][Tt][Ii][Tt][Yy][- _][Dd][Oo][Cc][Uu][Mm][Ee][Nn][Tt]"
@@ -1327,11 +1339,36 @@
       "additionalProperties": false,
       "required": [
         "actor_id",
+        "actor_type",
         "metadata"
       ],
       "properties": {
         "actor_id": {
           "type": "string"
+        },
+        "actor_type": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/FacilityStringField"
+            },
+            {
+              "properties": {
+                "value": {
+                  "enum": [
+                    "owner",
+                    "caregiver",
+                    "family_contact",
+                    "friend_contact",
+                    "pickup_contact",
+                    "emergency_contact",
+                    "facility_staff",
+                    "organization",
+                    "integration_client"
+                  ]
+                }
+              }
+            }
+          ]
         },
         "display_name": {
           "$ref": "#/$defs/FacilityStringField"
@@ -1716,7 +1753,9 @@
         "grant_id",
         "subject_pet_id",
         "grantor_actor_id",
+        "grantor_actor_type",
         "grantee_actor_id",
+        "grantee_actor_type",
         "scopes",
         "purposes",
         "status",
@@ -1732,8 +1771,14 @@
         "grantor_actor_id": {
           "type": "string"
         },
+        "grantor_actor_type": {
+          "$ref": "#/$defs/ActorType"
+        },
         "grantee_actor_id": {
           "type": "string"
+        },
+        "grantee_actor_type": {
+          "$ref": "#/$defs/ActorType"
         },
         "facility_id": {
           "type": "string"
@@ -1847,6 +1892,7 @@
         "decision",
         "evaluated_at",
         "requester_actor_id",
+        "requester_actor_type",
         "pet_id",
         "purpose",
         "applied_scopes",
@@ -1868,6 +1914,9 @@
         },
         "requester_actor_id": {
           "type": "string"
+        },
+        "requester_actor_type": {
+          "$ref": "#/$defs/ActorType"
         },
         "pet_id": {
           "type": "string"
@@ -1932,6 +1981,7 @@
       "required": [
         "request_id",
         "requester_actor_id",
+        "requester_actor_type",
         "pet_id",
         "purpose",
         "scopes"
@@ -1942,6 +1992,9 @@
         },
         "requester_actor_id": {
           "type": "string"
+        },
+        "requester_actor_type": {
+          "$ref": "#/$defs/ActorType"
         },
         "pet_id": {
           "type": "string"
@@ -1968,6 +2021,7 @@
       "required": [
         "request_id",
         "requester_actor_id",
+        "requester_actor_type",
         "pet_id",
         "facility_id",
         "service_id",
@@ -1983,6 +2037,9 @@
         },
         "requester_actor_id": {
           "type": "string"
+        },
+        "requester_actor_type": {
+          "$ref": "#/$defs/ActorType"
         },
         "pet_id": {
           "type": "string"
@@ -2024,6 +2081,7 @@
       "required": [
         "request_id",
         "requester_actor_id",
+        "requester_actor_type",
         "pet_id",
         "facility_id",
         "service_id",
@@ -2032,7 +2090,8 @@
         "purpose",
         "scopes",
         "grant_id",
-        "pickup_actor_id"
+        "pickup_actor_id",
+        "pickup_actor_type"
       ],
       "properties": {
         "request_id": {
@@ -2040,6 +2099,9 @@
         },
         "requester_actor_id": {
           "type": "string"
+        },
+        "requester_actor_type": {
+          "$ref": "#/$defs/ActorType"
         },
         "pet_id": {
           "type": "string"
@@ -2073,6 +2135,20 @@
         },
         "pickup_actor_id": {
           "type": "string"
+        },
+        "pickup_actor_type": {
+          "type": "string",
+          "enum": [
+            "owner",
+            "caregiver",
+            "family_contact",
+            "friend_contact",
+            "pickup_contact",
+            "emergency_contact",
+            "facility_staff",
+            "organization",
+            "integration_client"
+          ]
         }
       }
     },
@@ -3110,6 +3186,7 @@
       "required": [
         "request_id",
         "requester_actor_id",
+        "requester_actor_type",
         "pet_id",
         "purpose",
         "scopes",
@@ -3122,6 +3199,9 @@
         },
         "requester_actor_id": {
           "type": "string"
+        },
+        "requester_actor_type": {
+          "$ref": "#/$defs/ActorType"
         },
         "pet_id": {
           "type": "string"

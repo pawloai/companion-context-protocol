@@ -5,6 +5,7 @@
     "decision": "allowed",
     "evaluated_at": "2026-05-15T20:30:00Z",
     "requester_actor_id": "actor_boarding_facility_app_001",
+    "requester_actor_type": "facility",
     "pet_id": "pet_luna_001",
     "purpose": "pickup_verification",
     "grant_id": "grant_owner_to_boarding_facility_pickup_001",
@@ -28,6 +29,21 @@
     },
     "pickup_actor": {
       "actor_id": "actor_pickup_contact_001",
+      "actor_type": {
+        "value": "pickup_contact",
+        "visibility": [
+          "owner_visible",
+          "facility_shareable"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_owner_001",
+          "source_system": "example-ccp-server",
+          "recorded_at": "2026-05-01T14:30:00Z",
+          "confidence": 0.9,
+          "source_record_ref": "example://pets/pet_luna_001/pickup/actor_pickup_contact_001"
+        }
+      },
       "display_name": {
         "value": "Authorized pickup contact",
         "visibility": [

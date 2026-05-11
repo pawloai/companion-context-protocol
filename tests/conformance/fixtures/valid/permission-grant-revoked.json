@@ -2,7 +2,9 @@
   "grant_id": "grant_synthetic_revoked_001",
   "subject_pet_id": "pet_synthetic_001",
   "grantor_actor_id": "actor_owner_001",
+  "grantor_actor_type": "owner",
   "grantee_actor_id": "actor_example_filtering_agent",
+  "grantee_actor_type": "agent_client",
   "scopes": [
     "pet.commerce_context.read",
     "pet.permission_grants.read"

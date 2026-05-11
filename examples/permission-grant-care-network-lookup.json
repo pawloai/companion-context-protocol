@@ -2,7 +2,9 @@
   "grant_id": "grant_care_network_lookup_001",
   "subject_pet_id": "pet_luna_001",
   "grantor_actor_id": "actor_owner_001",
+  "grantor_actor_type": "owner",
   "grantee_actor_id": "actor_sitter_001",
+  "grantee_actor_type": "caregiver",
   "scopes": [
     "pet.care_network.actor_refs.read",
     "pet.care_network.relationships.read",
