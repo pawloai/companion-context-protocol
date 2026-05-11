@@ -16,7 +16,7 @@ The operationally-grounded review targets are the Care Facility Context schema s
 
 The draft also ships the Commerce Context Profile — commerce-safe pet context for product recommendations and filtering, with the same exclusions for staff notes, wellness timelines, diagnosis or treatment history, billing data, household data, and sensitive facility operations data. Commerce is a valid profile, but it is not the lead adoption wedge: merchants already collect pet profiles at signup and infer preferences from order history, the consent path runs through the merchant rather than a third-party protocol, and the merchant tends to be the system of record — so the `PermissionGrant` model's "neutral custodian distinct from the requester" assumption is least true here. Treat Commerce as a parallel narrow slice, not the canonical worked example.
 
-Facility Truth is a design candidate for a future profile covering provenance-backed facility hours, services, eligibility, certifications, service areas, booking links, and freshness for public operational facts that agents often answer incorrectly. Its public-facts subset doesn't require a `PermissionGrant` at all and addresses a present, measurable agent-accuracy problem — it is the strongest design candidate ahead of expanding Commerce. Promotion from design draft to schema-backed profile is tracked separately.
+Facility Truth is a design candidate for a future profile covering provenance-backed facility hours, services, eligibility, certifications, service areas, booking links, and freshness for public operational facts that agents often answer incorrectly. Because facility facts can be public-by-nature, the design proposes that a public-facts subset could be served without a `PermissionGrant` — sidestepping grant-transport prerequisites that gate the pet-specific profiles. Combined with a present, measurable agent-accuracy problem, that makes Facility Truth the strongest design candidate ahead of expanding Commerce. Promotion from design draft to schema-backed profile is tracked separately.
 
 ## What CCP Defines
 
@@ -83,10 +83,6 @@ companion-context-protocol/
 - [Care Facility Pickup Verification response schema](schemas/care-facility-pickup-verification-response.schema.json)
 - [Care Network Lookup request schema](schemas/care-network-lookup-request.schema.json)
 - [Care Network Lookup response schema](schemas/care-network-lookup-response.schema.json)
-- [Commerce permission grant example](examples/permission-grant-commerce-context.json)
-- [Commerce context request example](examples/commerce-context-request.json)
-- [Commerce context partial response example](examples/commerce-context-response.json)
-- [Commerce context denied response example](examples/commerce-context-denied-response.json)
 - [Care Facility permission grant example](examples/permission-grant-care-facility-boarding-preparation.json)
 - [Care Facility context request example](examples/care-facility-boarding-preparation-request.json)
 - [Care Facility context partial response example](examples/care-facility-boarding-preparation-response.json)
@@ -103,18 +99,22 @@ companion-context-protocol/
 - [Care Network Lookup allowed response example](examples/care-network-lookup-response.json)
 - [Care Network Lookup contact-withheld partial response example](examples/care-network-lookup-contact-withheld-response.json)
 - [Care Network Lookup denied response example](examples/care-network-lookup-denied-response.json)
+- [Commerce permission grant example](examples/permission-grant-commerce-context.json)
+- [Commerce context request example](examples/commerce-context-request.json)
+- [Commerce context partial response example](examples/commerce-context-response.json)
+- [Commerce context denied response example](examples/commerce-context-denied-response.json)
 - [Draft changelog](CHANGELOG.md)
 - [Maintainer and contact path](MAINTAINERS.md)
-- [Commerce Context OpenAPI adapter](openapi/commerce-context.openapi.json)
-- [Commerce Context MCP tool sketches](mcp/commerce-context.tools.json)
 - [Care Facility Context OpenAPI adapter](openapi/care-facility-context.openapi.json)
 - [Care Facility Context MCP tool sketches](mcp/care-facility-context.tools.json)
 - [Care Facility Pickup Verification OpenAPI adapter](openapi/care-facility-pickup-verification.openapi.json)
 - [Care Facility Pickup Verification MCP tool sketches](mcp/care-facility-pickup-verification.tools.json)
 - [Care Network Lookup OpenAPI adapter](openapi/care-network-lookup.openapi.json)
 - [Care Network Lookup MCP tool sketch](mcp/care-network-lookup.tools.json)
-- [Commerce Context server implementer guide](docs/implementers/commerce-context-server.md)
+- [Commerce Context OpenAPI adapter](openapi/commerce-context.openapi.json)
+- [Commerce Context MCP tool sketches](mcp/commerce-context.tools.json)
 - [Care Facility Context server implementer guide](docs/implementers/care-facility-context-server.md)
+- [Commerce Context server implementer guide](docs/implementers/commerce-context-server.md)
 - [Known compatibility risks](docs/implementers/compatibility-risks.md)
 - [Draft threat model](THREAT_MODEL.md)
 - [Public launch checklist](docs/launch/public-launch-checklist.md)

@@ -7,7 +7,7 @@ The goal of design-partner outreach is to test whether the current CCP profiles 
 This document is the **Commerce Context outreach packet**. Commerce is a parallel valid profile but is not the lead adoption wedge — for most ecosystem outreach, prefer one of:
 
 - `docs/launch/care-facility-design-partner-review.md` — first Care Facility boarding-preparation review (recommended default starting point for facility, practice-management, and care-operator reviewers).
-- `docs/design/2026-05-05-facility-truth-profile.md` — when the reviewer is focused on facility hours, services, policies, booking, listing accuracy, or agent answer grounding. Facility Truth's public-facts subset does not require a `PermissionGrant`, which makes it the strongest design candidate ahead of expanding Commerce.
+- `docs/design/2026-05-05-facility-truth-profile.md` — when the reviewer is focused on facility hours, services, policies, booking, listing accuracy, or agent answer grounding. The design proposes that a public-facts subset could be served without a `PermissionGrant`, which is what makes Facility Truth the strongest design candidate ahead of expanding Commerce.
 
 Use this packet only when the reviewer is specifically a commerce or product-recommendation operator and the conversation is bounded to that profile; or when a Care Facility / Facility Truth reviewer has explicitly asked to also see the Commerce slice. The structural reasons Commerce is not the lead — incumbent merchant signup flows already capture pet profiles, the consent path runs through the merchant, and the merchant is typically the system of record so there is no neutral grant custodian — are worth flagging up front in any Commerce conversation.
 

@@ -2,7 +2,7 @@
 
 Status: Draft, pre-1.0
 
-CCP is `0.1.0-draft`. Draft versions may change incompatibly while the first profile, schema contract, and conformance expectations are refined. This document lists the known surfaces where implementers should expect change before a stable `1.0` release, and how to insulate an implementation against those changes.
+CCP is `0.1.0-draft`. Draft versions may change incompatibly while the current profile slices, schema contract, and conformance expectations are refined. This document lists the known surfaces where implementers should expect change before a stable `1.0` release, and how to insulate an implementation against those changes.
 
 The canonical contract is JSON Schema. When in doubt, validate against the schemas shipped in `schemas/` rather than against any prose, adapter sketch, or package type.
 

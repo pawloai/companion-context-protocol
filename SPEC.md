@@ -148,7 +148,7 @@ The Commerce profile should exclude by default:
 
 ### Facility Truth (Design Candidate)
 
-Facility Truth is a design candidate, not a schema-backed profile in this version. It would cover public or operational facility facts such as hours, services, service areas, eligibility constraints, certifications, contact methods, booking links, accepted pet types, freshness, and provenance. It should be developed separately from pet-specific context because public facility facts have different consent, authorization, and provenance requirements — the public-facts subset doesn't require a `PermissionGrant` at all, which removes the grant-transport prerequisites that gate the pet-specific profiles. Facility Truth is the strongest design candidate ahead of expanding Commerce, and its promotion to a schema-backed profile is tracked separately.
+Facility Truth is a design candidate, not a schema-backed profile in this version. It would cover public or operational facility facts such as hours, services, service areas, eligibility constraints, certifications, contact methods, booking links, accepted pet types, freshness, and provenance. It should be developed separately from pet-specific context because public facility facts have different consent, authorization, and provenance requirements — the design proposes that a public-facts subset could be served without a `PermissionGrant`, which would remove the grant-transport prerequisites that gate the pet-specific profiles. Facility Truth is the strongest design candidate ahead of expanding Commerce, and its promotion to a schema-backed profile is tracked separately.
 
 ## Core Objects
 
