@@ -56,7 +56,7 @@ The current invariant set (`ok` / `partial` / `denied` consistency, denied requi
 
 `status: active` is incompatible with `revoked_at`; expired grants must carry `expires_at`; revoked grants must carry `revoked_at`. These constraints will not be loosened. Future drafts may add states (e.g., `pending`, `suspended`) for multi-party consent.
 
-The current `PermissionGrant` schema defines record shape only. It does not standardize issuance, storage, token format, signing, proof-of-possession, introspection, or revocation propagation. Implementers should treat `grant_id` as a lookup key into trusted authorization state, not as a bearer secret, and should expect this area to change before `1.0`.
+The current `PermissionGrant` schema defines record shape only. It does not standardize issuance, storage, token format, signing, proof-of-possession, introspection, or revocation propagation. Implementers should treat `grant_id` as a lookup key into trusted authorization state, not as a bearer secret, and should expect this area to change before `1.0`. The grant carries `grantor_actor_type` and `grantee_actor_type` but no field for recording how the issuer's authentication was verified — the verification MUST happen per `SPEC.md` Conformance Requirements but is currently unserialized. A future draft may add a `grantor_verification_method` (or equivalent) once proof-of-possession lands; cross-system grant portability before that field exists relies on out-of-band trust between issuer and consumer.
 
 ### Commerce-safe rule
 

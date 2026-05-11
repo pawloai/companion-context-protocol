@@ -37,7 +37,7 @@ Canonical schemas:
 Implementations should evaluate requests in this order:
 
 1. Parse the transport request.
-2. Authenticate the requester through the transport or host environment.
+2. Authenticate the requester through the transport or host environment. Reject the request when the transport provides no authenticated principal. Verify that the asserted `requester_actor_type` matches the principal's trust posture; reject mismatches and reject `requester_actor_type: "vet"` until a vet-export profile is defined.
 3. Validate the request body against `CareFacilityPickupVerificationRequest`.
 4. Resolve the requested pet.
 5. Resolve the active grant. The pickup-verification slice requires `grant_id`.
@@ -58,6 +58,7 @@ Scopes are necessary but not sufficient.
 A server should authorize each returned field using:
 
 - Authenticated requester actor.
+- Asserted `requester_actor_type` bound to the authenticated principal.
 - Requested pet.
 - Requested facility.
 - Requested service id and service type.
@@ -136,6 +137,7 @@ Populate:
 - `decision`: `allowed`, `partial`, or `denied`.
 - `evaluated_at`: timestamp of evaluation.
 - `requester_actor_id`: authenticated requester.
+- `requester_actor_type`: echoed from the request, MUST equal the request value.
 - `pet_id`: requested pet.
 - `purpose`: `pickup_verification`.
 - `grant_id`: grant used.
@@ -277,6 +279,8 @@ Both adapters preserve the canonical request, response, authorization decision, 
 
 - Validate incoming request bodies against canonical schemas.
 - Authenticate requester identity outside the CCP payload.
+- Bind the asserted `requester_actor_type` to the authenticated principal; reject mismatches, unauthenticated requests, and `requester_actor_type: "vet"` until a vet-export profile lands.
+- For systems that issue grants, verify `grantor_actor_type` against the authenticated grant issuer at issuance time.
 - Check requester, pet, facility, service, service window, pickup actor, purpose, grant, scope, expiry, revocation, visibility, and freshness.
 - Return only facility-shareable context allowed by the grant, purpose, facility, service window, and pickup actor.
 - Attach provenance and visibility to every returned field.
