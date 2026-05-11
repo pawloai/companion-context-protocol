@@ -30,42 +30,34 @@ An early implementation should be framed as:
 
 Avoid making CCP look like a single-vendor export format or a one-author standard. The public project should use vendor-neutral naming, examples, governance, and compatibility language while also acknowledging adjacent standards, prior art, and ecosystem holders.
 
-## Existing Schema-Backed Wedge
+## Existing Schema-Backed Wedges
 
-The current schema-backed wedge is the Commerce Context Profile.
+The draft ships four narrow schema-backed slices. They are not equally well-positioned as adoption wedges.
 
-This profile should support permissioned, commerce-safe pet context for product recommendations and product filtering.
+### Care Facility flows — operationally-grounded wedge
 
-The initial context should include only the minimum useful fields, such as:
+The Care Facility boarding-preparation slice, the pickup-verification slice, and the first Care Network lookup slice are the strongest currently-shipping wedge. They sit closest to a clear custodian (the facility's practice-management or facility-management system) and a concrete operational pain point (intake-form re-keying, pickup-desk verification, ambiguous caregiver contact and authority) that an interop standard can directly address. The boarding-preparation slice should support facility booking context, care instructions, feeding instructions, vaccination status, pickup authorization, and emergency contacts; it should exclude medication administration, facility observation writeback, full wellness timelines, diagnosis or treatment history, billing data, payment authority, and identity document copies.
 
-- Species.
-- Breed or breed mix.
-- Size.
-- Weight band.
-- Life stage.
-- Diet.
-- Allergies.
-- Sensitivities.
-- Product exclusions.
-- Staff-curated or owner-entered preferences.
-- Relevant purchase history if explicitly permitted.
+### Commerce Context — parallel slice, not the lead
 
-The initial profile should exclude:
+The Commerce Context Profile supports permissioned, commerce-safe pet context for product recommendations and product filtering — species, breed or breed mix, size, weight band, life stage, diet, allergies, sensitivities, product exclusions, owner or staff-curated preferences, and permitted purchase-history summaries; it excludes internal staff notes, full wellness timelines, diagnosis or treatment history, billing data, unrelated owner or household data, and sensitive facility operations data.
 
-- Internal staff notes.
-- Full wellness timelines.
-- Diagnosis or treatment history.
-- Billing data.
-- Unrelated owner or household data.
-- Sensitive facility operations data.
+Commerce was selected as a narrow, lower-risk schema slice early in the draft. It remains a valid profile, but it is structurally weak as an adoption wedge:
 
-This wedge remains useful because it is commercially understandable and less risky than starting with full medical, wellness, booking, or payment authority. It should not be described as proven to be the best first ecosystem wedge until design partners validate it.
+- Merchants already collect pet profiles via account signup and infer purchase preferences from order history. The consent path runs through the merchant, not a third-party protocol.
+- The merchant is typically the system of record. CCP's `PermissionGrant` model assumes a custodian distinct from the requester; that assumption is least true here.
+- The pain isn't acute enough to drive adoption. Merchant account profiles plus checkout-time preference capture are deployed at scale and aren't visibly broken in a way that buyers will pay to fix with a new protocol.
 
-## Facility Truth Challenge
+Do not describe Commerce as the lead wedge in public materials. Treat it as a parallel narrow slice that design partners may review, with the explicit framing that "no, the merchant account already covers this" is a useful answer.
 
-Ecosystem feedback identified a possible mismatch between the public agent-accuracy problem and the first schema-backed profile.
+## Facility Truth — Strongest Forward Wedge
 
-If the motivating problem is agents giving wrong facility hours, outdated services, unsupported pet types, stale booking links, or invented certifications, then a Facility Truth Profile may be a more direct first review target than pet-specific commerce context.
+If the motivating problem is agents giving wrong facility hours, outdated services, unsupported pet types, stale booking links, or invented certifications, a Facility Truth Profile is a more direct review target than pet-specific commerce context. It is the strongest design candidate ahead of expanding Commerce, for several structural reasons:
+
+- The data is public-by-nature. The public-facts subset doesn't require a `PermissionGrant` at all, which removes the grant transport, possession, and revocation prerequisites that gate the pet-specific profiles.
+- The agent-facing pain is present and measurable: every assistant grounded in stale crawl data hallucinates hours, services, eligibility, and certifications.
+- It has a standalone value proposition. A facility can publish accurate operational facts with provenance and benefit immediately — no counterparty needs to implement CCP first. Every other profile needs at least two implementing parties.
+- The visibility model already fits. Distinguishing public from partner-only facts using existing precedence rules (`staff_only` and `restricted_sensitive` take precedence) is a small extension, not a redesign.
 
 Facility Truth should cover facility facts rather than private pet context:
 
@@ -80,7 +72,7 @@ Facility Truth should cover facility facts rather than private pet context:
 
 Facility Truth should remain separate from Care Facility Context. The former describes a facility; the latter describes one pet's context for a facility workflow.
 
-Recommended next action: run discovery review against `docs/design/2026-05-05-facility-truth-profile.md` before deciding whether to add Facility Truth schemas.
+Recommended next action: promote `docs/design/2026-05-05-facility-truth-profile.md` from design draft to a schema-backed profile with its own schemas, examples, adapters, implementer guide, and conformance fixtures, on the same footing as the Care Facility and Commerce profiles.
 
 ## Transport-Neutral Design
 
@@ -134,19 +126,19 @@ companion-context-protocol/
 
 ## First Public Artifact
 
-The first release should include one excellent end-to-end example rather than many partial abstractions.
+The first release should include one excellent end-to-end example rather than many partial abstractions. The canonical worked example should be a Care Facility flow, not a Commerce flow — facility operations are where CCP has the clearest custodian and the most concrete pain point.
 
 Example flow:
 
-1. Owner grants `pet.commerce_context.read`.
-2. Client requests context for `purpose: product_recommendation`.
-3. Server evaluates actor, grant, purpose, visibility class, and scope.
-4. Server returns a minimized `CommerceContext`.
-5. Returned fields include provenance and visibility metadata.
+1. Owner grants boarding-preparation scopes to a facility for one pet and service window.
+2. Facility requests care-facility context for `purpose: boarding_preparation`.
+3. Server evaluates actor, grant, pet, facility, service window, purpose, visibility class, and scope.
+4. Server returns a minimized `CareFacilityContext`.
+5. Returned fields include `facility_shareable` visibility and provenance.
 6. Restricted fields are omitted with machine-readable omission reasons.
 7. Conformance tests validate the response shape and privacy behavior.
 
-The example should demonstrate that commerce systems can get useful recommendation context without receiving raw medical records, staff-only notes, or unrelated owner data.
+The example should demonstrate that a facility can get usable intake context for a specific stay without receiving medication administration records, raw wellness timelines, diagnosis history, billing data, payment authority, or identity-document copies.
 
 ## Minimal v0.1 Scope
 
@@ -196,20 +188,17 @@ Defer broader areas until the base model is proven:
 
 Before broad announcement, recruit 3-5 design partners and ask them to review one narrow flow.
 
-Target partner types:
+Target partner types, in priority order:
 
-- Daycare or boarding operator.
-- Pet retailer or ecommerce vendor.
+- Daycare, boarding, or grooming operator.
 - Facility-management software builder.
 - Practice-management software builder.
+- Facility-directory, listing-accuracy, or local-business agent tooling builder (also a strong Facility Truth fit).
 - Vet-adjacent software contact.
 - Insurance, registry, or claims-workflow reviewer.
+- Pet retailer or ecommerce vendor (Commerce-specific; not the lead).
 - AI agent or tooling developer.
 - Shelter or rescue operator later, after the first profile is stable.
-
-The partner question should be concrete:
-
-> Would you implement this Commerce Context Profile if it existed?
 
 For Care Facility design partners, use `docs/launch/care-facility-design-partner-review.md` and ask:
 
@@ -217,9 +206,13 @@ For Care Facility design partners, use `docs/launch/care-facility-design-partner
 
 For Facility Truth discovery, use `docs/design/2026-05-05-facility-truth-profile.md` and ask:
 
-> Would facility hours, services, acceptance criteria, contact methods, booking links, certifications, freshness, and provenance solve a more urgent agent-accuracy problem than pet-specific context?
+> Would facility hours, services, acceptance criteria, contact methods, booking links, certifications, freshness, and provenance solve a more urgent agent-accuracy problem than pet-specific context? Should Facility Truth be promoted from design draft to a schema-backed profile ahead of expanding Commerce?
 
-Avoid asking partners to react to the whole long-term protocol vision at first.
+For Commerce-specific reviewers, use `docs/launch/design-partner-outreach.md` and ask:
+
+> Would you implement this Commerce Context Profile if it existed — and what does it offer beyond merchant account signup and order-history inference?
+
+Avoid asking partners to react to the whole long-term protocol vision at first. Avoid pitching Commerce as the lead profile.
 
 ## Next Scope Candidates
 
@@ -359,7 +352,7 @@ See:
 - `docs/launch/public-launch-checklist.md`
 - `docs/launch/design-partner-outreach.md`
 
-The repo can be shared privately with design partners now. Broad public launch should wait until the public launch checklist is materially complete, 2-3 design partners have reviewed the Commerce Context Profile, and 2-3 design partners have reviewed the first Care Facility boarding-preparation slice.
+The repo can be shared privately with design partners now. Broad public launch should wait until the public launch checklist is materially complete, 2-3 design partners have reviewed the first Care Facility boarding-preparation slice, and 2-3 design partners have completed Facility Truth discovery review. Commerce Context partner review is welcome but is not a gating condition for broad launch.
 
 ## Near-Term Execution Plan
 
@@ -386,10 +379,11 @@ Current status:
 - Done: maintainer contact path, launch announcement copy, and initial issue labels.
 - Done: first tagged `v0.1.0-draft` feedback preview.
 - Done: Care Facility design-partner review packet and feedback triage log.
-- Next: identify 3-5 Commerce Context design partners for review.
 - Next: identify 3-5 Care Facility design partners for boarding-preparation review.
 - Next: identify 2-3 Care Facility design partners for pickup-verification review.
 - Next: identify 2-3 Care Network design partners for one-subject lookup review.
+- Next: run Facility Truth discovery review against `docs/design/2026-05-05-facility-truth-profile.md` and decide whether to promote it to a schema-backed profile alongside the Care Facility flows. Treat this as higher priority than further Commerce review.
 - Next: review whether the first Care Network lookup slice should expand into management writes, remain read-only, or stay as shared primitives embedded in purpose-specific profiles.
+- Next: identify 2-3 commerce-specific design partners for Commerce Context review, recognizing that "no, merchant signup already covers this" is a useful answer and that Commerce is no longer positioned as the lead.
 - Next: complete remaining public launch checklist items after partner review.
 - Next: generated Python model plan or Pydantic model generation spike, if partner feedback shows demand for runtime models.

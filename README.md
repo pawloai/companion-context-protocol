@@ -12,11 +12,11 @@ This repository is ready to ask design partners for review, but it should not ye
 
 CCP is currently a protocol proposal with canonical schemas and validation tests. It is not yet endorsed by practice-management vendors, care-facility software vendors, veterinary bodies, insurers, registries, shelters, or other pet-data holders. A compatible implementation claim means "matches this draft and test suite," not "participates in an adopted industry standard."
 
-The first schema-backed profile is the Commerce Context Profile, focused on product recommendations and filtering without exposing unrelated staff notes, wellness timelines, diagnosis or treatment history, billing data, household data, or sensitive facility operations data. That schema order is not a claim that Commerce is the best public adoption wedge.
+The operationally-grounded review targets are the Care Facility Context schema slices for boarding preparation and pickup verification, plus the first Care Network lookup slice for one pet and one subject actor. These are intentionally narrower than the full care-facility and care-network designs and exclude medication administration, writeback, payment authority, emergency override access, full wellness timelines, diagnosis history, treatment history, billing records, household exports, and identity document copies. They sit closest to a clear custodian (the facility's practice-management or facility-management system) and a concrete pain point (intake-form re-keying, pickup-desk verification, ambiguous caregiver authority) that an interop standard can directly address.
 
-The draft also includes Care Facility Context schema slices for boarding preparation and pickup verification, plus a first Care Network lookup slice for one pet and one subject actor. They are intentionally narrower than the full care-facility and care-network designs and exclude medication administration, writeback, payment authority, emergency override access, full wellness timelines, diagnosis history, treatment history, billing records, household exports, and identity document copies.
+The draft also ships the Commerce Context Profile — commerce-safe pet context for product recommendations and filtering, with the same exclusions for staff notes, wellness timelines, diagnosis or treatment history, billing data, household data, and sensitive facility operations data. Commerce is a valid profile, but it is not the lead adoption wedge: merchants already collect pet profiles at signup and infer preferences from order history, the consent path runs through the merchant rather than a third-party protocol, and the merchant tends to be the system of record — so the `PermissionGrant` model's "neutral custodian distinct from the requester" assumption is least true here. Treat Commerce as a parallel narrow slice, not the canonical worked example.
 
-Facility Truth remains a design candidate for a future profile covering provenance-backed facility hours, services, eligibility, certifications, service areas, booking links, and freshness for public operational facts that agents often answer incorrectly. It is still design material only and is not on the immediate roadmap; the active path is implementation feedback on the Care Facility and Care Network profiles.
+Facility Truth is a design candidate for a future profile covering provenance-backed facility hours, services, eligibility, certifications, service areas, booking links, and freshness for public operational facts that agents often answer incorrectly. Its public-facts subset doesn't require a `PermissionGrant` at all and addresses a present, measurable agent-accuracy problem — it is the strongest design candidate ahead of expanding Commerce. Promotion from design draft to schema-backed profile is tracked separately.
 
 ## What CCP Defines
 
@@ -147,13 +147,13 @@ Start with the draft specification, then validate the current contract before bu
    npm test
    ```
 
-If you are implementing a Commerce Context server, use [docs/implementers/commerce-context-server.md](docs/implementers/commerce-context-server.md) as the implementation guide. Validate incoming `CommerceContextRequest` objects, authenticate the requester outside the CCP payload, evaluate grants, scopes, purposes, visibility, freshness, and provenance, then validate outgoing `CommerceContextResponse` objects before returning them.
-
 If you are implementing the first Care Facility Context slice, use [docs/implementers/care-facility-context-server.md](docs/implementers/care-facility-context-server.md) as the implementation guide. Validate incoming `CareFacilityContextRequest` objects, authenticate the requester outside the CCP payload, evaluate grants, facility identity, service-window boundaries, scopes, purpose, `facility_shareable` visibility, freshness, and provenance, then validate outgoing `CareFacilityContextResponse` objects before returning them.
 
 If you are implementing the first Care Network lookup slice, validate incoming `CareNetworkLookupRequest` objects, authenticate the requester outside the CCP payload, evaluate grants, subject actor identity, scopes, purpose, `care_network_visible`, `contact_shareable`, and `action_authorization_visible` boundaries, freshness, revocation, and provenance, then validate outgoing `CareNetworkLookupResponse` objects before returning them. The first slice is a lookup for one subject actor, not a full care-network export.
 
-If you are integrating over HTTP, start with [openapi/](openapi/) for Commerce Context, Care Facility Context, Pickup Verification, and Care Network Lookup adapter sketches. If you are integrating with agents or assistant clients, start with [mcp/](mcp/) for the matching tool sketches. Compatibility is based on preserving the canonical CCP semantics, not on copying a specific transport shape.
+If you are implementing a Commerce Context server, use [docs/implementers/commerce-context-server.md](docs/implementers/commerce-context-server.md) as the implementation guide. Validate incoming `CommerceContextRequest` objects, authenticate the requester outside the CCP payload, evaluate grants, scopes, purposes, visibility, freshness, and provenance, then validate outgoing `CommerceContextResponse` objects before returning them.
+
+If you are integrating over HTTP, start with [openapi/](openapi/) for Care Facility Context, Pickup Verification, Care Network Lookup, and Commerce Context adapter sketches. If you are integrating with agents or assistant clients, start with [mcp/](mcp/) for the matching tool sketches. Compatibility is based on preserving the canonical CCP semantics, not on copying a specific transport shape.
 
 If you are using helper packages, see [packages/typescript](packages/typescript) for draft TypeScript types and Node-focused AJV validator helpers, and [packages/python](packages/python) for Python schema-loading helpers. These are convenience packages, not production SDKs or normative artifacts. The canonical schemas still win if package helpers and schemas disagree.
 
@@ -185,16 +185,16 @@ The test suite validates the current positive examples and core `$defs` fixtures
 
 ## Contributing
 
-This project is early. The most useful contributions are concrete reviews of the Care Facility boarding-preparation slice, pickup verification, the first Care Network lookup slice, and the Commerce Context Profile, particularly from teams operating or building pet-care facility software:
+This project is early. The most useful contributions are concrete reviews of the Care Facility boarding-preparation slice, pickup verification, the first Care Network lookup slice, and a future Facility Truth Profile, particularly from teams operating or building pet-care facility software, facility-directory systems, or agent tooling grounded in local-business data. Commerce Context review is welcome but is not the priority adoption wedge:
 
 - Is the boarding-preparation bundle useful for facility intake and stay planning?
 - Is the pickup-verification slice safe and complete for facility release workflows?
 - Is the Care Network lookup useful without becoming a broad household or contact export?
-- Is the commerce-context bundle useful for product filtering or recommendations?
-- Are the scope and purpose boundaries clear?
+- Would a Facility Truth Profile for hours, services, certifications, accepted pets, booking links, freshness, and provenance solve a more urgent agent-accuracy problem than pet-specific context for your AI agent or directory product?
 - Are facility identity and service-window boundaries clear enough for implementation?
+- Are the scope and purpose boundaries clear?
 - Are privacy and safety expectations enforceable?
 - Can an implementer build against the schemas without private context?
-- Would a future Facility Truth Profile for hours, services, certifications, accepted pets, booking links, freshness, and provenance be valuable for your AI agent or directory product?
+- Is the commerce-context bundle useful for product filtering or recommendations, given that merchants already capture pet profiles at signup?
 
 Substantial changes to schemas, scopes, visibility classes, profile boundaries, or conformance behavior should be proposed before implementation. See [GOVERNANCE.md](GOVERNANCE.md), [SECURITY.md](SECURITY.md), and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).

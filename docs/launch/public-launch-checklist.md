@@ -11,12 +11,13 @@ Current recommendation: public feedback preview.
 The repository can be made public to gather feedback now, but broad positioning as a standard should wait until:
 
 - Prior-art and ecosystem gaps have been acknowledged in public docs.
-- 2-3 design partners have reviewed the Commerce Context Profile.
 - 2-3 design partners have reviewed the first Care Facility boarding-preparation slice.
-- 2-3 design partners have reviewed whether Facility Truth should be the first agent-accuracy profile.
+- 2-3 design partners have reviewed whether Facility Truth should be promoted from design draft to a schema-backed profile.
 - At least one partner has confirmed that the request and response shape is implementable.
 - Open questions from partner review are triaged into accepted changes, deferred work, or explicit non-goals.
 - The announcement copy is reviewed for vendor-neutral positioning.
+
+Commerce Context partner review is welcome but is not a gating condition; the Care Facility flows are the operationally-grounded lead and Facility Truth is the strongest forward direction.
 
 ## Repository Readiness
 
@@ -40,8 +41,10 @@ The repository can be made public to gather feedback now, but broad positioning 
 
 ## Spec Readiness
 
-- [x] Commerce Context Profile has a narrow first use case.
 - [x] Care Facility Context has a narrow first boarding-preparation slice.
+- [x] Care Facility Pickup Verification has a narrow first slice.
+- [x] Care Network Lookup has a narrow first one-subject slice.
+- [x] Commerce Context Profile has a narrow first use case.
 - [x] Scope registry is documented.
 - [x] Purpose registry is documented.
 - [x] Visibility precedence is documented.
@@ -49,12 +52,12 @@ The repository can be made public to gather feedback now, but broad positioning 
 - [x] Authorization decision consistency is enforced by schema.
 - [x] Response status consistency is enforced by schema.
 - [x] Permission grant lifecycle constraints are enforced by schema.
-- [ ] Design partners have reviewed the Commerce Context Profile.
 - [ ] Design partners have reviewed the first Care Facility boarding-preparation slice.
+- [ ] Facility Truth has completed discovery review or has been promoted to a schema-backed profile.
+- [ ] Design partners have reviewed the Commerce Context Profile (non-blocking; Commerce is not the lead wedge).
 - [ ] Feedback has been triaged into v0.1.0-draft updates or later milestones.
 - [x] Known compatibility risks are documented.
 - [x] Prior-art and ecosystem gaps are documented.
-- [ ] Facility Truth has completed discovery review or is explicitly deferred.
 
 ## Example And Data Safety
 

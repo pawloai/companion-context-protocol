@@ -4,7 +4,12 @@ Status: Draft
 
 The goal of design-partner outreach is to test whether the current CCP profiles are useful, understandable, and implementable. Do not pitch CCP as a finished standard, adopted protocol, or ecosystem consensus. Ask for concrete review of one narrow workflow and for missing prior art.
 
-Use this document for Commerce Context outreach and general ecosystem review. Use `docs/launch/care-facility-design-partner-review.md` for the first Care Facility boarding-preparation review. Use `docs/design/2026-05-05-facility-truth-profile.md` when the reviewer is focused on facility hours, services, policies, booking, listing accuracy, or agent answer grounding.
+This document is the **Commerce Context outreach packet**. Commerce is a parallel valid profile but is not the lead adoption wedge — for most ecosystem outreach, prefer one of:
+
+- `docs/launch/care-facility-design-partner-review.md` — first Care Facility boarding-preparation review (recommended default starting point for facility, practice-management, and care-operator reviewers).
+- `docs/design/2026-05-05-facility-truth-profile.md` — when the reviewer is focused on facility hours, services, policies, booking, listing accuracy, or agent answer grounding. Facility Truth's public-facts subset does not require a `PermissionGrant`, which makes it the strongest design candidate ahead of expanding Commerce.
+
+Use this packet only when the reviewer is specifically a commerce or product-recommendation operator and the conversation is bounded to that profile; or when a Care Facility / Facility Truth reviewer has explicitly asked to also see the Commerce slice. The structural reasons Commerce is not the lead — incumbent merchant signup flows already capture pet profiles, the consent path runs through the merchant, and the merchant is typically the system of record so there is no neutral grant custodian — are worth flagging up front in any Commerce conversation.
 
 ## Credibility Posture
 
@@ -22,7 +27,7 @@ Avoid implying that existing pet-care, veterinary, facility, insurance, registry
 
 Primary question:
 
-> Would you implement this Commerce Context Profile for product recommendation or product filtering if it existed?
+> Would you implement this Commerce Context Profile for product recommendation or product filtering if it existed — and if so, what does it offer beyond merchant account signup and order-history inference, which already capture pet profiles today?
 
 Secondary questions:
 
@@ -32,22 +37,26 @@ Secondary questions:
 - Are the privacy and safety exclusions credible?
 - What field is missing that would block implementation?
 - What field feels too sensitive for commerce use?
-- Is the Facility Truth Profile a better immediate review target for your work?
+- Would a Facility Truth Profile (hours, services, eligibility, certifications, booking links, freshness) be a more urgent first review target for your work? Most reviewers should expect the answer to be yes.
 - Which prior art, system class, data holder, or workflow does the draft fail to account for?
 - Can your team validate compatibility with the provided tests?
 
 ## Target Partner Profiles
 
-Recruit 3-5 design partners across different implementation perspectives:
+For Commerce-specific outreach using this packet, target partners whose product is specifically a commerce surface or recommendation engine:
 
 - Pet retailer or ecommerce operator.
+- Pet data platform or CRM operator whose primary customer is a retailer.
+- AI agent or developer tooling builder targeting commerce/shopping flows.
+
+For broader ecosystem outreach, prefer `docs/launch/care-facility-design-partner-review.md` and recruit instead:
+
 - Daycare, boarding, or grooming operator.
 - Facility-management software builder.
 - Practice-management software builder.
 - Vet-adjacent software contact.
 - Insurance, registry, or claims-workflow reviewer.
-- AI agent or developer tooling builder.
-- Pet data platform or CRM operator.
+- Facility-directory, listing-accuracy, or local-business agent tooling builder (also a strong fit for the Facility Truth design draft).
 
 Later, after the Commerce Context Profile is less fluid:
 
@@ -62,7 +71,7 @@ Short version:
 ```text
 I am working on Companion Context Protocol, a draft protocol proposal for permissioned pet context exchange.
 
-The first profile is intentionally narrow: commerce-safe pet context for product recommendation and filtering, without exposing staff notes, wellness timelines, diagnosis history, billing data, or unrelated owner data.
+The Commerce Context Profile is one of several narrow schema-backed slices in the draft: commerce-safe pet context for product recommendation and filtering, without exposing staff notes, wellness timelines, diagnosis history, billing data, or unrelated owner data. I want to be straightforward that this isn't the lead adoption wedge for CCP — merchants already capture pet profiles at signup and the consent path runs through the merchant — so a "yes, we'd implement this" answer is genuinely useful signal rather than the expected outcome.
 
 Would you be willing to review the draft Commerce Context Profile and tell me whether your team would implement it, what is missing, what feels unsafe or unclear, and which existing systems or standards the draft fails to account for?
 
@@ -159,14 +168,14 @@ Avoid expanding the first profile unless multiple partners identify the same blo
 
 ## Success Criteria
 
-Design-partner review is successful when:
+Commerce-specific design-partner review is successful when:
 
 - 2-3 partners can explain the Commerce Context flow back accurately.
-- At least one likely implementer says the profile is implementable.
+- Partners give a clear yes/no on whether they would implement it given the incumbent merchant-signup path. "No, the merchant account already covers this" is a useful answer.
 - Major privacy or safety objections have clear mitigations.
-- Reviewers identify the highest-priority next profile or workflow.
+- Reviewers identify the highest-priority next profile or workflow — Facility Truth or one of the Care Facility flows is the expected pointer.
 - Missing prior art is captured in `docs/design/prior-art-and-ecosystem-map.md` or an issue.
-- Partner feedback produces a short, concrete v0.1 change list.
+- Partner feedback produces a short, concrete v0.1 change list, or an explicit decision to defer Commerce expansion until a stronger profile lands.
 - No partner interprets CCP as a vendor export format.
 
 ## After Review

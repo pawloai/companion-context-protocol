@@ -93,36 +93,13 @@ Omission: A machine-readable explanation that context exists or was requested bu
 
 ## Current Profiles
 
-The first schema-backed profile is the Commerce Context Profile.
+The draft ships four narrow schema-backed slices: Care Facility Context (`boarding_preparation`), Care Facility Pickup Verification (`pickup_verification`), Care Network Lookup (`care_network_lookup`), and Commerce Context.
 
-Profile order is a draft artifact, not a claim about market priority or ecosystem consensus. Commerce Context was selected as a narrow, lower-risk schema slice. The Care Facility, Pickup Verification, and Care Network profiles are expected to evolve faster than Commerce Context as the first production implementations land.
+Profile order in this section is not a claim about market priority or ecosystem consensus. The Care Facility and Care Network slices are listed first because they sit closest to a clear custodian (the facility's practice-management or facility-management system) and a concrete operational pain point — intake-form re-keying, pickup-desk verification, and ambiguous caregiver contact and authority. Commerce Context is listed after because, while its schemas are equally complete, merchants already capture pet profiles at signup and the consent path runs through the merchant rather than a third-party protocol — so Commerce should not be treated as the canonical worked example.
 
-This profile lets authorized clients request commerce-safe pet context for product recommendations and filtering while excluding unrelated sensitive context.
+### Care Facility Profiles
 
-The initial profile should support:
-
-- Species.
-- Breed or breed mix.
-- Size.
-- Weight band.
-- Life stage.
-- Diet.
-- Allergies.
-- Sensitivities.
-- Product exclusions.
-- Staff-curated or owner-entered preferences.
-- Relevant purchase history summary when explicitly permitted.
-
-The initial profile should exclude by default:
-
-- Internal staff notes.
-- Full wellness timelines.
-- Diagnosis or treatment history.
-- Billing data.
-- Unrelated owner or household data.
-- Sensitive facility operations data.
-
-The draft also includes Care Facility Context schema slices for `boarding_preparation` and `pickup_verification`, plus a first Care Network lookup slice for `care_network_lookup`. The boarding-preparation slice lets an authorized care facility request boarding-preparation context for one pet, facility, and service window. The pickup-verification slice lets an authorized care facility verify whether one pickup actor may pick up one pet for one facility and service window. The Care Network lookup slice lets an authorized requester retrieve a minimized actor, relationship, contact-channel, action-authorization, or revocation subset for one pet and one subject actor.
+The boarding-preparation slice lets an authorized care facility request boarding-preparation context for one pet, facility, and service window. The pickup-verification slice lets an authorized care facility verify whether one pickup actor may pick up one pet for one facility and service window. The Care Network lookup slice lets an authorized requester retrieve a minimized actor, relationship, contact-channel, action-authorization, or revocation subset for one pet and one subject actor.
 
 The boarding-preparation care-facility slice can include:
 
@@ -142,7 +119,36 @@ The boarding-preparation care-facility slice excludes by default:
 - Billing data and payment authority.
 - Identity document copies.
 
-Facility Truth is a design candidate, not a schema-backed profile in this version. It would cover public or operational facility facts such as hours, services, service areas, eligibility constraints, certifications, contact methods, booking links, accepted pet types, freshness, and provenance. It should be developed separately from pet-specific context because public facility facts have different consent, authorization, and provenance requirements.
+### Commerce Context Profile
+
+The Commerce Context Profile lets authorized clients request commerce-safe pet context for product recommendations and filtering while excluding unrelated sensitive context. It remains a valid profile, but it is not the lead adoption wedge — implementers reviewing CCP for the first time should generally start with the Care Facility flows above.
+
+The Commerce profile should support:
+
+- Species.
+- Breed or breed mix.
+- Size.
+- Weight band.
+- Life stage.
+- Diet.
+- Allergies.
+- Sensitivities.
+- Product exclusions.
+- Staff-curated or owner-entered preferences.
+- Relevant purchase history summary when explicitly permitted.
+
+The Commerce profile should exclude by default:
+
+- Internal staff notes.
+- Full wellness timelines.
+- Diagnosis or treatment history.
+- Billing data.
+- Unrelated owner or household data.
+- Sensitive facility operations data.
+
+### Facility Truth (Design Candidate)
+
+Facility Truth is a design candidate, not a schema-backed profile in this version. It would cover public or operational facility facts such as hours, services, service areas, eligibility constraints, certifications, contact methods, booking links, accepted pet types, freshness, and provenance. It should be developed separately from pet-specific context because public facility facts have different consent, authorization, and provenance requirements — the public-facts subset doesn't require a `PermissionGrant` at all, which removes the grant-transport prerequisites that gate the pet-specific profiles. Facility Truth is the strongest design candidate ahead of expanding Commerce, and its promotion to a schema-backed profile is tracked separately.
 
 ## Core Objects
 
@@ -419,26 +425,6 @@ An omission should include:
 
 Omissions belong in the response envelope. Nested context objects should not carry their own `omissions` array unless a future profile explicitly defines object-local omissions and non-overlap rules.
 
-## Commerce Context Request Flow
-
-Example flow:
-
-1. Owner grants `pet.commerce_context.read` for `purpose: product_recommendation`.
-2. Client requests commerce-safe context for one pet.
-3. Server evaluates requester, grant, purpose, scopes, visibility, and freshness.
-4. Server returns an `authorization_decision`.
-5. Server returns a minimized `CommerceContext`.
-6. Returned context fields include visibility and provenance.
-7. Restricted or unrelated fields are omitted with machine-readable reasons.
-
-See `examples/permission-grant-commerce-context.json`, `examples/commerce-context-request.json`, `examples/commerce-context-response.json`, and `examples/commerce-context-denied-response.json`.
-
-The illustrative HTTP adapter for this flow is `openapi/commerce-context.openapi.json`.
-
-The illustrative MCP adapter for this flow is `mcp/commerce-context.tools.json`.
-
-Implementation guidance for this flow is `docs/implementers/commerce-context-server.md`.
-
 ## Care Facility Context Request Flow
 
 Example flow:
@@ -505,6 +491,26 @@ The illustrative HTTP adapter for this flow is `openapi/care-network-lookup.open
 The illustrative MCP adapter for this flow is `mcp/care-network-lookup.tools.json`.
 
 Implementation guidance for this flow is `docs/implementers/care-network-lookup-server.md`.
+
+## Commerce Context Request Flow
+
+Example flow:
+
+1. Owner grants `pet.commerce_context.read` for `purpose: product_recommendation`.
+2. Client requests commerce-safe context for one pet.
+3. Server evaluates requester, grant, purpose, scopes, visibility, and freshness.
+4. Server returns an `authorization_decision`.
+5. Server returns a minimized `CommerceContext`.
+6. Returned context fields include visibility and provenance.
+7. Restricted or unrelated fields are omitted with machine-readable reasons.
+
+See `examples/permission-grant-commerce-context.json`, `examples/commerce-context-request.json`, `examples/commerce-context-response.json`, and `examples/commerce-context-denied-response.json`.
+
+The illustrative HTTP adapter for this flow is `openapi/commerce-context.openapi.json`.
+
+The illustrative MCP adapter for this flow is `mcp/commerce-context.tools.json`.
+
+Implementation guidance for this flow is `docs/implementers/commerce-context-server.md`.
 
 ## Conformance Requirements
 
