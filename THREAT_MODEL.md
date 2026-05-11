@@ -74,19 +74,39 @@ The unresolved sub-decisions (issuance, storage, possession, revocation propagat
 
 ## Cross-Profile Inference
 
-Visibility precedence rules prevent many single-response leaks, but they do not fully prevent inference across multiple authorized calls. For example, a requester with separate commerce and care-facility grants could compare omissions, partial responses, timestamps, or summaries to infer restricted context.
+Cross-profile inference is a residual risk CCP does not fully prevent and does not promise to eliminate by `1.0`. Visibility precedence rules prevent many single-response leaks, but they do not prevent a requester who holds grants for more than one profile — or who makes repeated calls within a single profile — from correlating omissions, partial responses, freshness timestamps, and summaries across calls to reconstruct restricted context that no single response would have disclosed. The canonical schemas cannot detect cross-call correlation; only the authorization layer can. The stable line is expected to ship with this risk surface acknowledged rather than closed; ongoing work narrows it, not closes it.
 
-Current mitigations are:
+### Mitigations required today
+
+`SPEC.md` Conformance Requirements state normatively that servers MUST NOT rely on per-profile narrowness alone, and that servers granting multi-profile (or repeat single-profile) access for the same requester SHOULD apply per-requester rate limits across all authorized profiles, correlation-aware authorization logging with enough metadata for retrospective abuse review, and per-request minimization (return only fields the declared purpose needs, even when granted scopes would allow more). In addition, compatible servers should:
 
 - Keep each profile narrow and purpose-bound.
 - Require machine-readable omissions without restricted source content.
 - Avoid raw free-text details in denial reasons.
 - Treat cross-profile access as a policy decision, not a schema-only decision.
-- Log authorization decisions with enough metadata for abuse review.
+- Treat cross-profile access for the same requester as a higher-scrutiny authorization decision rather than the union of independent per-profile decisions.
 
-These mitigations are necessary but not sufficient. `SPEC.md` Conformance Requirements now state normatively that servers MUST NOT rely on per-profile narrowness alone, and that servers granting multi-profile (or repeat single-profile) access for the same requester SHOULD apply per-requester rate limits across profiles, correlation-aware authorization logging, and per-request minimization. The canonical schemas cannot detect cross-call correlation; only the authorization layer can.
+These mitigations are necessary but not sufficient. They reduce the inference surface; they do not eliminate it.
 
-Stronger guidance — a standard correlation identifier, a rate-limit envelope, machine-checkable minimization, and profile-combination policy — is a future-draft agenda item tracked in GitHub issue #7. The unresolved sub-decisions and the candidate primitives under evaluation (standard optional `correlation_token`, per-requester rate-limit headers, server-internal join, hybrid) are catalogued in `docs/implementers/compatibility-risks.md` §Decisions Needed Before 1.0 §Cross-profile inference controls. A worked synthetic attack-and-defense example lives in `docs/implementers/cross-profile-inference.md`. None of the candidate primitives are endorsed in `0.1.0-draft`.
+### Sub-decisions under ongoing research
+
+Stronger guidance is under ongoing research and tracked in GitHub issue #7. The candidate sub-decisions and primitives below are documented so that implementers know what shape future-draft work could take; none are endorsed in `0.1.0-draft`, and adoption is not a precondition for the stable line. Four sub-decisions remain open:
+
+- **Correlation identifier** — whether requests carry a standard cross-profile correlation field (candidate names: `correlation_token`, `requester_session_id`, `abuse_review_id`) that lets independent profile servers operated by different teams join authorization records into a shared abuse-review pipeline without bilateral coordination, or whether each integrator invents its own join key.
+- **Per-requester rate-limit envelope** — whether a future draft defines a minimum rate-limit and back-off contract across authorized profiles for the same requester, or leaves the envelope to deployment policy. The trade-off is interop predictability versus deployment freedom on systems with very different traffic profiles.
+- **Per-request minimization guidance** — whether a future draft tightens "return only fields the purpose needs" from a `SHOULD` into machine-checkable behavior (e.g., per-purpose minimum-required-field tables, or a `minimization_profile` field), or leaves it as policy.
+- **Profile-combination policy** — whether a future draft adds explicit rules for what a single requester is allowed to hold grants for simultaneously (e.g., disallow holding a commerce grant and a care-facility grant for the same pet under the same requester identity without a higher-trust attestation), or treats profile combinations as wholly a deployment decision.
+
+### Candidate primitives under evaluation
+
+None of the following are endorsed in `0.1.0-draft`. They are listed so implementers can recognize the shape of future-draft work, not as a roadmap commitment:
+
+- **Standard optional `correlation_token` request field** — a low-surface addition: each profile request schema gains one optional opaque-string field that profile servers MAY log alongside authorization decisions. Cheap to specify and adopt; does not by itself enforce rate limits or minimization, and creates a new privacy surface if the token is owner-derived rather than requester-derived. Binding properties differ sharply by who assigns the token. A *client-assigned* token carries no server-side binding: a malicious requester can omit, rotate, or forge it to defeat cross-call correlation in audit logs. A *server-assigned* token (server-generated identifier returned in the response that the client must echo on subsequent calls) avoids the forgery surface but still admits short-window correlation evasion if the client rotates tokens between calls. Any future-draft design that adopts `correlation_token` should treat the server's own authenticated-principal identity as the authoritative join key and treat the token as an optional additional signal, never as the primary identifier; the client-assigned warning above applies to the client-assigned shape specifically.
+- **Per-requester rate-limit headers** (e.g., `CCP-Requester-Quota-Remaining`, `CCP-Requester-Quota-Window`) — gives clients backpressure signals across profiles, but lives at the transport layer (HTTP/MCP) rather than in the canonical contract, and depends on the rate-limit envelope decision above.
+- **Server-internal correlation join (no protocol change)** — each deployment correlates by its own infrastructure (authenticated principal, IP, fingerprint). Zero protocol surface, zero standardization, and cross-organization abuse review remains unsolved.
+- **Hybrid** — optional `correlation_token` for cross-organization joins plus rate-limit headers for backpressure; leaves minimization and profile-combination policy to a later draft. Largest surface to specify and adopt, but covers two of the four gaps.
+
+A worked synthetic attack-and-defense example lives in `docs/implementers/cross-profile-inference.md`.
 
 ## Facility Truth Risks
 

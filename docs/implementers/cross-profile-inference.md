@@ -2,7 +2,7 @@
 
 Status: Draft, pre-1.0
 
-This document carries the worked attack-and-defense example referenced from `SPEC.md` Conformance Requirements, `THREAT_MODEL.md` §Cross-Profile Inference, and `docs/implementers/compatibility-risks.md` §Decisions Needed Before 1.0 §Cross-profile inference controls. It is illustrative, not normative. The canonical contract is JSON Schema; this doc shows how policy and minimization decisions outside the schema layer change the inference surface.
+This document carries the worked attack-and-defense example referenced from `SPEC.md` Conformance Requirements and `THREAT_MODEL.md` §Cross-Profile Inference. It is illustrative, not normative. The canonical contract is JSON Schema; this doc shows how policy and minimization decisions outside the schema layer change the inference surface.
 
 All identifiers, scenarios, omission codes, and freshness timestamps below are synthetic. Implementers MUST NOT copy real data into worked examples.
 
@@ -131,7 +131,7 @@ Emit logs that join across profiles for the same authenticated principal. Recomm
 
 Logs that contain only the request and response are not enough. A retrospective abuse-review pipeline needs to see, for a given authenticated principal, the *sequence* of authorized calls across profiles within a configurable window. Most cross-profile attacks are correlation attacks; the defense is correlation-aware audit.
 
-`0.1.0-draft` does not standardize a correlation identifier on the request envelope. The unresolved decision (candidate names: `correlation_token`, `requester_session_id`, `abuse_review_id`) is tracked in GitHub issue #7. Until a primitive is selected, servers SHOULD correlate using their own internal identifiers and SHOULD NOT rely on the requester to provide a join key — a client-supplied token has no server-side binding, so a malicious requester can omit, rotate, or forge it to fragment its audit trail. A server-assigned shape (server generates the identifier and the client must echo it on subsequent calls) avoids the forgery surface but still admits short-window evasion if the client rotates tokens across calls; see `docs/implementers/compatibility-risks.md` §Decisions Needed Before 1.0 §Cross-profile inference controls for both shapes. The server's authenticated transport principal is the only identifier the server controls end-to-end.
+`0.1.0-draft` does not standardize a correlation identifier on the request envelope. The candidate identifiers (`correlation_token`, `requester_session_id`, `abuse_review_id`) and their trade-offs are under ongoing research tracked in GitHub issue #7; none are endorsed in `0.1.0-draft`, and the stable line is not expected to close this residual risk. Until a primitive is selected, servers SHOULD correlate using their own internal identifiers and SHOULD NOT rely on the requester to provide a join key — a client-supplied token has no server-side binding, so a malicious requester can omit, rotate, or forge it to fragment its audit trail. A server-assigned shape (server generates the identifier and the client must echo it on subsequent calls) avoids the forgery surface but still admits short-window evasion if the client rotates tokens across calls; see `THREAT_MODEL.md` §Cross-Profile Inference for both shapes. The server's authenticated transport principal is the only identifier the server controls end-to-end.
 
 ### Per-requester rate limits across profiles
 
@@ -185,7 +185,6 @@ None of the defenses above are detectable by the canonical conformance runner:
 ## Related
 
 - `SPEC.md` Conformance Requirements — normative cross-profile correlation `MUST` / `SHOULD`.
-- `THREAT_MODEL.md` §Cross-Profile Inference — current assumptions and future-draft agenda pointer.
-- `docs/implementers/compatibility-risks.md` §Decisions Needed Before 1.0 §Cross-profile inference controls — unresolved sub-decisions and candidate primitives.
+- `THREAT_MODEL.md` §Cross-Profile Inference — residual risk framing, mitigations required today, and the open sub-decisions and candidate primitives under ongoing research.
 - `docs/implementers/conformance-checklist.md` §Cross-enum and cross-profile boundaries — self-attestation entries.
-- GitHub issue #7 — tracking the future-draft resolution.
+- GitHub issue #7 — tracking ongoing research into residual-risk mitigations.

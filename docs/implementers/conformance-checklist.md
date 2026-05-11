@@ -62,7 +62,7 @@ The following requirements live in `SPEC.md` Conformance Requirements but operat
 - [ ] Server applies per-requester rate limits across all authorized profiles for the same authenticated principal (not just per-profile rate limits).
 - [ ] Server emits correlation-aware authorization logs carrying enough metadata (authenticated principal, request ID, deployment-internal session, declared purpose, granted scopes, omission codes) for retrospective abuse review across profile boundaries.
 - [ ] Server applies per-request minimization: returns only the fields the declared purpose needs, even when the granted scopes would allow more.
-- [ ] Server treats cross-profile access for the same requester as a higher-scrutiny authorization decision rather than the union of independent per-profile decisions. See `compatibility-risks.md` §Decisions Needed Before 1.0 §Cross-profile inference controls and the worked example in `cross-profile-inference.md`.
+- [ ] Server treats cross-profile access for the same requester as a higher-scrutiny authorization decision rather than the union of independent per-profile decisions. See `THREAT_MODEL.md` §Cross-Profile Inference (which catalogues the open sub-decisions and candidate primitives under ongoing research, none endorsed in `0.1.0-draft`) and the worked example in `cross-profile-inference.md`.
 
 ### Vendor neutrality
 
