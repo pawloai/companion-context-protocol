@@ -435,6 +435,78 @@ const cases = [
     schema: "schemas/care-network-lookup-response.schema.json",
     data: "tests/conformance/fixtures/invalid/care-network-lookup-cross-profile-visibility.json",
     valid: false
+  },
+  {
+    name: "facility truth request example",
+    schema: "schemas/facility-truth-request.schema.json",
+    data: "examples/facility-truth-request.json",
+    valid: true
+  },
+  {
+    name: "facility truth allowed response example",
+    schema: "schemas/facility-truth-response.schema.json",
+    data: "examples/facility-truth-response.json",
+    valid: true
+  },
+  {
+    name: "facility truth partial response example",
+    schema: "schemas/facility-truth-response.schema.json",
+    data: "examples/facility-truth-partial-response.json",
+    valid: true
+  },
+  {
+    name: "facility truth denied response example",
+    schema: "schemas/facility-truth-response.schema.json",
+    data: "examples/facility-truth-denied-response.json",
+    valid: true
+  },
+  {
+    name: "reject facility truth cross-profile visibility",
+    schema: "schemas/facility-truth-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/facility-truth-cross-profile-visibility.json",
+    valid: false
+  },
+  {
+    name: "reject facility truth missing facility_public",
+    schema: "schemas/facility-truth-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/facility-truth-missing-facility-public.json",
+    valid: false
+  },
+  {
+    name: "reject facility truth staff-only visibility",
+    schema: "schemas/facility-truth-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/facility-truth-staff-only-visibility.json",
+    valid: false
+  },
+  {
+    name: "reject facility truth denied response with context",
+    schema: "schemas/facility-truth-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/facility-truth-denied-response-with-context.json",
+    valid: false
+  },
+  {
+    name: "reject facility truth field missing verified_at",
+    schema: "schemas/facility-truth-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/facility-truth-field-missing-verified-at.json",
+    valid: false
+  },
+  {
+    name: "reject facility truth broad scope request",
+    schema: "schemas/facility-truth-request.schema.json",
+    data: "tests/conformance/fixtures/invalid/facility-truth-broad-scope-request.json",
+    valid: false
+  },
+  {
+    name: "reject facility truth pet_id leak",
+    schema: "schemas/facility-truth-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/facility-truth-pet-id-leak.json",
+    valid: false
+  },
+  {
+    name: "reject facility truth sensitive provenance ref",
+    schema: "schemas/facility-truth-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/facility-truth-sensitive-provenance-ref.json",
+    valid: false
   }
 ];
 
@@ -509,12 +581,33 @@ const roundTripPairs = [
     request: "examples/care-network-lookup-request.json",
     response: "examples/care-network-lookup-response.json",
     contextKey: "care_network_context"
+  },
+  {
+    name: "facility truth example",
+    request: "examples/facility-truth-request.json",
+    response: "examples/facility-truth-response.json",
+    contextKey: "facility_truth_context",
+    subjectKey: "facility_id"
   }
 ];
+
+const containsPetId = (value) => {
+  if (Array.isArray(value)) {
+    return value.some((item) => containsPetId(item));
+  }
+  if (value !== null && typeof value === "object") {
+    for (const [key, nested] of Object.entries(value)) {
+      if (key === "pet_id") return true;
+      if (containsPetId(nested)) return true;
+    }
+  }
+  return false;
+};
 
 for (const pair of roundTripPairs) {
   const request = readJson(pair.request);
   const response = readJson(pair.response);
+  const subjectKey = pair.subjectKey ?? "pet_id";
   const roundTripChecks = [
     ["response.request_id", response.request_id, request.request_id],
     [
@@ -527,7 +620,11 @@ for (const pair of roundTripPairs) {
       response.authorization_decision.requester_actor_type,
       request.requester_actor_type
     ],
-    ["authorization_decision.pet_id", response.authorization_decision.pet_id, request.pet_id],
+    [
+      `authorization_decision.${subjectKey}`,
+      response.authorization_decision[subjectKey],
+      request[subjectKey]
+    ],
     ["authorization_decision.purpose", response.authorization_decision.purpose, request.purpose],
     ["authorization_decision.grant_id", response.authorization_decision.grant_id, request.grant_id]
   ];
@@ -536,10 +633,18 @@ for (const pair of roundTripPairs) {
   const context = response[contextKey];
 
   if (context !== null) {
-    roundTripChecks.push(
-      [`${contextKey}.pet_id`, context?.pet_id, request.pet_id],
-      [`${contextKey}.purpose`, context?.purpose, request.purpose]
-    );
+    if (subjectKey === "pet_id") {
+      roundTripChecks.push(
+        [`${contextKey}.pet_id`, context?.pet_id, request.pet_id],
+        [`${contextKey}.purpose`, context?.purpose, request.purpose]
+      );
+    } else {
+      roundTripChecks.push([
+        `${contextKey}.${subjectKey}`,
+        context?.[subjectKey],
+        request[subjectKey]
+      ]);
+    }
 
     if (
       contextKey === "care_facility_context" ||
@@ -575,6 +680,13 @@ for (const pair of roundTripPairs) {
         request.subject_actor_id
       ]);
     }
+  }
+
+  if (contextKey === "facility_truth_context" && containsPetId(response)) {
+    failed = true;
+    console.error(
+      `not ok - ${pair.name} subject-boundary: facility truth response contains pet_id`
+    );
   }
 
   for (const [name, actual, expected] of roundTripChecks) {

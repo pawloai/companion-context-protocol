@@ -1,0 +1,349 @@
+{
+  "request_id": "req_facility_truth_001",
+  "status": "ok",
+  "authorization_decision": {
+    "decision": "allowed",
+    "evaluated_at": "2026-05-11T12:05:00Z",
+    "requester_actor_id": "actor_agent_001",
+    "requester_actor_type": "agent_client",
+    "facility_id": "facility_synthetic_001",
+    "purpose": "facility_truth_lookup",
+    "applied_scopes": [
+      "facility.profile.read",
+      "facility.hours.read",
+      "facility.services.read",
+      "facility.contact_methods.read",
+      "facility.service_area.read",
+      "facility.acceptance_criteria.read"
+    ],
+    "denied_scopes": [],
+    "reasons": [
+      "public facility truth scopes do not require a permission grant in v1"
+    ]
+  },
+  "facility_truth_context": {
+    "facility_id": "facility_synthetic_001",
+    "profile_summary": {
+      "facility_name": {
+        "value": "Synthetic Pet Care Co",
+        "visibility": [
+          "facility_public"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_facility_admin_001",
+          "recorded_at": "2026-05-01T09:00:00Z",
+          "verified_at": "2026-05-10T09:00:00Z"
+        }
+      },
+      "description": {
+        "value": "Synthetic daycare and grooming services for small and medium dogs.",
+        "visibility": [
+          "facility_public"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_facility_admin_001",
+          "recorded_at": "2026-05-01T09:00:00Z",
+          "verified_at": "2026-05-10T09:00:00Z"
+        }
+      },
+      "primary_address": {
+        "value": "100 Synthetic Way, Synthetic City",
+        "visibility": [
+          "facility_public"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_facility_admin_001",
+          "recorded_at": "2026-05-01T09:00:00Z",
+          "verified_at": "2026-05-10T09:00:00Z"
+        }
+      },
+      "metadata": {
+        "visibility": [
+          "facility_public"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_facility_admin_001",
+          "recorded_at": "2026-05-01T09:00:00Z",
+          "verified_at": "2026-05-10T09:00:00Z"
+        }
+      }
+    },
+    "hours": {
+      "regular": {
+        "value": [
+          "Mon-Fri 07:00-19:00",
+          "Sat 09:00-17:00",
+          "Sun closed"
+        ],
+        "visibility": [
+          "facility_public"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_facility_admin_001",
+          "recorded_at": "2026-05-01T09:00:00Z",
+          "verified_at": "2026-05-10T09:00:00Z"
+        }
+      },
+      "time_zone": {
+        "value": "America/Toronto",
+        "visibility": [
+          "facility_public"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_facility_admin_001",
+          "recorded_at": "2026-05-01T09:00:00Z",
+          "verified_at": "2026-05-10T09:00:00Z"
+        }
+      },
+      "metadata": {
+        "visibility": [
+          "facility_public"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_facility_admin_001",
+          "recorded_at": "2026-05-01T09:00:00Z",
+          "verified_at": "2026-05-10T09:00:00Z"
+        }
+      }
+    },
+    "services": [
+      {
+        "service_type": {
+          "value": "daycare",
+          "visibility": [
+            "facility_public"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor_facility_admin_001",
+            "recorded_at": "2026-05-01T09:00:00Z",
+            "verified_at": "2026-05-10T09:00:00Z"
+          }
+        },
+        "display_name": {
+          "value": "Full-day daycare",
+          "visibility": [
+            "facility_public"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor_facility_admin_001",
+            "recorded_at": "2026-05-01T09:00:00Z",
+            "verified_at": "2026-05-10T09:00:00Z"
+          }
+        },
+        "accepted_pet_types": {
+          "value": [
+            "dog"
+          ],
+          "visibility": [
+            "facility_public"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor_facility_admin_001",
+            "recorded_at": "2026-05-01T09:00:00Z",
+            "verified_at": "2026-05-10T09:00:00Z"
+          }
+        },
+        "currently_offered": {
+          "value": true,
+          "visibility": [
+            "facility_public"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor_facility_admin_001",
+            "recorded_at": "2026-05-01T09:00:00Z",
+            "verified_at": "2026-05-10T09:00:00Z"
+          }
+        },
+        "metadata": {
+          "visibility": [
+            "facility_public"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor_facility_admin_001",
+            "recorded_at": "2026-05-01T09:00:00Z",
+            "verified_at": "2026-05-10T09:00:00Z"
+          }
+        }
+      }
+    ],
+    "service_area": {
+      "description": {
+        "value": "Greater Synthetic City metro area",
+        "visibility": [
+          "facility_public"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_facility_admin_001",
+          "recorded_at": "2026-05-01T09:00:00Z",
+          "verified_at": "2026-05-10T09:00:00Z"
+        }
+      },
+      "regions": {
+        "value": [
+          "Synthetic City",
+          "Synthetic Suburb A",
+          "Synthetic Suburb B"
+        ],
+        "visibility": [
+          "facility_public"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_facility_admin_001",
+          "recorded_at": "2026-05-01T09:00:00Z",
+          "verified_at": "2026-05-10T09:00:00Z"
+        }
+      },
+      "radius_km": {
+        "value": 25,
+        "visibility": [
+          "facility_public"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_facility_admin_001",
+          "recorded_at": "2026-05-01T09:00:00Z",
+          "verified_at": "2026-05-10T09:00:00Z"
+        }
+      },
+      "metadata": {
+        "visibility": [
+          "facility_public"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_facility_admin_001",
+          "recorded_at": "2026-05-01T09:00:00Z",
+          "verified_at": "2026-05-10T09:00:00Z"
+        }
+      }
+    },
+    "contact_methods": [
+      {
+        "channel_type": {
+          "value": "phone",
+          "visibility": [
+            "facility_public"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor_facility_admin_001",
+            "recorded_at": "2026-05-01T09:00:00Z",
+            "verified_at": "2026-05-10T09:00:00Z"
+          }
+        },
+        "channel_value": {
+          "value": "+15550100100",
+          "visibility": [
+            "facility_public"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor_facility_admin_001",
+            "recorded_at": "2026-05-01T09:00:00Z",
+            "verified_at": "2026-05-10T09:00:00Z"
+          }
+        },
+        "purpose_label": {
+          "value": "Main front desk",
+          "visibility": [
+            "facility_public"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor_facility_admin_001",
+            "recorded_at": "2026-05-01T09:00:00Z",
+            "verified_at": "2026-05-10T09:00:00Z"
+          }
+        },
+        "metadata": {
+          "visibility": [
+            "facility_public"
+          ],
+          "provenance": {
+            "source_type": "owner_entered",
+            "source_actor_id": "actor_facility_admin_001",
+            "recorded_at": "2026-05-01T09:00:00Z",
+            "verified_at": "2026-05-10T09:00:00Z"
+          }
+        }
+      }
+    ],
+    "acceptance_criteria": {
+      "summary": {
+        "value": "Healthy, socialized dogs 4 months and older. Spay/neuter required for adults over 7 months.",
+        "visibility": [
+          "facility_public"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_facility_admin_001",
+          "recorded_at": "2026-05-01T09:00:00Z",
+          "verified_at": "2026-05-10T09:00:00Z"
+        }
+      },
+      "species_accepted": {
+        "value": [
+          "dog"
+        ],
+        "visibility": [
+          "facility_public"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_facility_admin_001",
+          "recorded_at": "2026-05-01T09:00:00Z",
+          "verified_at": "2026-05-10T09:00:00Z"
+        }
+      },
+      "minimum_age_months": {
+        "value": 4,
+        "visibility": [
+          "facility_public"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_facility_admin_001",
+          "recorded_at": "2026-05-01T09:00:00Z",
+          "verified_at": "2026-05-10T09:00:00Z"
+        }
+      },
+      "metadata": {
+        "visibility": [
+          "facility_public"
+        ],
+        "provenance": {
+          "source_type": "owner_entered",
+          "source_actor_id": "actor_facility_admin_001",
+          "recorded_at": "2026-05-01T09:00:00Z",
+          "verified_at": "2026-05-10T09:00:00Z"
+        }
+      }
+    },
+    "metadata": {
+      "visibility": [
+        "facility_public"
+      ],
+      "provenance": {
+        "source_type": "owner_entered",
+        "source_actor_id": "actor_facility_admin_001",
+        "recorded_at": "2026-05-01T09:00:00Z",
+        "verified_at": "2026-05-10T09:00:00Z"
+      }
+    }
+  },
+  "omissions": []
+}

@@ -1,0 +1,29 @@
+{
+  "request_id": "req_facility_truth_003",
+  "status": "denied",
+  "authorization_decision": {
+    "decision": "denied",
+    "evaluated_at": "2026-05-11T12:15:00Z",
+    "requester_actor_id": "actor_agent_001",
+    "requester_actor_type": "agent_client",
+    "facility_id": "facility_synthetic_001",
+    "purpose": "facility_truth_lookup",
+    "applied_scopes": [],
+    "denied_scopes": [
+      "facility.profile.read",
+      "facility.hours.read",
+      "facility.services.read"
+    ],
+    "reasons": [
+      "facility id is not registered with the facility truth directory"
+    ]
+  },
+  "facility_truth_context": null,
+  "omissions": [
+    {
+      "field": "facility_truth_context",
+      "reason": "not_available",
+      "detail": "facility has no published facility truth record"
+    }
+  ]
+}

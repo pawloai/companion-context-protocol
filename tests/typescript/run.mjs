@@ -123,6 +123,30 @@ const checks = [
     valid: validators.careNetworkLookupResponse(
       readJson("examples/care-network-lookup-contact-withheld-response.json")
     )
+  },
+  {
+    name: "facility truth request validator accepts example",
+    valid: validators.facilityTruthRequest(
+      readJson("examples/facility-truth-request.json")
+    )
+  },
+  {
+    name: "facility truth response validator accepts example",
+    valid: validators.facilityTruthResponse(
+      readJson("examples/facility-truth-response.json")
+    )
+  },
+  {
+    name: "facility truth response validator accepts partial example",
+    valid: validators.facilityTruthResponse(
+      readJson("examples/facility-truth-partial-response.json")
+    )
+  },
+  {
+    name: "facility truth response validator accepts denied example",
+    valid: validators.facilityTruthResponse(
+      readJson("examples/facility-truth-denied-response.json")
+    )
   }
 ];
 
@@ -201,6 +225,21 @@ const invalidFixtures = [
     name: "care network lookup response validator rejects sensitive provenance ref",
     validator: validators.careNetworkLookupResponse,
     data: "tests/conformance/fixtures/invalid/care-network-lookup-sensitive-provenance-ref.json"
+  },
+  {
+    name: "facility truth request validator rejects broad scope",
+    validator: validators.facilityTruthRequest,
+    data: "tests/conformance/fixtures/invalid/facility-truth-broad-scope-request.json"
+  },
+  {
+    name: "facility truth response validator rejects missing facility_public",
+    validator: validators.facilityTruthResponse,
+    data: "tests/conformance/fixtures/invalid/facility-truth-missing-facility-public.json"
+  },
+  {
+    name: "facility truth response validator rejects missing verified_at",
+    validator: validators.facilityTruthResponse,
+    data: "tests/conformance/fixtures/invalid/facility-truth-field-missing-verified-at.json"
   }
 ];
 

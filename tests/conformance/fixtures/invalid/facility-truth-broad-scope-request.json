@@ -1,0 +1,11 @@
+{
+  "request_id": "req_facility_truth_invalid_006",
+  "requester_actor_id": "actor_agent_001",
+  "requester_actor_type": "agent_client",
+  "facility_id": "facility_synthetic_001",
+  "purpose": "facility_truth_lookup",
+  "scopes": [
+    "facility.profile.read",
+    "pet.profile.read"
+  ]
+}

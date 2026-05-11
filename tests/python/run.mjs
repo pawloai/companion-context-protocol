@@ -46,6 +46,8 @@ assert load_schema("commerce-context-request")["$ref"] == "ccp-core.schema.json#
 assert load_schema("care-facility-context-request")["$ref"] == "ccp-core.schema.json#/$defs/CareFacilityContextRequest"
 assert load_schema("care-facility-pickup-verification-request")["$ref"] == "ccp-core.schema.json#/$defs/CareFacilityPickupVerificationRequest"
 assert load_schema("care-network-lookup-request")["$ref"] == "ccp-core.schema.json#/$defs/CareNetworkLookupRequest"
+assert load_schema("facility-truth-request")["$ref"] == "ccp-core.schema.json#/$defs/FacilityTruthRequest"
+assert load_schema("facility-truth-response")["$ref"] == "ccp-core.schema.json#/$defs/FacilityTruthResponse"
 assert set(load_schemas()) == expected_names
 
 schema_module._repo_root = lambda: Path("/ccp-source-tree-not-present")
