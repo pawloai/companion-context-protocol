@@ -65,9 +65,13 @@ Actor type: A discrete trust posture for an actor in policy evaluation. The draf
 - `merchant` — a commerce-side actor requesting commerce-safe context for product recommendation or filtering.
 - `agent_client` — software acting on behalf of an authenticated end-user (e.g., an LLM assistant carrying out a user task). The user is in the loop.
 - `service_integration` — a system-to-system non-interactive client running under its own credentials (e.g., a vendor backend syncing on a schedule). No human is in the loop at request time.
-- `vet` — reserved for veterinary-side actors. No vet profile, scope, or flow exists in this draft. Servers SHOULD reject `requester_actor_type: "vet"` until a vet-export profile is defined.
+- `vet` — reserved for veterinary-side actors. No vet profile, scope, or flow exists in this draft. The normative server requirement to reject `requester_actor_type: "vet"` until a vet-export profile is defined appears in Conformance Requirements.
 
-Requests, grants, and authorization decisions all carry actor types so that scope evaluation, omission rules, and audit records can distinguish, for example, an agent acting on behalf of an owner from a merchant requesting context directly. Actor type is policy metadata — it does not by itself grant access. A server MUST verify that the `requester_actor_type` in a request is consistent with the trust posture of the authenticated transport principal; servers MUST NOT accept a client-asserted actor type that the authenticated identity is not entitled to claim. Future drafts may extend this enum as new profiles (e.g., vet export) land.
+The boundary between `agent_client` and `service_integration` is interactive consent capability. An `agent_client` represents a session in which the user can be re-prompted for consent during the request lifecycle; a `service_integration` cannot. Asynchronous workflows triggered by a prior user action but processed without an interactive session are `service_integration`. Implementers should err toward `service_integration` when consent freshness cannot be re-established at request time.
+
+`CareNetworkActorType` (the relationship enum used by `pickup_actor_type`, `PickupActor.actor_type`, and `CareNetworkActorRef.actor_type`) shares some value names with `ActorType` (e.g., `owner`, `caregiver`) but is a distinct namespace. A care-network relationship value MUST NOT be used to infer a global `ActorType` trust posture; it describes a candidate's relationship to a pet, not the requester's policy class.
+
+Requests, grants, and authorization decisions all carry actor types so that scope evaluation, omission rules, and audit records can distinguish, for example, an agent acting on behalf of an owner from a merchant requesting context directly. Actor type is policy metadata — it does not by itself grant access. The server-side binding requirement appears in Conformance Requirements. Future drafts may extend this enum as new profiles (e.g., vet export) land.
 
 Pet: The companion animal that context describes.
 
@@ -506,8 +510,9 @@ Implementation guidance for this flow is `docs/implementers/care-network-lookup-
 
 Every profile implementation MUST also:
 
-- Require `requester_actor_type` on every request and echo it on the response's `authorization_decision`. The echo MUST equal the request value; servers MUST NOT silently coerce or substitute. Servers MUST verify the asserted `requester_actor_type` against the trust posture of the authenticated transport principal and reject mismatches as authorization failures rather than silently honoring a client-asserted privilege class.
-- Require `grantor_actor_type` and `grantee_actor_type` on every grant. The `grantee_actor_type` MUST match the `requester_actor_type` of any request that references the grant.
+- Require `requester_actor_type` on every request and echo it on the response's `authorization_decision`. The echo MUST equal the request value; servers MUST NOT silently coerce or substitute. Servers MUST verify the asserted `requester_actor_type` against the trust posture of the authenticated transport principal and reject mismatches as authorization failures rather than silently honoring a client-asserted privilege class. If the transport provides no authenticated principal, servers MUST reject the request as an authorization failure; there is no defined unauthenticated fallback.
+- Require `grantor_actor_type` and `grantee_actor_type` on every grant. Servers MUST verify `grantor_actor_type` against the authenticated identity of the grant issuer at issuance time; a grant MUST NOT carry a `grantor_actor_type` the issuer is not entitled to claim. The `grantee_actor_type` MUST match the `requester_actor_type` of any request that references the grant.
+- Servers MUST reject any request with `requester_actor_type: "vet"` as an authorization failure until a vet-export profile is defined; the value remains in the enum as a reserved placeholder for that future profile.
 
 A CCP Commerce Context Profile implementation should:
 

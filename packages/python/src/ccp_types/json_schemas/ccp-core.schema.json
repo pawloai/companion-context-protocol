@@ -82,7 +82,7 @@
         "vet"
       ]
     },
-    "CareNetworkActorTypeValue": {
+    "CareNetworkActorType": {
       "type": "string",
       "enum": [
         "owner",
@@ -1368,7 +1368,7 @@
             {
               "properties": {
                 "value": {
-                  "$ref": "#/$defs/CareNetworkActorTypeValue"
+                  "$ref": "#/$defs/CareNetworkActorType"
                 }
               }
             }
@@ -2141,7 +2141,7 @@
           "type": "string"
         },
         "pickup_actor_type": {
-          "$ref": "#/$defs/CareNetworkActorTypeValue"
+          "$ref": "#/$defs/CareNetworkActorType"
         }
       }
     },
@@ -2777,7 +2777,7 @@
         {
           "properties": {
             "value": {
-              "$ref": "#/$defs/CareNetworkActorTypeValue"
+              "$ref": "#/$defs/CareNetworkActorType"
             }
           }
         }

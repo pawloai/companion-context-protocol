@@ -173,6 +173,12 @@ const cases = [
     valid: false
   },
   {
+    name: "reject pickup verification request with invalid pickup_actor_type",
+    schema: "schemas/care-facility-pickup-verification-request.schema.json",
+    data: "tests/conformance/fixtures/invalid/pickup-verification-request-invalid-pickup-actor-type.json",
+    valid: false
+  },
+  {
     name: "reject active grant with revoked timestamp",
     schema: "schemas/permission-grant.schema.json",
     data: "tests/conformance/fixtures/invalid/active-grant-with-revoked-at.json",
@@ -548,11 +554,18 @@ for (const pair of roundTripPairs) {
     }
 
     if (contextKey === "pickup_verification_context") {
-      roundTripChecks.push([
-        `${contextKey}.pickup_actor.actor_id`,
-        context?.pickup_actor?.actor_id,
-        request.pickup_actor_id
-      ]);
+      roundTripChecks.push(
+        [
+          `${contextKey}.pickup_actor.actor_id`,
+          context?.pickup_actor?.actor_id,
+          request.pickup_actor_id
+        ],
+        [
+          `${contextKey}.pickup_actor.actor_type.value`,
+          context?.pickup_actor?.actor_type?.value,
+          request.pickup_actor_type
+        ]
+      );
     }
 
     if (contextKey === "care_network_context") {
@@ -620,83 +633,63 @@ const reportGrantRequestMismatches = ({ label, request, grant, fieldChecks }) =>
   return blockFailed;
 };
 
-const commerceContextRequest = readJson("examples/commerce-context-request.json");
-const commerceContextGrant = readJson("examples/permission-grant-commerce-context.json");
-failed ||= reportGrantRequestMismatches({
-  label: "commerce context",
-  request: commerceContextRequest,
-  grant: commerceContextGrant,
-  fieldChecks: [
-    ["grant_id", commerceContextGrant.grant_id, commerceContextRequest.grant_id],
-    ["subject_pet_id", commerceContextGrant.subject_pet_id, commerceContextRequest.pet_id],
-    ["grantee_actor_id", commerceContextGrant.grantee_actor_id, commerceContextRequest.requester_actor_id],
-    ["grantee_actor_type", commerceContextGrant.grantee_actor_type, commerceContextRequest.requester_actor_type]
-  ]
-});
+const grantRequestPairs = [
+  {
+    label: "commerce context",
+    request: "examples/commerce-context-request.json",
+    grant: "examples/permission-grant-commerce-context.json"
+  },
+  {
+    label: "care facility",
+    request: "examples/care-facility-boarding-preparation-request.json",
+    grant: "examples/permission-grant-care-facility-boarding-preparation.json",
+    extraFieldChecks: (grant, request) => [
+      ["facility_id", grant.facility_id, request.facility_id],
+      ["service_id", grant.service_id, request.service_id],
+      ["service_type", grant.service_type, request.service_type],
+      ["service_window", grant.service_window, request.service_window]
+    ]
+  },
+  {
+    label: "pickup verification",
+    request: "examples/care-facility-pickup-verification-request.json",
+    grant: "examples/permission-grant-care-facility-pickup-verification.json",
+    extraFieldChecks: (grant, request) => [
+      ["facility_id", grant.facility_id, request.facility_id],
+      ["service_id", grant.service_id, request.service_id],
+      ["service_type", grant.service_type, request.service_type],
+      ["service_window", grant.service_window, request.service_window]
+    ]
+  },
+  {
+    label: "care network lookup",
+    request: "examples/care-network-lookup-request.json",
+    grant: "examples/permission-grant-care-network-lookup.json",
+    extraFieldChecks: (grant, request) => [
+      ["service_id", grant.service_id, request.service_id],
+      ["service_window", grant.service_window, request.service_window]
+    ]
+  }
+];
 
-if (failed) {
-  process.exit(1);
+for (const pair of grantRequestPairs) {
+  const request = readJson(pair.request);
+  const grant = readJson(pair.grant);
+  const fieldChecks = [
+    ["grant_id", grant.grant_id, request.grant_id],
+    ["subject_pet_id", grant.subject_pet_id, request.pet_id],
+    ["grantee_actor_id", grant.grantee_actor_id, request.requester_actor_id],
+    ["grantee_actor_type", grant.grantee_actor_type, request.requester_actor_type],
+    ...(pair.extraFieldChecks?.(grant, request) ?? [])
+  ];
+
+  failed ||= reportGrantRequestMismatches({
+    label: pair.label,
+    request,
+    grant,
+    fieldChecks
+  });
 }
-
-const careFacilityRequest = readJson("examples/care-facility-boarding-preparation-request.json");
-const careFacilityGrant = readJson("examples/permission-grant-care-facility-boarding-preparation.json");
-failed ||= reportGrantRequestMismatches({
-  label: "care facility",
-  request: careFacilityRequest,
-  grant: careFacilityGrant,
-  fieldChecks: [
-    ["grant_id", careFacilityGrant.grant_id, careFacilityRequest.grant_id],
-    ["subject_pet_id", careFacilityGrant.subject_pet_id, careFacilityRequest.pet_id],
-    ["grantee_actor_id", careFacilityGrant.grantee_actor_id, careFacilityRequest.requester_actor_id],
-    ["grantee_actor_type", careFacilityGrant.grantee_actor_type, careFacilityRequest.requester_actor_type],
-    ["facility_id", careFacilityGrant.facility_id, careFacilityRequest.facility_id],
-    ["service_id", careFacilityGrant.service_id, careFacilityRequest.service_id],
-    ["service_type", careFacilityGrant.service_type, careFacilityRequest.service_type],
-    ["service_window", careFacilityGrant.service_window, careFacilityRequest.service_window]
-  ]
-});
-
-if (failed) {
-  process.exit(1);
-}
-
-const pickupVerificationRequest = readJson("examples/care-facility-pickup-verification-request.json");
-const pickupVerificationGrant = readJson("examples/permission-grant-care-facility-pickup-verification.json");
-failed ||= reportGrantRequestMismatches({
-  label: "pickup verification",
-  request: pickupVerificationRequest,
-  grant: pickupVerificationGrant,
-  fieldChecks: [
-    ["grant_id", pickupVerificationGrant.grant_id, pickupVerificationRequest.grant_id],
-    ["subject_pet_id", pickupVerificationGrant.subject_pet_id, pickupVerificationRequest.pet_id],
-    ["grantee_actor_id", pickupVerificationGrant.grantee_actor_id, pickupVerificationRequest.requester_actor_id],
-    ["grantee_actor_type", pickupVerificationGrant.grantee_actor_type, pickupVerificationRequest.requester_actor_type],
-    ["facility_id", pickupVerificationGrant.facility_id, pickupVerificationRequest.facility_id],
-    ["service_id", pickupVerificationGrant.service_id, pickupVerificationRequest.service_id],
-    ["service_type", pickupVerificationGrant.service_type, pickupVerificationRequest.service_type],
-    ["service_window", pickupVerificationGrant.service_window, pickupVerificationRequest.service_window]
-  ]
-});
-
-if (failed) {
-  process.exit(1);
-}
-
-const careNetworkLookupRequest = readJson("examples/care-network-lookup-request.json");
-const careNetworkLookupGrant = readJson("examples/permission-grant-care-network-lookup.json");
-failed ||= reportGrantRequestMismatches({
-  label: "care network lookup",
-  request: careNetworkLookupRequest,
-  grant: careNetworkLookupGrant,
-  fieldChecks: [
-    ["grant_id", careNetworkLookupGrant.grant_id, careNetworkLookupRequest.grant_id],
-    ["subject_pet_id", careNetworkLookupGrant.subject_pet_id, careNetworkLookupRequest.pet_id],
-    ["grantee_actor_id", careNetworkLookupGrant.grantee_actor_id, careNetworkLookupRequest.requester_actor_id],
-    ["grantee_actor_type", careNetworkLookupGrant.grantee_actor_type, careNetworkLookupRequest.requester_actor_type],
-    ["service_id", careNetworkLookupGrant.service_id, careNetworkLookupRequest.service_id],
-    ["service_window", careNetworkLookupGrant.service_window, careNetworkLookupRequest.service_window]
-  ]
-});
 
 if (failed) {
   process.exit(1);
