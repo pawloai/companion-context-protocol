@@ -1,0 +1,28 @@
+{
+  "request_id": "req_pickup_invalid_overlay_001",
+  "status": "denied",
+  "authorization_decision": {
+    "decision": "denied",
+    "evaluated_at": "2026-05-15T20:50:00Z",
+    "requester_actor_id": "actor_boarding_facility_app_002",
+    "requester_actor_type": "facility",
+    "purpose": "pickup_verification",
+    "grant_id": "grant_owner_to_boarding_facility_pickup_001",
+    "applied_scopes": [],
+    "denied_scopes": [
+      "pet.pickup_authorization.read"
+    ],
+    "reasons": [
+      "The requester facility does not match the facility authorized for pickup verification."
+    ]
+  },
+  "pickup_verification_context": null,
+  "omissions": [
+    {
+      "field": "pickup_verification_context",
+      "reason": "facility_mismatch",
+      "required_scope": "pet.pickup_authorization.read",
+      "detail": "Pickup verification context was not returned for the requester facility."
+    }
+  ]
+}

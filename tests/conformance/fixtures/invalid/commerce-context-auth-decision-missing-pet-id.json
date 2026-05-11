@@ -1,0 +1,28 @@
+{
+  "request_id": "req_commerce_invalid_overlay_001",
+  "status": "denied",
+  "authorization_decision": {
+    "decision": "denied",
+    "evaluated_at": "2026-05-04T16:35:00Z",
+    "requester_actor_id": "actor_unknown_agent",
+    "requester_actor_type": "agent_client",
+    "purpose": "product_recommendation",
+    "grant_id": "grant_owner_to_unknown_agent_001",
+    "applied_scopes": [],
+    "denied_scopes": [
+      "pet.commerce_context.read"
+    ],
+    "reasons": [
+      "The active grant does not allow the requested purpose."
+    ]
+  },
+  "commerce_context": null,
+  "omissions": [
+    {
+      "field": "commerce_context",
+      "reason": "purpose_not_allowed",
+      "required_scope": "pet.commerce_context.read",
+      "detail": "The active grant does not allow the requested purpose."
+    }
+  ]
+}

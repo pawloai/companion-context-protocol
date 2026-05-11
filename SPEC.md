@@ -368,7 +368,7 @@ Initial precedence rules:
 9. `care_network_visible`, `contact_shareable`, and `action_authorization_visible` may be returned for Care Network lookup only when the requested actor, scope, purpose, grant, and freshness checks allow that field.
 10. `care_network_visible`, `contact_shareable`, and `action_authorization_visible` must not be combined with `staff_only`, `restricted_sensitive`, `commerce_safe`, or `facility_shareable` on the same returned field.
 11. `contact_shareable` does not imply action authority, and `action_authorization_visible` does not imply access to contact channels.
-12. `facility_public` may be returned for Facility Truth lookup only when the requested scope, purpose, and freshness checks allow that field. Every Facility Truth context field MUST include `facility_public` (the "facility-public rule"). `facility_public` does not override `staff_only` or `restricted_sensitive`, and must not be combined with `staff_only`, `restricted_sensitive`, `commerce_safe`, `facility_shareable`, `care_network_visible`, `contact_shareable`, or `action_authorization_visible` on the same returned field. `facility_public` does not imply commerce safety, care-network access, or facility-shareable status; cross-profile reuse requires a separately authorized response in the other profile.
+12. `facility_public` may be returned for Facility Truth lookup only when the requested scope, purpose, and freshness checks allow that field. Every Facility Truth context field MUST include `facility_public` (the "facility-public rule"). `facility_public` does not override `staff_only` or `restricted_sensitive`, and must not be combined with `staff_only`, `restricted_sensitive`, `commerce_safe`, `facility_shareable`, `care_network_visible`, `contact_shareable`, `action_authorization_visible`, `owner_visible`, `caregiver_visible`, `vet_shareable`, or `agent_summary_only` on the same returned field — Facility Truth fields are facility-subject, not pet- or owner-subject, so pet-centric or summary-only classes are semantically incoherent on them. `facility_public` does not imply commerce safety, care-network access, or facility-shareable status; cross-profile reuse requires a separately authorized response in the other profile.
 
 ## Scope Registry
 
@@ -409,7 +409,7 @@ Initial facility-truth scopes (public-fact, no `PermissionGrant` required in v1)
 - `facility.contact_methods.read`
 - `facility.service_area.read`
 - `facility.acceptance_criteria.read`
-- `facility.booking_links.read`
+- `facility.booking_methods.read`
 - `facility.policies.summary.read`
 
 Deferred medication scope recognized for omissions and denied-scope reporting:
@@ -455,8 +455,8 @@ Initial omission reason codes:
 - `source_stale`
 - `not_available`
 - `summary_only`
-- `not_verified` — the requested scope is allowed but the facility has no current verification on file (used by Facility Truth).
-- `not_applicable` — the requested sub-resource does not apply to this facility (used by Facility Truth).
+- `not_verified` — the requested scope is allowed but the source has no current verification on file. Introduced for Facility Truth; available to any profile that surfaces freshness-bound data.
+- `not_applicable` — the requested sub-resource does not apply to the subject. Introduced for Facility Truth; available to any profile that distinguishes "absent" from "does not apply".
 
 An omission should include:
 
@@ -651,7 +651,7 @@ A CCP Facility Truth implementation should:
 - Validate request and response objects against the canonical schema.
 - Enforce purpose-bound access (`facility_truth_lookup`).
 - Enforce the one-facility subject boundary; reject responses that include `pet_id` anywhere.
-- Enforce visibility precedence; require `facility_public` and reject `staff_only`, `restricted_sensitive`, `commerce_safe`, `facility_shareable`, `care_network_visible`, `contact_shareable`, or `action_authorization_visible` on returned context fields.
+- Enforce visibility precedence; require `facility_public` and reject `staff_only`, `restricted_sensitive`, `commerce_safe`, `facility_shareable`, `care_network_visible`, `contact_shareable`, `action_authorization_visible`, `owner_visible`, `caregiver_visible`, `vet_shareable`, or `agent_summary_only` on returned context fields.
 - Return only granted scopes from the eight Facility Truth scopes; reject broader scopes from other profiles in the request.
 - Treat `grant_id` as advisory in v1 — it is not required and not evaluated.
 - Attach provenance with `verified_at` to every returned field; omit unverified fields with `not_verified` and stale fields with `source_stale` rather than guess.

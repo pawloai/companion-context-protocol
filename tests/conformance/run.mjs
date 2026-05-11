@@ -507,6 +507,48 @@ const cases = [
     schema: "schemas/facility-truth-response.schema.json",
     data: "tests/conformance/fixtures/invalid/facility-truth-sensitive-provenance-ref.json",
     valid: false
+  },
+  {
+    name: "reject facility truth pet_id leak in authorization_decision",
+    schema: "schemas/facility-truth-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/facility-truth-auth-decision-pet-id-leak.json",
+    valid: false
+  },
+  {
+    name: "reject facility truth ok response with empty context",
+    schema: "schemas/facility-truth-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/facility-truth-empty-ok-context.json",
+    valid: false
+  },
+  {
+    name: "reject facility truth agent_summary_only visibility",
+    schema: "schemas/facility-truth-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/facility-truth-agent-summary-only-visibility.json",
+    valid: false
+  },
+  {
+    name: "reject commerce context auth_decision missing pet_id",
+    schema: "schemas/commerce-context-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/commerce-context-auth-decision-missing-pet-id.json",
+    valid: false
+  },
+  {
+    name: "reject care facility context auth_decision missing pet_id",
+    schema: "schemas/care-facility-context-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-context-auth-decision-missing-pet-id.json",
+    valid: false
+  },
+  {
+    name: "reject care facility pickup verification auth_decision missing pet_id",
+    schema: "schemas/care-facility-pickup-verification-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-facility-pickup-verification-auth-decision-missing-pet-id.json",
+    valid: false
+  },
+  {
+    name: "reject care network lookup auth_decision missing pet_id",
+    schema: "schemas/care-network-lookup-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/care-network-lookup-auth-decision-missing-pet-id.json",
+    valid: false
   }
 ];
 

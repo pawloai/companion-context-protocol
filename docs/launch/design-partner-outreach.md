@@ -56,7 +56,7 @@ For broader ecosystem outreach, prefer `docs/launch/care-facility-design-partner
 - Practice-management software builder.
 - Vet-adjacent software contact.
 - Insurance, registry, or claims-workflow reviewer.
-- Facility-directory, listing-accuracy, or local-business agent tooling builder (also a strong fit for the Facility Truth design draft).
+- Facility-directory, listing-accuracy, or local-business agent tooling builder (also a strong fit for the Facility Truth v1 profile).
 
 Later, after the Commerce Context Profile is less fluid:
 

@@ -59,7 +59,7 @@ Scopes are necessary but not sufficient. The v1 profile authorizes eight public-
 - `facility.contact_methods.read` — published contact channels.
 - `facility.service_area.read` — described or geo-bounded service area.
 - `facility.acceptance_criteria.read` — public-facing acceptance criteria summary.
-- `facility.booking_links.read` — public booking methods and links.
+- `facility.booking_methods.read` — public booking methods and links.
 - `facility.policies.summary.read` — short summaries of public-facing policies.
 
 A request may carry any non-empty subset of these. Each granted scope is evaluated independently. Each must include the corresponding visibility class (`facility_public`) on every returned field, and each returned field's provenance must include `verified_at` within the facility's freshness window.
@@ -179,6 +179,7 @@ The returned bundle should not include object families that are outside this pro
 Freshness is part of safety. A facility that has not verified a fact recently is a liability for agent grounding.
 
 - Every returned field's provenance MUST carry `verified_at`. The schema enforces this through `FacilityTruthContextProvenance`.
+- `verified_at` MUST be a real verification timestamp recorded by the facility (or its delegate), in UTC with a `Z` suffix, and strictly in the past relative to the response. It MUST NOT be set to the request time, the current wall clock, or any future placeholder. Implementations SHOULD reject source records that carry a `verified_at` in the future or in the request window before serving them.
 - Implementations SHOULD set a freshness window per sub-resource (e.g., 30 days for hours, 90 days for service area, 7 days for currently_offered).
 - A field whose `verified_at` is outside the window MUST be omitted with `source_stale` rather than returned.
 - A field whose source has never been verified by the facility MUST be omitted with `not_verified` rather than returned.

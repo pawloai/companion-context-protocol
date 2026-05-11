@@ -1,0 +1,27 @@
+{
+  "request_id": "req_care_network_lookup_invalid_overlay_001",
+  "status": "denied",
+  "authorization_decision": {
+    "decision": "denied",
+    "evaluated_at": "2026-05-10T15:05:00Z",
+    "requester_actor_id": "actor_sitter_001",
+    "requester_actor_type": "caregiver",
+    "purpose": "care_network_lookup",
+    "grant_id": "grant_care_network_lookup_001",
+    "applied_scopes": [],
+    "denied_scopes": [
+      "pet.care_network.actor_refs.read"
+    ],
+    "reasons": [
+      "grant is not active for care-network lookup"
+    ]
+  },
+  "care_network_context": null,
+  "omissions": [
+    {
+      "field": "care_network_context",
+      "reason": "grant_revoked",
+      "detail": "care-network lookup was denied"
+    }
+  ]
+}

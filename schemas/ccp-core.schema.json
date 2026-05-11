@@ -49,7 +49,7 @@
         "facility.contact_methods.read",
         "facility.service_area.read",
         "facility.acceptance_criteria.read",
-        "facility.booking_links.read",
+        "facility.booking_methods.read",
         "facility.policies.summary.read"
       ]
     },
@@ -3496,7 +3496,11 @@
                 "facility_shareable",
                 "care_network_visible",
                 "contact_shareable",
-                "action_authorization_visible"
+                "action_authorization_visible",
+                "owner_visible",
+                "caregiver_visible",
+                "vet_shareable",
+                "agent_summary_only"
               ]
             }
           }
@@ -4036,7 +4040,7 @@
               "facility.contact_methods.read",
               "facility.service_area.read",
               "facility.acceptance_criteria.read",
-              "facility.booking_links.read",
+              "facility.booking_methods.read",
               "facility.policies.summary.read"
             ]
           }
@@ -4078,6 +4082,7 @@
                 "facility_id"
               ],
               "properties": {
+                "pet_id": false,
                 "purpose": {
                   "const": "facility_truth_lookup"
                 },
@@ -4090,7 +4095,7 @@
                       "facility.contact_methods.read",
                       "facility.service_area.read",
                       "facility.acceptance_criteria.read",
-                      "facility.booking_links.read",
+                      "facility.booking_methods.read",
                       "facility.policies.summary.read"
                     ]
                   }
@@ -4104,7 +4109,7 @@
                       "facility.contact_methods.read",
                       "facility.service_area.read",
                       "facility.acceptance_criteria.read",
-                      "facility.booking_links.read",
+                      "facility.booking_methods.read",
                       "facility.policies.summary.read"
                     ]
                   }
@@ -4145,7 +4150,7 @@
                       "facility.contact_methods.read",
                       "facility.service_area.read",
                       "facility.acceptance_criteria.read",
-                      "facility.booking_links.read",
+                      "facility.booking_methods.read",
                       "facility.policies.summary.read"
                     ]
                   },
@@ -4183,7 +4188,23 @@
                 }
               },
               "facility_truth_context": {
-                "$ref": "#/$defs/FacilityTruthContext"
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/FacilityTruthContext"
+                  },
+                  {
+                    "anyOf": [
+                      { "required": ["profile_summary"] },
+                      { "required": ["hours"] },
+                      { "required": ["services"] },
+                      { "required": ["service_area"] },
+                      { "required": ["contact_methods"] },
+                      { "required": ["booking_methods"] },
+                      { "required": ["acceptance_criteria"] },
+                      { "required": ["policy_summaries"] }
+                    ]
+                  }
+                ]
               },
               "omissions": {
                 "maxItems": 0
@@ -4212,7 +4233,23 @@
                 }
               },
               "facility_truth_context": {
-                "$ref": "#/$defs/FacilityTruthContext"
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/FacilityTruthContext"
+                  },
+                  {
+                    "anyOf": [
+                      { "required": ["profile_summary"] },
+                      { "required": ["hours"] },
+                      { "required": ["services"] },
+                      { "required": ["service_area"] },
+                      { "required": ["contact_methods"] },
+                      { "required": ["booking_methods"] },
+                      { "required": ["acceptance_criteria"] },
+                      { "required": ["policy_summaries"] }
+                    ]
+                  }
+                ]
               },
               "omissions": {
                 "minItems": 1

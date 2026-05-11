@@ -240,6 +240,41 @@ const invalidFixtures = [
     name: "facility truth response validator rejects missing verified_at",
     validator: validators.facilityTruthResponse,
     data: "tests/conformance/fixtures/invalid/facility-truth-field-missing-verified-at.json"
+  },
+  {
+    name: "facility truth response validator rejects pet_id in authorization_decision",
+    validator: validators.facilityTruthResponse,
+    data: "tests/conformance/fixtures/invalid/facility-truth-auth-decision-pet-id-leak.json"
+  },
+  {
+    name: "facility truth response validator rejects ok response with empty context",
+    validator: validators.facilityTruthResponse,
+    data: "tests/conformance/fixtures/invalid/facility-truth-empty-ok-context.json"
+  },
+  {
+    name: "facility truth response validator rejects agent_summary_only visibility",
+    validator: validators.facilityTruthResponse,
+    data: "tests/conformance/fixtures/invalid/facility-truth-agent-summary-only-visibility.json"
+  },
+  {
+    name: "commerce context response validator rejects auth_decision missing pet_id",
+    validator: validators.commerceContextResponse,
+    data: "tests/conformance/fixtures/invalid/commerce-context-auth-decision-missing-pet-id.json"
+  },
+  {
+    name: "care facility response validator rejects auth_decision missing pet_id",
+    validator: validators.careFacilityContextResponse,
+    data: "tests/conformance/fixtures/invalid/care-facility-context-auth-decision-missing-pet-id.json"
+  },
+  {
+    name: "pickup verification response validator rejects auth_decision missing pet_id",
+    validator: validators.careFacilityPickupVerificationResponse,
+    data: "tests/conformance/fixtures/invalid/care-facility-pickup-verification-auth-decision-missing-pet-id.json"
+  },
+  {
+    name: "care network lookup response validator rejects auth_decision missing pet_id",
+    validator: validators.careNetworkLookupResponse,
+    data: "tests/conformance/fixtures/invalid/care-network-lookup-auth-decision-missing-pet-id.json"
   }
 ];
 

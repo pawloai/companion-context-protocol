@@ -30,7 +30,7 @@ export type FacilityTruthScope =
   | "facility.contact_methods.read"
   | "facility.service_area.read"
   | "facility.acceptance_criteria.read"
-  | "facility.booking_links.read"
+  | "facility.booking_methods.read"
   | "facility.policies.summary.read";
 
 export type Scope =
