@@ -72,6 +72,15 @@ export type SourceType =
   | "inferred"
   | "generated";
 
+export type ActorType =
+  | "owner"
+  | "caregiver"
+  | "facility"
+  | "merchant"
+  | "agent_client"
+  | "service_integration"
+  | "vet";
+
 export interface ContextProvenance {
   source_type: SourceType;
   source_actor_id?: string;
@@ -271,6 +280,7 @@ export type ReleaseConstraintType =
 
 export interface PickupActor {
   actor_id: string;
+  actor_type: FieldEnvelope<CareNetworkActorType>;
   display_name?: FieldEnvelope<string>;
   relationship?: FieldEnvelope<string>;
   role?: FieldEnvelope<string>;
@@ -436,7 +446,9 @@ export interface PermissionGrant {
   grant_id: string;
   subject_pet_id: string;
   grantor_actor_id: string;
+  grantor_actor_type: ActorType;
   grantee_actor_id: string;
+  grantee_actor_type: ActorType;
   facility_id?: string;
   service_id?: string;
   service_type?: string;
@@ -453,6 +465,7 @@ export interface AuthorizationDecision {
   decision: "allowed" | "partial" | "denied";
   evaluated_at: string;
   requester_actor_id: string;
+  requester_actor_type: ActorType;
   pet_id: string;
   purpose: Purpose;
   grant_id?: string;
@@ -472,6 +485,7 @@ export interface Omission {
 export interface CommerceContextRequest {
   request_id: string;
   requester_actor_id: string;
+  requester_actor_type: ActorType;
   pet_id: string;
   purpose: Purpose;
   scopes: Scope[];
@@ -481,6 +495,7 @@ export interface CommerceContextRequest {
 export interface CareFacilityContextRequest {
   request_id: string;
   requester_actor_id: string;
+  requester_actor_type: ActorType;
   pet_id: string;
   facility_id: string;
   service_id: string;
@@ -494,6 +509,7 @@ export interface CareFacilityContextRequest {
 export interface CareFacilityPickupVerificationRequest {
   request_id: string;
   requester_actor_id: string;
+  requester_actor_type: ActorType;
   pet_id: string;
   facility_id: string;
   service_id: string;
@@ -503,11 +519,13 @@ export interface CareFacilityPickupVerificationRequest {
   scopes: Scope[];
   grant_id: string;
   pickup_actor_id: string;
+  pickup_actor_type: CareNetworkActorType;
 }
 
 export interface CareNetworkLookupRequest {
   request_id: string;
   requester_actor_id: string;
+  requester_actor_type: ActorType;
   pet_id: string;
   purpose: "care_network_lookup";
   scopes: Scope[];

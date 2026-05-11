@@ -167,6 +167,12 @@ const cases = [
     valid: false
   },
   {
+    name: "reject grant missing grantee_actor_type",
+    schema: "schemas/permission-grant.schema.json",
+    data: "tests/conformance/fixtures/invalid/grant-missing-grantee-actor-type.json",
+    valid: false
+  },
+  {
     name: "reject active grant with revoked timestamp",
     schema: "schemas/permission-grant.schema.json",
     data: "tests/conformance/fixtures/invalid/active-grant-with-revoked-at.json",
@@ -613,6 +619,24 @@ const reportGrantRequestMismatches = ({ label, request, grant, fieldChecks }) =>
 
   return blockFailed;
 };
+
+const commerceContextRequest = readJson("examples/commerce-context-request.json");
+const commerceContextGrant = readJson("examples/permission-grant-commerce-context.json");
+failed ||= reportGrantRequestMismatches({
+  label: "commerce context",
+  request: commerceContextRequest,
+  grant: commerceContextGrant,
+  fieldChecks: [
+    ["grant_id", commerceContextGrant.grant_id, commerceContextRequest.grant_id],
+    ["subject_pet_id", commerceContextGrant.subject_pet_id, commerceContextRequest.pet_id],
+    ["grantee_actor_id", commerceContextGrant.grantee_actor_id, commerceContextRequest.requester_actor_id],
+    ["grantee_actor_type", commerceContextGrant.grantee_actor_type, commerceContextRequest.requester_actor_type]
+  ]
+});
+
+if (failed) {
+  process.exit(1);
+}
 
 const careFacilityRequest = readJson("examples/care-facility-boarding-preparation-request.json");
 const careFacilityGrant = readJson("examples/permission-grant-care-facility-boarding-preparation.json");

@@ -57,7 +57,17 @@ MCP is one adapter for CCP. It is not the protocol itself.
 
 Actor: A person, organization, system, agent, or service requesting or acting on context.
 
-Actor type: A discrete trust posture for an actor in policy evaluation. The draft defines seven values: `owner`, `caregiver`, `facility`, `merchant`, `agent_client`, `service_integration`, and `vet`. Requests, grants, and authorization decisions all carry actor types so that scope evaluation, omission rules, and audit records can distinguish, for example, an agent acting on behalf of an owner from a merchant requesting context directly. Actor type is policy metadata — it does not by itself grant access. Future drafts may extend this enum as new profiles (e.g., vet export) land.
+Actor type: A discrete trust posture for an actor in policy evaluation. The draft defines seven values:
+
+- `owner` — primary consent authority for a pet.
+- `caregiver` — a person granted ongoing care responsibility by an owner (e.g., a partner, family member, or paid caregiver).
+- `facility` — an organization providing in-person services (boarding, daycare, grooming) acting under a service agreement.
+- `merchant` — a commerce-side actor requesting commerce-safe context for product recommendation or filtering.
+- `agent_client` — software acting on behalf of an authenticated end-user (e.g., an LLM assistant carrying out a user task). The user is in the loop.
+- `service_integration` — a system-to-system non-interactive client running under its own credentials (e.g., a vendor backend syncing on a schedule). No human is in the loop at request time.
+- `vet` — reserved for veterinary-side actors. No vet profile, scope, or flow exists in this draft. Servers SHOULD reject `requester_actor_type: "vet"` until a vet-export profile is defined.
+
+Requests, grants, and authorization decisions all carry actor types so that scope evaluation, omission rules, and audit records can distinguish, for example, an agent acting on behalf of an owner from a merchant requesting context directly. Actor type is policy metadata — it does not by itself grant access. A server MUST verify that the `requester_actor_type` in a request is consistent with the trust posture of the authenticated transport principal; servers MUST NOT accept a client-asserted actor type that the authenticated identity is not entitled to claim. Future drafts may extend this enum as new profiles (e.g., vet export) land.
 
 Pet: The companion animal that context describes.
 
@@ -458,6 +468,8 @@ Example flow:
 7. Denied responses return `pickup_verification_context: null`.
 8. Restricted, unrelated, or unresolved fields are omitted with machine-readable reasons.
 
+A pickup-verification request MUST carry a required `pickup_actor_id` and `pickup_actor_type` describing the candidate pickup actor. `pickup_actor_type` uses a care-network relationship enum (`owner`, `caregiver`, `family_contact`, `friend_contact`, `pickup_contact`, `emergency_contact`, `facility_staff`, `organization`, `integration_client`) — distinct from the global `ActorType` because it describes the candidate's relationship to the pet, not the requester's trust posture. The same enum constrains `PickupActor.actor_type` on the response. The candidate's `pickup_actor_type` does not by itself grant release authority; release decisions are made against the pet's pickup authorization records regardless of relationship type.
+
 The pickup-verification slice must not return feeding instructions, medication details, billing data, payment authority, household context, identity document copies or numbers, full Care Network data, wellness timelines, diagnosis history, treatment history, staff-only notes, or unrelated contacts.
 
 See `examples/permission-grant-care-facility-pickup-verification.json`, `examples/care-facility-pickup-verification-request.json`, `examples/care-facility-pickup-verification-response.json`, `examples/care-facility-pickup-verification-owner-confirmation-response.json`, `examples/care-facility-pickup-verification-facility-mismatch-denied-response.json`, and `examples/care-facility-pickup-verification-inactive-service-window-denied-response.json`.
@@ -494,7 +506,7 @@ Implementation guidance for this flow is `docs/implementers/care-network-lookup-
 
 Every profile implementation MUST also:
 
-- Require `requester_actor_type` on every request and echo it on the response's `authorization_decision`. The echo MUST equal the request value; servers MUST NOT silently coerce or substitute.
+- Require `requester_actor_type` on every request and echo it on the response's `authorization_decision`. The echo MUST equal the request value; servers MUST NOT silently coerce or substitute. Servers MUST verify the asserted `requester_actor_type` against the trust posture of the authenticated transport principal and reject mismatches as authorization failures rather than silently honoring a client-asserted privilege class.
 - Require `grantor_actor_type` and `grantee_actor_type` on every grant. The `grantee_actor_type` MUST match the `requester_actor_type` of any request that references the grant.
 
 A CCP Commerce Context Profile implementation should:
