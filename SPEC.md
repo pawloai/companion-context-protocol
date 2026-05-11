@@ -446,7 +446,7 @@ CCP responses should omit restricted data by default and explain omissions with 
 
 Initial omission reason codes:
 
-- `not_requested`
+- `not_requested` — the field was not present in the request scopes (or its required scope was denied during evaluation), or it was granted but withheld by per-request minimization. See `docs/implementers/cross-profile-inference.md` §Per-request minimization for the two-case semantics.
 - `scope_missing`
 - `purpose_not_allowed`
 - `visibility_restricted`

@@ -2,7 +2,7 @@
 
 Status: Draft, pre-1.0
 
-`npm test` is the canonical machine-checked surface for CCP conformance, but the spec also carries normative `MUST`s that no schema or test runner can verify because they describe transport-layer or runtime behavior. This checklist separates the two so an implementer can self-attest against the parts the runner cannot reach.
+`npm test` is the canonical machine-checked surface for CCP conformance, but the spec also carries normative `MUST`s that no schema or test runner can verify because they describe transport-layer, runtime-policy, or cross-call behavior. This checklist separates the two so an implementer can self-attest against the parts the runner cannot reach.
 
 The canonical source for every requirement here is `SPEC.md`. If this checklist and `SPEC.md` disagree, `SPEC.md` wins.
 
