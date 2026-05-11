@@ -521,6 +521,12 @@ const cases = [
     valid: false
   },
   {
+    name: "reject facility truth partial response with empty context",
+    schema: "schemas/facility-truth-response.schema.json",
+    data: "tests/conformance/fixtures/invalid/facility-truth-empty-partial-context.json",
+    valid: false
+  },
+  {
     name: "reject facility truth agent_summary_only visibility",
     schema: "schemas/facility-truth-response.schema.json",
     data: "tests/conformance/fixtures/invalid/facility-truth-agent-summary-only-visibility.json",
@@ -739,6 +745,21 @@ for (const pair of roundTripPairs) {
     failed = true;
     console.error(`not ok - ${pair.name} request/response mismatch: ${name}`);
     console.error(`  expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+  }
+}
+
+const facilityTruthScanOnly = [
+  "examples/facility-truth-partial-response.json",
+  "examples/facility-truth-denied-response.json"
+];
+
+for (const responsePath of facilityTruthScanOnly) {
+  const response = readJson(responsePath);
+  if (containsPetId(response)) {
+    failed = true;
+    console.error(
+      `not ok - facility truth subject-boundary: ${responsePath} contains pet_id`
+    );
   }
 }
 

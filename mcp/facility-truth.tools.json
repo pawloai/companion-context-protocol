@@ -9,7 +9,7 @@
     {
       "name": "ccp_facility_truth_request",
       "title": "Request CCP Facility Truth",
-      "description": "Look up one facility's public-fact truth record (profile, hours, services, contact methods, service area, acceptance criteria, booking links, policy summaries). The server evaluates requester identity, facility identity, scopes, purpose, visibility classes, and freshness. Public-fact scopes do not require a PermissionGrant in v1. Protocol-level denials return a CCP response envelope with status `denied`.",
+      "description": "Look up one facility's public-fact truth record (profile, hours, services, contact methods, service area, acceptance criteria, booking methods, policy summaries). The server evaluates requester identity, facility identity, scopes, purpose, visibility classes, and freshness. Public-fact scopes do not require a PermissionGrant in v1. Protocol-level denials return a CCP response envelope with status `denied`.",
       "inputSchema": {
         "$ref": "../schemas/ccp-core.schema.json#/$defs/FacilityTruthRequest"
       },

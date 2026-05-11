@@ -252,6 +252,11 @@ const invalidFixtures = [
     data: "tests/conformance/fixtures/invalid/facility-truth-empty-ok-context.json"
   },
   {
+    name: "facility truth response validator rejects partial response with empty context",
+    validator: validators.facilityTruthResponse,
+    data: "tests/conformance/fixtures/invalid/facility-truth-empty-partial-context.json"
+  },
+  {
     name: "facility truth response validator rejects agent_summary_only visibility",
     validator: validators.facilityTruthResponse,
     data: "tests/conformance/fixtures/invalid/facility-truth-agent-summary-only-visibility.json"

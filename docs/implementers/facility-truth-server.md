@@ -74,7 +74,7 @@ A server should authorize each returned field using:
 - Field visibility classes.
 - Field freshness — every returned field's provenance MUST carry `verified_at`. Unverified or stale data is omitted with `not_verified` or `source_stale`.
 
-`facility_public` does not imply commerce safety, care-network access, contact-channel reuse, or facility-shareable status. Cross-profile reuse requires a separately authorized response in the other profile. `staff_only`, `restricted_sensitive`, `commerce_safe`, `facility_shareable`, `care_network_visible`, `contact_shareable`, and `action_authorization_visible` must never appear on returned Facility Truth fields.
+`facility_public` does not imply commerce safety, care-network access, contact-channel reuse, or facility-shareable status. Cross-profile reuse requires a separately authorized response in the other profile. `staff_only`, `restricted_sensitive`, `commerce_safe`, `facility_shareable`, `care_network_visible`, `contact_shareable`, `action_authorization_visible`, `owner_visible`, `caregiver_visible`, `vet_shareable`, and `agent_summary_only` must never appear on returned Facility Truth fields — Facility Truth fields are facility-subject, not pet- or owner-subject, so pet-centric or summary-only classes are semantically incoherent on them and are rejected by `FacilityTruthVisibilitySet`.
 
 ## Subject Boundary
 
@@ -113,7 +113,7 @@ Use `partial` when:
 - Some sub-resources can be returned.
 - Some requested or relevant data is omitted (for example, `not_verified` for a stale policy summary).
 - `authorization_decision.decision` is `partial`.
-- `facility_truth_context` is non-null.
+- `facility_truth_context` is non-null and includes at least one sub-resource.
 - `omissions` has at least one item.
 
 Use `denied` when:
@@ -248,9 +248,13 @@ Valid denied response:
 
 Schema-invalid fixtures:
 
+- `tests/conformance/fixtures/invalid/facility-truth-agent-summary-only-visibility.json`
+- `tests/conformance/fixtures/invalid/facility-truth-auth-decision-pet-id-leak.json`
 - `tests/conformance/fixtures/invalid/facility-truth-broad-scope-request.json`
 - `tests/conformance/fixtures/invalid/facility-truth-cross-profile-visibility.json`
 - `tests/conformance/fixtures/invalid/facility-truth-denied-response-with-context.json`
+- `tests/conformance/fixtures/invalid/facility-truth-empty-ok-context.json`
+- `tests/conformance/fixtures/invalid/facility-truth-empty-partial-context.json`
 - `tests/conformance/fixtures/invalid/facility-truth-field-missing-verified-at.json`
 - `tests/conformance/fixtures/invalid/facility-truth-missing-facility-public.json`
 - `tests/conformance/fixtures/invalid/facility-truth-pet-id-leak.json`
