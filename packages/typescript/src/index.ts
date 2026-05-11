@@ -20,7 +20,18 @@ export type VisibilityClass =
   | "restricted_sensitive"
   | "care_network_visible"
   | "contact_shareable"
-  | "action_authorization_visible";
+  | "action_authorization_visible"
+  | "facility_public";
+
+export type FacilityTruthScope =
+  | "facility.profile.read"
+  | "facility.hours.read"
+  | "facility.services.read"
+  | "facility.contact_methods.read"
+  | "facility.service_area.read"
+  | "facility.acceptance_criteria.read"
+  | "facility.booking_links.read"
+  | "facility.policies.summary.read";
 
 export type Scope =
   | "pet.profile.read"
@@ -41,14 +52,16 @@ export type Scope =
   | "pet.care_network.relationships.read"
   | "pet.care_network.contact_channels.read"
   | "pet.care_network.action_authorizations.read"
-  | "pet.care_network.revocation_status.read";
+  | "pet.care_network.revocation_status.read"
+  | FacilityTruthScope;
 
 export type Purpose =
   | "product_recommendation"
   | "product_filtering"
   | "boarding_preparation"
   | "pickup_verification"
-  | "care_network_lookup";
+  | "care_network_lookup"
+  | "facility_truth_lookup";
 
 export type OmissionReasonCode =
   | "not_requested"
@@ -61,7 +74,9 @@ export type OmissionReasonCode =
   | "service_window_inactive"
   | "source_stale"
   | "not_available"
-  | "summary_only";
+  | "summary_only"
+  | "not_verified"
+  | "not_applicable";
 
 export type SourceType =
   | "owner_entered"
@@ -466,7 +481,8 @@ export interface AuthorizationDecision {
   evaluated_at: string;
   requester_actor_id: string;
   requester_actor_type: ActorType;
-  pet_id: string;
+  pet_id?: string;
+  facility_id?: string;
   purpose: Purpose;
   grant_id?: string;
   applied_scopes: Scope[];
@@ -568,6 +584,119 @@ export interface CareNetworkLookupResponse {
   omissions: Omission[];
 }
 
+export type FacilityContactChannelType =
+  | "phone"
+  | "email"
+  | "web_form"
+  | "sms"
+  | "chat"
+  | "address";
+
+export type FacilityBookingMethodType =
+  | "web_url"
+  | "phone"
+  | "email"
+  | "partner_integration";
+
+export type FacilityPolicyType =
+  | "vaccination"
+  | "cancellation"
+  | "intake"
+  | "late_pickup"
+  | "medication_handling"
+  | "emergency_escalation"
+  | "forms_and_waivers";
+
+export interface FacilityProfileSummary {
+  facility_name: FieldEnvelope<string>;
+  description?: FieldEnvelope<string>;
+  primary_address?: FieldEnvelope<string>;
+  metadata: ObjectMetadata;
+}
+
+export interface FacilityHours {
+  regular?: FieldEnvelope<string[]>;
+  holiday?: FieldEnvelope<string[]>;
+  time_zone?: FieldEnvelope<string>;
+  emergency_after_hours?: FieldEnvelope<string>;
+  metadata: ObjectMetadata;
+}
+
+export interface FacilityService {
+  service_type: FieldEnvelope<string>;
+  display_name?: FieldEnvelope<string>;
+  accepted_pet_types?: FieldEnvelope<string[]>;
+  size_or_breed_constraints?: FieldEnvelope<string[]>;
+  currently_offered?: FieldEnvelope<boolean>;
+  metadata: ObjectMetadata;
+}
+
+export interface FacilityContactMethod {
+  channel_type: FieldEnvelope<FacilityContactChannelType>;
+  channel_value: FieldEnvelope<string>;
+  purpose_label?: FieldEnvelope<string>;
+  metadata: ObjectMetadata;
+}
+
+export interface FacilityBookingMethod {
+  method_type: FieldEnvelope<FacilityBookingMethodType>;
+  value: FieldEnvelope<string>;
+  accepted_services?: FieldEnvelope<string[]>;
+  metadata: ObjectMetadata;
+}
+
+export interface FacilityServiceArea {
+  description?: FieldEnvelope<string>;
+  regions?: FieldEnvelope<string[]>;
+  radius_km?: FieldEnvelope<number>;
+  metadata: ObjectMetadata;
+}
+
+export interface FacilityAcceptanceCriteria {
+  summary?: FieldEnvelope<string>;
+  species_accepted?: FieldEnvelope<string[]>;
+  minimum_age_months?: FieldEnvelope<number>;
+  weight_or_size_limits?: FieldEnvelope<string>;
+  metadata: ObjectMetadata;
+}
+
+export interface FacilityPolicySummary {
+  policy_type: FieldEnvelope<FacilityPolicyType>;
+  summary: FieldEnvelope<string>;
+  metadata: ObjectMetadata;
+}
+
+export interface FacilityTruthContext {
+  facility_id: string;
+  profile_summary?: FacilityProfileSummary;
+  hours?: FacilityHours;
+  services?: FacilityService[];
+  service_area?: FacilityServiceArea;
+  contact_methods?: FacilityContactMethod[];
+  booking_methods?: FacilityBookingMethod[];
+  acceptance_criteria?: FacilityAcceptanceCriteria;
+  policy_summaries?: FacilityPolicySummary[];
+  metadata: ObjectMetadata;
+}
+
+export interface FacilityTruthRequest {
+  request_id: string;
+  requester_actor_id: string;
+  requester_actor_type: ActorType;
+  facility_id: string;
+  purpose: "facility_truth_lookup";
+  scopes: FacilityTruthScope[];
+  grant_id?: string;
+}
+
+export interface FacilityTruthResponse {
+  request_id: string;
+  status: "ok" | "partial" | "denied";
+  authorization_decision: AuthorizationDecision;
+  facility_truth_context: FacilityTruthContext | null;
+  omissions: Omission[];
+}
+
 const schemaRoot = new URL("./schemas/", import.meta.url);
 
 const readJson = (relativePath: string): AnySchemaObject => {
@@ -593,6 +722,8 @@ export const schemaPaths = {
     "schemas/care-facility-pickup-verification-response.schema.json",
   careNetworkLookupRequest: "schemas/care-network-lookup-request.schema.json",
   careNetworkLookupResponse: "schemas/care-network-lookup-response.schema.json",
+  facilityTruthRequest: "schemas/facility-truth-request.schema.json",
+  facilityTruthResponse: "schemas/facility-truth-response.schema.json",
   permissionGrant: "schemas/permission-grant.schema.json"
 } as const;
 
@@ -661,6 +792,18 @@ export function createCareNetworkLookupResponseValidator(
   return compileSchema<CareNetworkLookupResponse>(ajv, schemaPaths.careNetworkLookupResponse);
 }
 
+export function createFacilityTruthRequestValidator(
+  ajv = createCcpAjv()
+): ValidateFunction<FacilityTruthRequest> {
+  return compileSchema<FacilityTruthRequest>(ajv, schemaPaths.facilityTruthRequest);
+}
+
+export function createFacilityTruthResponseValidator(
+  ajv = createCcpAjv()
+): ValidateFunction<FacilityTruthResponse> {
+  return compileSchema<FacilityTruthResponse>(ajv, schemaPaths.facilityTruthResponse);
+}
+
 export function createPermissionGrantValidator(
   ajv = createCcpAjv()
 ): ValidateFunction<PermissionGrant> {
@@ -679,6 +822,8 @@ export function createCcpValidators(ajv = createCcpAjv()) {
       createCareFacilityPickupVerificationResponseValidator(ajv),
     careNetworkLookupRequest: createCareNetworkLookupRequestValidator(ajv),
     careNetworkLookupResponse: createCareNetworkLookupResponseValidator(ajv),
+    facilityTruthRequest: createFacilityTruthRequestValidator(ajv),
+    facilityTruthResponse: createFacilityTruthResponseValidator(ajv),
     permissionGrant: createPermissionGrantValidator(ajv)
   };
 }

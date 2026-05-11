@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://companioncontext.org/schemas/facility-truth-request.schema.json",
+  "title": "CCP Facility Truth Request",
+  "$ref": "ccp-core.schema.json#/$defs/FacilityTruthRequest"
+}

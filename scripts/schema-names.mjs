@@ -8,6 +8,8 @@ export const schemaFilenames = [
   "care-facility-pickup-verification-response.schema.json",
   "care-network-lookup-request.schema.json",
   "care-network-lookup-response.schema.json",
+  "facility-truth-request.schema.json",
+  "facility-truth-response.schema.json",
   "permission-grant.schema.json"
 ];
 

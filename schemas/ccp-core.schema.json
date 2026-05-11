@@ -17,7 +17,8 @@
         "restricted_sensitive",
         "care_network_visible",
         "contact_shareable",
-        "action_authorization_visible"
+        "action_authorization_visible",
+        "facility_public"
       ]
     },
     "Scope": {
@@ -41,7 +42,15 @@
         "pet.care_network.relationships.read",
         "pet.care_network.contact_channels.read",
         "pet.care_network.action_authorizations.read",
-        "pet.care_network.revocation_status.read"
+        "pet.care_network.revocation_status.read",
+        "facility.profile.read",
+        "facility.hours.read",
+        "facility.services.read",
+        "facility.contact_methods.read",
+        "facility.service_area.read",
+        "facility.acceptance_criteria.read",
+        "facility.booking_links.read",
+        "facility.policies.summary.read"
       ]
     },
     "Purpose": {
@@ -51,7 +60,8 @@
         "product_filtering",
         "boarding_preparation",
         "pickup_verification",
-        "care_network_lookup"
+        "care_network_lookup",
+        "facility_truth_lookup"
       ]
     },
     "OmissionReasonCode": {
@@ -67,7 +77,9 @@
         "service_window_inactive",
         "source_stale",
         "not_available",
-        "summary_only"
+        "summary_only",
+        "not_verified",
+        "not_applicable"
       ]
     },
     "ActorType": {
@@ -1897,7 +1909,6 @@
         "evaluated_at",
         "requester_actor_id",
         "requester_actor_type",
-        "pet_id",
         "purpose",
         "applied_scopes",
         "denied_scopes",
@@ -1923,6 +1934,9 @@
           "$ref": "#/$defs/ActorType"
         },
         "pet_id": {
+          "type": "string"
+        },
+        "facility_id": {
           "type": "string"
         },
         "purpose": {
@@ -2168,7 +2182,16 @@
           ]
         },
         "authorization_decision": {
-          "$ref": "#/$defs/AuthorizationDecision"
+          "allOf": [
+            {
+              "$ref": "#/$defs/AuthorizationDecision"
+            },
+            {
+              "required": [
+                "pet_id"
+              ]
+            }
+          ]
         },
         "commerce_context": {
           "anyOf": [
@@ -2311,6 +2334,9 @@
               "$ref": "#/$defs/AuthorizationDecision"
             },
             {
+              "required": [
+                "pet_id"
+              ],
               "properties": {
                 "purpose": {
                   "const": "pickup_verification"
@@ -2545,6 +2571,9 @@
               "$ref": "#/$defs/AuthorizationDecision"
             },
             {
+              "required": [
+                "pet_id"
+              ],
               "properties": {
                 "purpose": {
                   "const": "boarding_preparation"
@@ -3259,6 +3288,9 @@
               "$ref": "#/$defs/AuthorizationDecision"
             },
             {
+              "required": [
+                "pet_id"
+              ],
               "properties": {
                 "purpose": {
                   "const": "care_network_lookup"
@@ -3443,6 +3475,779 @@
             "derived_from": {
               "items": {
                 "$ref": "#/$defs/SensitiveKeywordPattern"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "FacilityTruthVisibilitySet": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/VisibilitySet"
+        },
+        {
+          "not": {
+            "contains": {
+              "enum": [
+                "staff_only",
+                "restricted_sensitive",
+                "commerce_safe",
+                "facility_shareable",
+                "care_network_visible",
+                "contact_shareable",
+                "action_authorization_visible"
+              ]
+            }
+          }
+        },
+        {
+          "contains": {
+            "const": "facility_public"
+          }
+        }
+      ]
+    },
+    "FacilityTruthContextProvenance": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ContextProvenance"
+        },
+        {
+          "required": [
+            "verified_at"
+          ],
+          "properties": {
+            "source_system": {
+              "$ref": "#/$defs/SensitiveKeywordPattern"
+            },
+            "source_record_ref": {
+              "$ref": "#/$defs/SensitiveKeywordPattern"
+            },
+            "derived_from": {
+              "items": {
+                "$ref": "#/$defs/SensitiveKeywordPattern"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "FacilityTruthObjectMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "visibility",
+        "provenance"
+      ],
+      "properties": {
+        "visibility": {
+          "$ref": "#/$defs/FacilityTruthVisibilitySet"
+        },
+        "provenance": {
+          "$ref": "#/$defs/FacilityTruthContextProvenance"
+        }
+      }
+    },
+    "FacilityTruthStringField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/StringField"
+        },
+        {
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/SensitiveKeywordPattern"
+            },
+            "visibility": {
+              "$ref": "#/$defs/FacilityTruthVisibilitySet"
+            },
+            "provenance": {
+              "$ref": "#/$defs/FacilityTruthContextProvenance"
+            }
+          }
+        }
+      ]
+    },
+    "FacilityTruthStringArrayField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/StringArrayField"
+        },
+        {
+          "properties": {
+            "value": {
+              "items": {
+                "$ref": "#/$defs/SensitiveKeywordPattern"
+              }
+            },
+            "visibility": {
+              "$ref": "#/$defs/FacilityTruthVisibilitySet"
+            },
+            "provenance": {
+              "$ref": "#/$defs/FacilityTruthContextProvenance"
+            }
+          }
+        }
+      ]
+    },
+    "FacilityTruthBooleanField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/BooleanField"
+        },
+        {
+          "properties": {
+            "visibility": {
+              "$ref": "#/$defs/FacilityTruthVisibilitySet"
+            },
+            "provenance": {
+              "$ref": "#/$defs/FacilityTruthContextProvenance"
+            }
+          }
+        }
+      ]
+    },
+    "FacilityTruthNumberField": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/NumberField"
+        },
+        {
+          "properties": {
+            "visibility": {
+              "$ref": "#/$defs/FacilityTruthVisibilitySet"
+            },
+            "provenance": {
+              "$ref": "#/$defs/FacilityTruthContextProvenance"
+            }
+          }
+        }
+      ]
+    },
+    "FacilityProfileSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "facility_name",
+        "metadata"
+      ],
+      "properties": {
+        "facility_name": {
+          "$ref": "#/$defs/FacilityTruthStringField"
+        },
+        "description": {
+          "$ref": "#/$defs/FacilityTruthStringField"
+        },
+        "primary_address": {
+          "$ref": "#/$defs/FacilityTruthStringField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/FacilityTruthObjectMetadata"
+        }
+      }
+    },
+    "FacilityHours": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metadata"
+      ],
+      "properties": {
+        "regular": {
+          "$ref": "#/$defs/FacilityTruthStringArrayField"
+        },
+        "holiday": {
+          "$ref": "#/$defs/FacilityTruthStringArrayField"
+        },
+        "time_zone": {
+          "$ref": "#/$defs/FacilityTruthStringField"
+        },
+        "emergency_after_hours": {
+          "$ref": "#/$defs/FacilityTruthStringField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/FacilityTruthObjectMetadata"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "regular"
+          ]
+        },
+        {
+          "required": [
+            "holiday"
+          ]
+        },
+        {
+          "required": [
+            "time_zone"
+          ]
+        },
+        {
+          "required": [
+            "emergency_after_hours"
+          ]
+        }
+      ]
+    },
+    "FacilityService": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "service_type",
+        "metadata"
+      ],
+      "properties": {
+        "service_type": {
+          "$ref": "#/$defs/FacilityTruthStringField"
+        },
+        "display_name": {
+          "$ref": "#/$defs/FacilityTruthStringField"
+        },
+        "accepted_pet_types": {
+          "$ref": "#/$defs/FacilityTruthStringArrayField"
+        },
+        "size_or_breed_constraints": {
+          "$ref": "#/$defs/FacilityTruthStringArrayField"
+        },
+        "currently_offered": {
+          "$ref": "#/$defs/FacilityTruthBooleanField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/FacilityTruthObjectMetadata"
+        }
+      }
+    },
+    "FacilityContactMethod": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "channel_type",
+        "channel_value",
+        "metadata"
+      ],
+      "properties": {
+        "channel_type": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "visibility",
+            "provenance"
+          ],
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "phone",
+                "email",
+                "web_form",
+                "sms",
+                "chat",
+                "address"
+              ]
+            },
+            "visibility": {
+              "$ref": "#/$defs/FacilityTruthVisibilitySet"
+            },
+            "provenance": {
+              "$ref": "#/$defs/FacilityTruthContextProvenance"
+            }
+          }
+        },
+        "channel_value": {
+          "$ref": "#/$defs/FacilityTruthStringField"
+        },
+        "purpose_label": {
+          "$ref": "#/$defs/FacilityTruthStringField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/FacilityTruthObjectMetadata"
+        }
+      }
+    },
+    "FacilityBookingMethod": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method_type",
+        "value",
+        "metadata"
+      ],
+      "properties": {
+        "method_type": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "visibility",
+            "provenance"
+          ],
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "web_url",
+                "phone",
+                "email",
+                "partner_integration"
+              ]
+            },
+            "visibility": {
+              "$ref": "#/$defs/FacilityTruthVisibilitySet"
+            },
+            "provenance": {
+              "$ref": "#/$defs/FacilityTruthContextProvenance"
+            }
+          }
+        },
+        "value": {
+          "$ref": "#/$defs/FacilityTruthStringField"
+        },
+        "accepted_services": {
+          "$ref": "#/$defs/FacilityTruthStringArrayField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/FacilityTruthObjectMetadata"
+        }
+      }
+    },
+    "FacilityServiceArea": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metadata"
+      ],
+      "properties": {
+        "description": {
+          "$ref": "#/$defs/FacilityTruthStringField"
+        },
+        "regions": {
+          "$ref": "#/$defs/FacilityTruthStringArrayField"
+        },
+        "radius_km": {
+          "$ref": "#/$defs/FacilityTruthNumberField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/FacilityTruthObjectMetadata"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "description"
+          ]
+        },
+        {
+          "required": [
+            "regions"
+          ]
+        },
+        {
+          "required": [
+            "radius_km"
+          ]
+        }
+      ]
+    },
+    "FacilityAcceptanceCriteria": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metadata"
+      ],
+      "properties": {
+        "summary": {
+          "$ref": "#/$defs/FacilityTruthStringField"
+        },
+        "species_accepted": {
+          "$ref": "#/$defs/FacilityTruthStringArrayField"
+        },
+        "minimum_age_months": {
+          "$ref": "#/$defs/FacilityTruthNumberField"
+        },
+        "weight_or_size_limits": {
+          "$ref": "#/$defs/FacilityTruthStringField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/FacilityTruthObjectMetadata"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "summary"
+          ]
+        },
+        {
+          "required": [
+            "species_accepted"
+          ]
+        },
+        {
+          "required": [
+            "minimum_age_months"
+          ]
+        },
+        {
+          "required": [
+            "weight_or_size_limits"
+          ]
+        }
+      ]
+    },
+    "FacilityPolicySummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_type",
+        "summary",
+        "metadata"
+      ],
+      "properties": {
+        "policy_type": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "visibility",
+            "provenance"
+          ],
+          "properties": {
+            "value": {
+              "type": "string",
+              "enum": [
+                "vaccination",
+                "cancellation",
+                "intake",
+                "late_pickup",
+                "medication_handling",
+                "emergency_escalation",
+                "forms_and_waivers"
+              ]
+            },
+            "visibility": {
+              "$ref": "#/$defs/FacilityTruthVisibilitySet"
+            },
+            "provenance": {
+              "$ref": "#/$defs/FacilityTruthContextProvenance"
+            }
+          }
+        },
+        "summary": {
+          "$ref": "#/$defs/FacilityTruthStringField"
+        },
+        "metadata": {
+          "$ref": "#/$defs/FacilityTruthObjectMetadata"
+        }
+      }
+    },
+    "FacilityTruthContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "facility_id",
+        "metadata"
+      ],
+      "properties": {
+        "facility_id": {
+          "type": "string"
+        },
+        "profile_summary": {
+          "$ref": "#/$defs/FacilityProfileSummary"
+        },
+        "hours": {
+          "$ref": "#/$defs/FacilityHours"
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FacilityService"
+          }
+        },
+        "service_area": {
+          "$ref": "#/$defs/FacilityServiceArea"
+        },
+        "contact_methods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FacilityContactMethod"
+          }
+        },
+        "booking_methods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FacilityBookingMethod"
+          }
+        },
+        "acceptance_criteria": {
+          "$ref": "#/$defs/FacilityAcceptanceCriteria"
+        },
+        "policy_summaries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FacilityPolicySummary"
+          }
+        },
+        "metadata": {
+          "$ref": "#/$defs/FacilityTruthObjectMetadata"
+        }
+      }
+    },
+    "FacilityTruthRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "requester_actor_id",
+        "requester_actor_type",
+        "facility_id",
+        "purpose",
+        "scopes"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string"
+        },
+        "requester_actor_id": {
+          "type": "string"
+        },
+        "requester_actor_type": {
+          "$ref": "#/$defs/ActorType"
+        },
+        "facility_id": {
+          "type": "string"
+        },
+        "purpose": {
+          "const": "facility_truth_lookup"
+        },
+        "scopes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "facility.profile.read",
+              "facility.hours.read",
+              "facility.services.read",
+              "facility.contact_methods.read",
+              "facility.service_area.read",
+              "facility.acceptance_criteria.read",
+              "facility.booking_links.read",
+              "facility.policies.summary.read"
+            ]
+          }
+        },
+        "grant_id": {
+          "type": "string"
+        }
+      }
+    },
+    "FacilityTruthResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "status",
+        "authorization_decision",
+        "facility_truth_context",
+        "omissions"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "ok",
+            "partial",
+            "denied"
+          ]
+        },
+        "authorization_decision": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/AuthorizationDecision"
+            },
+            {
+              "required": [
+                "facility_id"
+              ],
+              "properties": {
+                "purpose": {
+                  "const": "facility_truth_lookup"
+                },
+                "applied_scopes": {
+                  "items": {
+                    "enum": [
+                      "facility.profile.read",
+                      "facility.hours.read",
+                      "facility.services.read",
+                      "facility.contact_methods.read",
+                      "facility.service_area.read",
+                      "facility.acceptance_criteria.read",
+                      "facility.booking_links.read",
+                      "facility.policies.summary.read"
+                    ]
+                  }
+                },
+                "denied_scopes": {
+                  "items": {
+                    "enum": [
+                      "facility.profile.read",
+                      "facility.hours.read",
+                      "facility.services.read",
+                      "facility.contact_methods.read",
+                      "facility.service_area.read",
+                      "facility.acceptance_criteria.read",
+                      "facility.booking_links.read",
+                      "facility.policies.summary.read"
+                    ]
+                  }
+                },
+                "reasons": {
+                  "items": {
+                    "$ref": "#/$defs/SensitiveKeywordPattern"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "facility_truth_context": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FacilityTruthContext"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "omissions": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/Omission"
+              },
+              {
+                "properties": {
+                  "required_scope": {
+                    "enum": [
+                      "facility.profile.read",
+                      "facility.hours.read",
+                      "facility.services.read",
+                      "facility.contact_methods.read",
+                      "facility.service_area.read",
+                      "facility.acceptance_criteria.read",
+                      "facility.booking_links.read",
+                      "facility.policies.summary.read"
+                    ]
+                  },
+                  "detail": {
+                    "$ref": "#/$defs/SensitiveKeywordPattern"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "ok"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "authorization_decision": {
+                "properties": {
+                  "decision": {
+                    "const": "allowed"
+                  },
+                  "denied_scopes": {
+                    "maxItems": 0
+                  }
+                }
+              },
+              "facility_truth_context": {
+                "$ref": "#/$defs/FacilityTruthContext"
+              },
+              "omissions": {
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "partial"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "authorization_decision": {
+                "properties": {
+                  "decision": {
+                    "const": "partial"
+                  }
+                }
+              },
+              "facility_truth_context": {
+                "$ref": "#/$defs/FacilityTruthContext"
+              },
+              "omissions": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "denied"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "authorization_decision": {
+                "properties": {
+                  "decision": {
+                    "const": "denied"
+                  },
+                  "applied_scopes": {
+                    "maxItems": 0
+                  }
+                }
+              },
+              "facility_truth_context": {
+                "type": "null"
+              },
+              "omissions": {
+                "minItems": 1
               }
             }
           }
