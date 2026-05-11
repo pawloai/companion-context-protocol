@@ -514,6 +514,8 @@ Every profile implementation MUST also:
 - Require `grantor_actor_type` and `grantee_actor_type` on every grant. Servers MUST verify `grantor_actor_type` against the authenticated identity of the grant issuer at issuance time; a grant MUST NOT carry a `grantor_actor_type` the issuer is not entitled to claim. The `grantee_actor_type` MUST match the `requester_actor_type` of any request that references the grant.
 - Servers MUST reject any request with `requester_actor_type: "vet"` as an authorization failure until a vet-export profile is defined; the value remains in the enum as a reserved placeholder for that future profile.
 
+The transport-layer requirements above (principal binding, no-principal rejection, grantor-binding-at-issuance, vet rejection) cannot be exercised by the canonical conformance runner because CCP is transport-neutral. `docs/implementers/conformance-checklist.md` separates the machine-checked surface from the requirements that implementers MUST self-attest in their own integration tests or runtime authorization layer.
+
 A CCP Commerce Context Profile implementation should:
 
 - Validate request and response objects against the canonical schema.

@@ -19,6 +19,7 @@ This project is pre-1.0. Draft versions may change incompatibly while schemas, p
 - Negative fixtures for missing `requester_actor_type`, invalid `requester_actor_type`, missing `grantor_actor_type`, missing `grantee_actor_type`, and invalid `pickup_actor_type`.
 - Hand-written TypeScript types updated to expose `ActorType` and the new required fields on requests, grants, decisions, and `PickupActor`.
 - Implementer guides (commerce, care facility, pickup verification, care network lookup) updated with the new actor-type binding rules and authorization-decision echo field.
+- New `docs/implementers/conformance-checklist.md` separating the machine-checked surface (`npm test`) from the transport-layer and runtime requirements implementers MUST self-attest.
 
 ### Changed
 

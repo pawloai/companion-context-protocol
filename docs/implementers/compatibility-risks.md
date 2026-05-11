@@ -141,5 +141,6 @@ These are not "compatibility risks" in the schema sense, but they affect what an
 - Treat unknown enum values as forward-compatible when reading, and reject them on write.
 - Pin a draft version (`v0.1.0-draft` today) and upgrade deliberately by diffing `CHANGELOG.md`.
 - Run `npm test` from a clean checkout against any draft you ship against — all six suites should pass.
+- Walk `docs/implementers/conformance-checklist.md` for the requirements the runner cannot reach (principal binding, grantor-binding-at-issuance, vet rejection, restricted-content hygiene). Treat those as integration-test or runtime-authorization gates on your side.
 - Do not hard-code adapter conventions (paths, headers, tool names) as compatibility checks. Validate the canonical request/response shapes instead.
 - Watch the profile boundary: adding sensitive context to a Commerce Context response is a profile change, not a field change.
