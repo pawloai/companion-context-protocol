@@ -16,7 +16,7 @@ The first schema-backed profile is the Commerce Context Profile, focused on prod
 
 The draft also includes Care Facility Context schema slices for boarding preparation and pickup verification, plus a first Care Network lookup slice for one pet and one subject actor. They are intentionally narrower than the full care-facility and care-network designs and exclude medication administration, writeback, payment authority, emergency override access, full wellness timelines, diagnosis history, treatment history, billing records, household exports, and identity document copies.
 
-Current feedback suggests the clearest public design-partner review path may be Facility Truth: provenance-backed facility hours, services, eligibility constraints, certifications, service areas, booking links, and freshness for public operational facts that agents often answer incorrectly. Facility Truth is still design material only until it has schemas, examples, adapters, tests, and design-partner review.
+Facility Truth remains a design candidate for a future profile covering provenance-backed facility hours, services, eligibility, certifications, service areas, booking links, and freshness for public operational facts that agents often answer incorrectly. It is still design material only and is not on the immediate roadmap; the active path is implementation feedback on the Care Facility and Care Network profiles.
 
 ## What CCP Defines
 
@@ -185,15 +185,16 @@ The test suite validates the current positive examples and core `$defs` fixtures
 
 ## Contributing
 
-This project is early. The most useful contributions are concrete reviews of the Facility Truth design candidate, Commerce Context Profile, the first Care Facility boarding-preparation slice, pickup verification, and the first Care Network lookup slice:
+This project is early. The most useful contributions are concrete reviews of the Care Facility boarding-preparation slice, pickup verification, the first Care Network lookup slice, and the Commerce Context Profile, particularly from teams operating or building pet-care facility software:
 
-- Would a Facility Truth Profile for hours, services, certifications, accepted pets, booking links, freshness, and provenance better match your immediate interoperability problem?
-- Is the context bundle useful for product filtering or recommendations?
 - Is the boarding-preparation bundle useful for facility intake and stay planning?
+- Is the pickup-verification slice safe and complete for facility release workflows?
 - Is the Care Network lookup useful without becoming a broad household or contact export?
+- Is the commerce-context bundle useful for product filtering or recommendations?
 - Are the scope and purpose boundaries clear?
 - Are facility identity and service-window boundaries clear enough for implementation?
 - Are privacy and safety expectations enforceable?
 - Can an implementer build against the schemas without private context?
+- Would a future Facility Truth Profile for hours, services, certifications, accepted pets, booking links, freshness, and provenance be valuable for your AI agent or directory product?
 
 Substantial changes to schemas, scopes, visibility classes, profile boundaries, or conformance behavior should be proposed before implementation. See [GOVERNANCE.md](GOVERNANCE.md), [SECURITY.md](SECURITY.md), and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).

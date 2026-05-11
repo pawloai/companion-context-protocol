@@ -79,7 +79,7 @@ Omission: A machine-readable explanation that context exists or was requested bu
 
 The first schema-backed profile is the Commerce Context Profile.
 
-Profile order is a draft artifact, not a claim about market priority or ecosystem consensus. Commerce Context was selected as a narrow, lower-risk schema slice, but design-partner feedback may show that a Facility Truth or care-facility workflow should be validated first.
+Profile order is a draft artifact, not a claim about market priority or ecosystem consensus. Commerce Context was selected as a narrow, lower-risk schema slice. The Care Facility, Pickup Verification, and Care Network profiles are expected to evolve faster than Commerce Context as the first production implementations land.
 
 This profile lets authorized clients request commerce-safe pet context for product recommendations and filtering while excluding unrelated sensitive context.
 
