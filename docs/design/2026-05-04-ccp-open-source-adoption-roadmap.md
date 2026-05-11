@@ -199,7 +199,7 @@ For Care Facility design partners, use `docs/launch/care-facility-design-partner
 
 For Facility Truth v1 partner review, use `docs/implementers/facility-truth-server.md` and ask:
 
-> Does the v1 Facility Truth schema fit your facility's data? Are the eight public-fact scopes (profile, hours, services, contact methods, service area, acceptance criteria, booking links, policy summaries) the right cut for an agent grounding on your facility? Is the `verified_at` freshness contract realistic against your source-of-truth update cadence? Should certifications, insurance statements, capacity status, or staff credentials land in a partner-only Facility Truth slice with a grant shape, or via a different mechanism?
+> Does the v1 Facility Truth schema fit your facility's data? Are the eight public-fact scopes (profile, hours, services, contact methods, service area, acceptance criteria, booking methods, policy summaries) the right cut for an agent grounding on your facility? Is the `verified_at` freshness contract realistic against your source-of-truth update cadence? Should certifications, insurance statements, capacity status, or staff credentials land in a partner-only Facility Truth slice with a grant shape, or via a different mechanism?
 
 For Commerce-specific reviewers, use `docs/launch/design-partner-outreach.md` and ask:
 

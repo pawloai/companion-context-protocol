@@ -52,7 +52,7 @@ The following requirements live in `SPEC.md` Conformance Requirements but operat
 
 ### Restricted source content
 
-- [ ] `authorization_decision.reasons` and omission `detail` strings do not contain restricted source content (raw staff notes, raw wellness timelines, diagnosis or treatment text, billing data, household data, sensitive facility operations data, identity-document content). The pickup-verification and care-network-lookup response schemas enforce this with a `SensitiveKeywordPattern` overlay; older slices leave the constraint to the implementer.
+- [ ] `authorization_decision.reasons` and omission `detail` strings do not contain restricted source content (raw staff notes, raw wellness timelines, diagnosis or treatment text, billing data, household data, sensitive facility operations data, identity-document content). The pickup-verification, care-network-lookup, and facility-truth response schemas enforce this with a `SensitiveKeywordPattern` overlay (the facility-truth schema additionally constrains every returned-field `value` plus the provenance `source_system`, `source_record_ref`, and `derived_from` strings); the commerce-context and care-facility-boarding-preparation response schemas leave the constraint to the implementer.
 - [ ] Server logs and observability tooling do not capture restricted source content from CCP payloads.
 
 ### Cross-enum and cross-profile boundaries

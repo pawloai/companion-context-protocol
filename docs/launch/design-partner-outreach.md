@@ -37,7 +37,7 @@ Secondary questions:
 - Are the privacy and safety exclusions credible?
 - What field is missing that would block implementation?
 - What field feels too sensitive for commerce use?
-- Would the v1 Facility Truth profile (hours, services, eligibility summary, contact methods, booking links, freshness) be a more urgent first review target for your work than Commerce? For most reviewers the answer should still be yes, and Facility Truth is now a schema-backed profile rather than a design candidate.
+- Would the v1 Facility Truth profile (hours, services, eligibility summary, contact methods, booking methods, freshness) be a more urgent first review target for your work than Commerce? For most reviewers the answer should still be yes, and Facility Truth is now a schema-backed profile rather than a design candidate.
 - Which prior art, system class, data holder, or workflow does the draft fail to account for?
 - Can your team validate compatibility with the provided tests?
 

@@ -765,7 +765,8 @@ for (const pair of roundTripPairs) {
 
 const facilityTruthScanOnly = [
   "examples/facility-truth-partial-response.json",
-  "examples/facility-truth-denied-response.json"
+  "examples/facility-truth-denied-response.json",
+  "tests/conformance/fixtures/valid/facility-truth-all-scopes-response.json"
 ];
 
 for (const responsePath of facilityTruthScanOnly) {
