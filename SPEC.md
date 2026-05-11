@@ -93,9 +93,9 @@ Omission: A machine-readable explanation that context exists or was requested bu
 
 ## Current Profiles
 
-The draft ships four narrow schema-backed slices: Care Facility Context (`boarding_preparation`), Care Facility Pickup Verification (`pickup_verification`), Care Network Lookup (`care_network_lookup`), and Commerce Context.
+The draft ships five narrow schema-backed slices: Care Facility Context (`boarding_preparation`), Care Facility Pickup Verification (`pickup_verification`), Care Network Lookup (`care_network_lookup`), Facility Truth (`facility_truth_lookup`), and Commerce Context.
 
-Profile order in this section is not a claim about market priority or ecosystem consensus. The Care Facility and Care Network slices are listed first because they sit closest to a clear custodian (the facility's practice-management or facility-management system) and a concrete operational pain point — intake-form re-keying, pickup-desk verification, and ambiguous caregiver contact and authority. Commerce Context is listed after because, while its schemas are equally complete, merchants already capture pet profiles at signup and the consent path runs through the merchant rather than a third-party protocol — so Commerce should not be treated as the canonical worked example.
+Profile order in this section is not a claim about market priority or ecosystem consensus. The Care Facility and Care Network slices are listed first because they sit closest to a clear custodian (the facility's practice-management or facility-management system) and a concrete operational pain point — intake-form re-keying, pickup-desk verification, and ambiguous caregiver contact and authority. Facility Truth follows: it is the first profile that does not depend on a `PermissionGrant`, and a single facility can publish accurate facts unilaterally without waiting on a counterparty. Commerce Context is listed last because, while its schemas are equally complete, merchants already capture pet profiles at signup and the consent path runs through the merchant rather than a third-party protocol — so Commerce should not be treated as the canonical worked example.
 
 ### Care Facility Profiles
 
@@ -146,9 +146,33 @@ The Commerce profile should exclude by default:
 - Unrelated owner or household data.
 - Sensitive facility operations data.
 
-### Facility Truth (Design Candidate)
+### Facility Truth Profile
 
-Facility Truth is a design candidate, not a schema-backed profile in this version. It would cover public or operational facility facts such as hours, services, service areas, eligibility constraints, certifications, contact methods, booking links, accepted pet types, freshness, and provenance. It should be developed separately from pet-specific context because public facility facts have different consent, authorization, and provenance requirements — the design proposes that a public-facts subset could be served without a `PermissionGrant`, which would remove the grant-transport prerequisites that gate the pet-specific profiles. Facility Truth is the strongest design candidate ahead of expanding Commerce, and its promotion to a schema-backed profile is tracked separately.
+Facility Truth lets an authorized requester retrieve a minimized public-fact bundle for one facility — profile summary, hours, services, contact methods, service area, acceptance criteria summary, booking links, and policy summaries. Its subject identifier is `facility_id`; the request carries no `pet_id` and the response must not include `pet_id` anywhere. v1 ships only public-fact scopes and does not require a `PermissionGrant` — a single facility can publish accurate, agent-grounding facts unilaterally without coordinating a counterparty grant flow.
+
+The Facility Truth profile can include:
+
+- Facility name, description, and primary address.
+- Regular and holiday hours, time zone, and after-hours line.
+- Services offered, accepted pet types, current availability.
+- Public contact methods.
+- Service area description or geo bounds.
+- Public-facing acceptance criteria summary.
+- Public booking methods and links.
+- Short summaries of public-facing policies.
+
+The Facility Truth profile excludes by default:
+
+- Pet-specific context of any kind.
+- Owner, household, or care-network records.
+- Staff identities, schedules, credentials, or notes.
+- Internal capacity models or live availability counts.
+- Billing data and payment authority.
+- Identity document data.
+- Medical, wellness, diagnosis, or treatment history.
+- Higher-scrutiny facility scopes (certifications, insurance statements, capacity status, staff credentials) — these are deferred to a future partner-only Facility Truth slice with its own grant model and `facility_partner_visible` visibility class.
+
+Freshness is part of safety. Every returned Facility Truth field's provenance MUST carry `verified_at`. Implementations omit unverified facts with `not_verified` and stale facts with `source_stale` rather than guess.
 
 ## Core Objects
 
@@ -321,6 +345,7 @@ Initial visibility classes:
 - `care_network_visible`
 - `contact_shareable`
 - `action_authorization_visible`
+- `facility_public` — public-fact context about a facility itself, returned by the Facility Truth profile.
 - `agent_summary_only`
 - `restricted_sensitive`
 
@@ -343,6 +368,7 @@ Initial precedence rules:
 9. `care_network_visible`, `contact_shareable`, and `action_authorization_visible` may be returned for Care Network lookup only when the requested actor, scope, purpose, grant, and freshness checks allow that field.
 10. `care_network_visible`, `contact_shareable`, and `action_authorization_visible` must not be combined with `staff_only`, `restricted_sensitive`, `commerce_safe`, or `facility_shareable` on the same returned field.
 11. `contact_shareable` does not imply action authority, and `action_authorization_visible` does not imply access to contact channels.
+12. `facility_public` may be returned for Facility Truth lookup only when the requested scope, purpose, and freshness checks allow that field. Every Facility Truth context field MUST include `facility_public` (the "facility-public rule"). `facility_public` does not override `staff_only` or `restricted_sensitive`, and must not be combined with `staff_only`, `restricted_sensitive`, `commerce_safe`, `facility_shareable`, `care_network_visible`, `contact_shareable`, or `action_authorization_visible` on the same returned field. `facility_public` does not imply commerce safety, care-network access, or facility-shareable status; cross-profile reuse requires a separately authorized response in the other profile.
 
 ## Scope Registry
 
@@ -375,11 +401,22 @@ Initial care-network lookup scopes:
 - `pet.care_network.action_authorizations.read`
 - `pet.care_network.revocation_status.read`
 
+Initial facility-truth scopes (public-fact, no `PermissionGrant` required in v1):
+
+- `facility.profile.read`
+- `facility.hours.read`
+- `facility.services.read`
+- `facility.contact_methods.read`
+- `facility.service_area.read`
+- `facility.acceptance_criteria.read`
+- `facility.booking_links.read`
+- `facility.policies.summary.read`
+
 Deferred medication scope recognized for omissions and denied-scope reporting:
 
 - `pet.medications.administration.read`
 
-Future profiles may define additional scopes for wellness, vet export, medication administration, facility writeback, and payment authority.
+Future profiles may define additional scopes for wellness, vet export, medication administration, facility writeback, payment authority, and partner-only Facility Truth (certifications, insurance statements, capacity status, staff credentials).
 
 ### Purpose Registry
 
@@ -396,6 +433,10 @@ Initial care-facility purposes:
 Initial care-network purposes:
 
 - `care_network_lookup`
+
+Initial facility-truth purposes:
+
+- `facility_truth_lookup`
 
 ## Omission Reasons
 
@@ -414,6 +455,8 @@ Initial omission reason codes:
 - `source_stale`
 - `not_available`
 - `summary_only`
+- `not_verified` — the requested scope is allowed but the facility has no current verification on file (used by Facility Truth).
+- `not_applicable` — the requested sub-resource does not apply to this facility (used by Facility Truth).
 
 An omission should include:
 
@@ -491,6 +534,31 @@ The illustrative HTTP adapter for this flow is `openapi/care-network-lookup.open
 The illustrative MCP adapter for this flow is `mcp/care-network-lookup.tools.json`.
 
 Implementation guidance for this flow is `docs/implementers/care-network-lookup-server.md`.
+
+## Facility Truth Lookup Flow
+
+Example flow:
+
+1. An authorized requester (typically an agent client) asks for `purpose: facility_truth_lookup` for one `facility_id`, declaring a non-empty subset of the eight Facility Truth scopes.
+2. v1 ignores `grant_id`; the request needs no `PermissionGrant` for the public-fact scope set.
+3. Server evaluates requester, facility, purpose, scopes, visibility classes, and freshness.
+4. Server returns an `authorization_decision` carrying `facility_id` (rather than `pet_id`).
+5. Server returns a minimized `FacilityTruthContext` only when at least one Facility Truth sub-resource may be returned.
+6. Every returned field's provenance MUST carry `verified_at`. Stale or unverified fields are omitted with `source_stale` or `not_verified` rather than guessed.
+7. Denied responses return `facility_truth_context: null`.
+8. Restricted, unrelated, unverified, or unresolved fields are omitted with machine-readable reasons.
+
+The Facility Truth profile must not return any pet-specific context, owner or household data, care-network records, staff identities or schedules, internal capacity models, billing data, payment authority, identity-document data, medical or wellness history, diagnosis history, or treatment history. Higher-scrutiny facility scopes (certifications, insurance statements, capacity status, staff credentials) are deferred to a future partner-only Facility Truth slice with its own grant model.
+
+The request carries no `pet_id` and the response must not include `pet_id` anywhere. This is a load-bearing subject-boundary rule and is enforced by the canonical conformance runner.
+
+See `examples/facility-truth-request.json`, `examples/facility-truth-response.json`, `examples/facility-truth-partial-response.json`, and `examples/facility-truth-denied-response.json`.
+
+The illustrative HTTP adapter for this flow is `openapi/facility-truth.openapi.json`.
+
+The illustrative MCP adapter for this flow is `mcp/facility-truth.tools.json`.
+
+Implementation guidance for this flow is `docs/implementers/facility-truth-server.md`.
 
 ## Commerce Context Request Flow
 
@@ -577,3 +645,17 @@ A CCP Care Network Lookup implementation should:
 - Omit restricted data by default.
 - Provide machine-readable omission reasons.
 - Avoid exposing full household records, unrelated contacts, billing data, payment authority, identity documents, medical or wellness history, diagnosis history, treatment history, staff-only records, or sensitive relationship narratives.
+
+A CCP Facility Truth implementation should:
+
+- Validate request and response objects against the canonical schema.
+- Enforce purpose-bound access (`facility_truth_lookup`).
+- Enforce the one-facility subject boundary; reject responses that include `pet_id` anywhere.
+- Enforce visibility precedence; require `facility_public` and reject `staff_only`, `restricted_sensitive`, `commerce_safe`, `facility_shareable`, `care_network_visible`, `contact_shareable`, or `action_authorization_visible` on returned context fields.
+- Return only granted scopes from the eight Facility Truth scopes; reject broader scopes from other profiles in the request.
+- Treat `grant_id` as advisory in v1 — it is not required and not evaluated.
+- Attach provenance with `verified_at` to every returned field; omit unverified fields with `not_verified` and stale fields with `source_stale` rather than guess.
+- Include an authorization decision in each response, carrying `facility_id` rather than `pet_id`.
+- Omit restricted, unverified, or non-applicable data by default.
+- Provide machine-readable omission reasons.
+- Avoid exposing pet-specific context, owner or household data, care-network records, staff identities or schedules, internal capacity models, billing data, payment authority, identity-document data, medical or wellness history, diagnosis history, or treatment history.

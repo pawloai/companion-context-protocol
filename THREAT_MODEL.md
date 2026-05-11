@@ -86,9 +86,13 @@ Future drafts should define stronger guidance for rate limits, query correlation
 
 ## Facility Truth Risks
 
-Facility Truth is expected to cover mostly public operational facts, but public-by-nature does not mean risk-free. Incorrect hours, stale service eligibility, invented certifications, or outdated booking links can still harm facilities and clients.
+Facility Truth covers mostly public operational facts, but public-by-nature does not mean risk-free. Incorrect hours, stale service eligibility, invented certifications, or outdated booking links can still harm facilities and clients.
 
-Facility Truth should therefore require provenance, freshness, source identity, omission reasons, and clear distinctions between public facts, partner-only facts, and restricted internal facility data.
+The v1 Facility Truth profile ships only public-fact scopes (`facility.profile.read`, `facility.hours.read`, `facility.services.read`, `facility.contact_methods.read`, `facility.service_area.read`, `facility.acceptance_criteria.read`, `facility.booking_links.read`, `facility.policies.summary.read`) and does not require a `PermissionGrant`. Removing the grant requirement removes the issuer-binding control surface for these scopes; the freshness contract carries its safety load instead. Every returned Facility Truth field's provenance MUST carry `verified_at`, and stale facts MUST be omitted with `source_stale` rather than returned. Unverified facts MUST be omitted with `not_verified` rather than guessed. The `facility-public` rule and the no-`pet_id` subject-boundary rule are enforced by the canonical schemas and conformance runner.
+
+Higher-scrutiny facility scopes — certifications, insurance statements, capacity status, staff credentials — are deferred to a future partner-only Facility Truth slice with its own scopes, purpose rules, `facility_partner_visible` visibility class, and grant shape (likely an additive `subject_facility_id` on `PermissionGrant`). v1 implementers MUST NOT assume the v1 no-grant semantics generalize to those future scopes.
+
+Cross-facility inference is a residual risk: a requester enumerating many `facility_id` values in succession can build behavioural signals (which facilities exist, which scopes are denied, when a facility last verified) even when each individual response is correctly minimized. Implementations should rate-limit, log, and review enumeration patterns outside the canonical schema layer.
 
 ## Security Review Questions
 
