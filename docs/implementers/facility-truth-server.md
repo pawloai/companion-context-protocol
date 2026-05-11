@@ -4,7 +4,7 @@ Status: Draft, pre-1.0
 
 This guide explains how to implement a server for the CCP Facility Truth profile.
 
-The profile is intentionally narrow. It answers a focused question: for the requested facility, what public-fact context (profile summary, hours, services, contact methods, service area, acceptance criteria, booking links, policy summaries) should an agent be allowed to ground itself in? It does not return staff schedules, internal capacity models, billing data, payment authority, household data, identity-document data, medical or wellness history, diagnosis history, treatment history, staff-only notes, or any pet-specific context. Higher-scrutiny facility scopes (certifications, insurance statements, capacity status, staff credentials) are deferred to a future partner-only Facility Truth slice with its own grant model.
+The profile is intentionally narrow. It answers a focused question: for the requested facility, what public-fact context (profile summary, hours, services, contact methods, service area, acceptance criteria, booking methods, policy summaries) should an agent be allowed to ground itself in? It does not return staff schedules, internal capacity models, billing data, payment authority, household data, identity-document data, medical or wellness history, diagnosis history, treatment history, staff-only notes, or any pet-specific context. Higher-scrutiny facility scopes (certifications, insurance statements, capacity status, staff credentials) are deferred to a future partner-only Facility Truth slice with its own grant model.
 
 The canonical contract is JSON Schema. OpenAPI and MCP are adapter surfaces that carry the same request and response objects.
 
@@ -47,7 +47,7 @@ Implementations should evaluate requests in this order:
 9. Add machine-readable omissions for requested or relevant data that was not returned.
 10. Validate the response against `FacilityTruthResponse` before returning it.
 
-A `grant_id` is optional on the request. v1 ignores it; reserve room for a scope-conditional rule when partner-only scopes ship.
+A `grant_id` is optional on the request. v1 servers MUST silently accept and ignore a `grant_id` field when present — do NOT hard-reject requests that carry one. Partner-only Facility Truth scopes will make `grant_id` required for those scopes, and v1 servers that reject requests carrying a `grant_id` today will silently break compatibility when partner-only scopes land. Reserve room for a scope-conditional grant-evaluation rule rather than treating "no grant" as an invariant.
 
 ## Authorization Rules
 
@@ -280,7 +280,7 @@ Both adapters preserve the canonical request, response, authorization decision, 
 - Validate incoming request bodies against canonical schemas.
 - Authenticate requester identity outside the CCP payload.
 - Bind the asserted `requester_actor_type` to the authenticated principal; reject mismatches, unauthenticated requests, and `requester_actor_type: "vet"` until a vet-export profile lands.
-- Treat `grant_id` as advisory in v1 — it is not required and not evaluated.
+- Treat `grant_id` as advisory in v1 — it is not required and not evaluated. v1 servers MUST silently accept and ignore a `grant_id` when present; do not hard-reject requests that carry one (partner-only scopes will make `grant_id` required, and a v1 hard-reject would break forward compatibility).
 - Check requester, facility, purpose, scopes, visibility, and freshness.
 - Evaluate each requested scope independently; do not collapse the eight facility scopes into a single yes/no decision.
 - Honor a per-sub-resource freshness window; omit stale or unverified facts.

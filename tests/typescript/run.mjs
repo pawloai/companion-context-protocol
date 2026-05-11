@@ -147,6 +147,18 @@ const checks = [
     valid: validators.facilityTruthResponse(
       readJson("examples/facility-truth-denied-response.json")
     )
+  },
+  {
+    name: "facility truth request validator accepts all-scopes fixture",
+    valid: validators.facilityTruthRequest(
+      readJson("tests/conformance/fixtures/valid/facility-truth-all-scopes-request.json")
+    )
+  },
+  {
+    name: "facility truth response validator accepts all-scopes fixture",
+    valid: validators.facilityTruthResponse(
+      readJson("tests/conformance/fixtures/valid/facility-truth-all-scopes-response.json")
+    )
   }
 ];
 

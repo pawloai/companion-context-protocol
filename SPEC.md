@@ -148,7 +148,7 @@ The Commerce profile should exclude by default:
 
 ### Facility Truth Profile
 
-Facility Truth lets an authorized requester retrieve a minimized public-fact bundle for one facility — profile summary, hours, services, contact methods, service area, acceptance criteria summary, booking links, and policy summaries. Its subject identifier is `facility_id`; the request carries no `pet_id` and the response must not include `pet_id` anywhere. v1 ships only public-fact scopes and does not require a `PermissionGrant` — a single facility can publish accurate, agent-grounding facts unilaterally without coordinating a counterparty grant flow.
+Facility Truth lets an authorized requester retrieve a minimized public-fact bundle for one facility — profile summary, hours, services, contact methods, service area, acceptance criteria summary, booking methods, and policy summaries. Its subject identifier is `facility_id`; the request carries no `pet_id` and the response must not include `pet_id` anywhere. v1 ships only public-fact scopes and does not require a `PermissionGrant` — a single facility can publish accurate, agent-grounding facts unilaterally without coordinating a counterparty grant flow.
 
 The Facility Truth profile can include:
 

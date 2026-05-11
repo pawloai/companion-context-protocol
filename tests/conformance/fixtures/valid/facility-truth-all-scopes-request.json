@@ -1,0 +1,17 @@
+{
+  "request_id": "req_facility_truth_all_scopes_001",
+  "requester_actor_id": "actor_agent_001",
+  "requester_actor_type": "agent_client",
+  "facility_id": "facility_synthetic_002",
+  "purpose": "facility_truth_lookup",
+  "scopes": [
+    "facility.profile.read",
+    "facility.hours.read",
+    "facility.services.read",
+    "facility.contact_methods.read",
+    "facility.service_area.read",
+    "facility.acceptance_criteria.read",
+    "facility.booking_methods.read",
+    "facility.policies.summary.read"
+  ]
+}

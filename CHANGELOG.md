@@ -33,6 +33,9 @@ This project is pre-1.0. Draft versions may change incompatibly while schemas, p
 - Conformance runner extended with Facility Truth cases, a `subjectKey: "facility_id"` round-trip pair, and a subject-boundary scan that rejects any `pet_id` anywhere in a Facility Truth response.
 - TypeScript package: hand-written Facility Truth types and AJV validator factories (`createFacilityTruthRequestValidator`, `createFacilityTruthResponseValidator`, and corresponding entries on `createCcpValidators()`).
 - Python package: `facility-truth-request` and `facility-truth-response` keys added to `SchemaName` and `_SCHEMA_FILENAMES`.
+- Positive `facility-truth-all-scopes-request` and `facility-truth-all-scopes-response` fixtures in `tests/conformance/fixtures/valid/` that exercise every Facility Truth scope and every content sub-resource (`profile_summary`, `hours`, `services`, `service_area`, `contact_methods`, `booking_methods`, `acceptance_criteria`, `policy_summaries`) in a single response.
+- Conformance runner `containsPetId` subject-boundary scan now also matches the substring `pet_id` (case-insensitive) inside string values — not only the JSON key — so the scan rejects `pet_id` embedded in free-text `reasons`, omission `detail`, or provenance fields on Facility Truth responses.
+- Implementer guide guidance: v1 Facility Truth servers MUST silently accept and ignore a `grant_id` on the request (do NOT hard-reject) so future partner-only scope rollouts that mandate `grant_id` remain forward-compatible.
 
 ### Changed
 

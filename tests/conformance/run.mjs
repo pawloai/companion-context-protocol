@@ -461,6 +461,18 @@ const cases = [
     valid: true
   },
   {
+    name: "facility truth all scopes request",
+    schema: "schemas/facility-truth-request.schema.json",
+    data: "tests/conformance/fixtures/valid/facility-truth-all-scopes-request.json",
+    valid: true
+  },
+  {
+    name: "facility truth all scopes response",
+    schema: "schemas/facility-truth-response.schema.json",
+    data: "tests/conformance/fixtures/valid/facility-truth-all-scopes-response.json",
+    valid: true
+  },
+  {
     name: "reject facility truth cross-profile visibility",
     schema: "schemas/facility-truth-response.schema.json",
     data: "tests/conformance/fixtures/invalid/facility-truth-cross-profile-visibility.json",
@@ -640,6 +652,9 @@ const roundTripPairs = [
 ];
 
 const containsPetId = (value) => {
+  if (typeof value === "string") {
+    return /pet_id/i.test(value);
+  }
   if (Array.isArray(value)) {
     return value.some((item) => containsPetId(item));
   }

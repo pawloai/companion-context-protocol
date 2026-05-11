@@ -19,9 +19,9 @@ The conformance runner exercises every requirement in this list. If `npm test` p
   - `denied` → `decision: denied`, null context, ≥1 omission.
 - Commerce-safe rule: every returned `commerce_context` field includes `commerce_safe` and excludes `staff_only` / `restricted_sensitive`.
 - Facility-shareable rule for care-facility profiles; care-network visibility rule for the care-network lookup profile.
-- Facility-public rule: every returned `facility_truth_context` field includes `facility_public` and excludes `staff_only`, `restricted_sensitive`, `commerce_safe`, `facility_shareable`, `care_network_visible`, `contact_shareable`, and `action_authorization_visible`.
+- Facility-public rule: every returned `facility_truth_context` field includes `facility_public` and excludes `staff_only`, `restricted_sensitive`, `commerce_safe`, `facility_shareable`, `care_network_visible`, `contact_shareable`, `action_authorization_visible`, `owner_visible`, `caregiver_visible`, `vet_shareable`, and `agent_summary_only`. The schema additionally requires that `ok` and `partial` Facility Truth responses include at least one content sub-resource in `facility_truth_context`.
 - Facility Truth freshness rule: every Facility Truth field's provenance carries `verified_at`.
-- Facility Truth subject-boundary rule: responses do not contain `pet_id` anywhere.
+- Facility Truth subject-boundary rule: responses do not contain `pet_id` anywhere. The schema rejects `pet_id` on `facility_truth_context` and on `authorization_decision`; the conformance runner also performs a recursive scan over Facility Truth response examples (ok/partial/denied) that fails if any `pet_id` key or `pet_id`-bearing string value appears anywhere in the tree.
 - Permission grant lifecycle: `status: active` is incompatible with `revoked_at`; `expired` requires `expires_at`; `revoked` requires `revoked_at`.
 - Requested scopes in a request are unique.
 - Omissions appear only on the response envelope, not on nested context objects.
