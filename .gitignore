@@ -69,5 +69,8 @@ id_ed25519*
 AGENTS.md
 CLAUDE.md
 
+# Local plan exports
+docs/design/*-plan.md
+
 # Local-only vendor scan inputs
 tests/vendor-neutrality/forbidden-terms.json
